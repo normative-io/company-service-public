@@ -19,8 +19,14 @@ async function bootstrap() {
     .addTag('company')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  const apiSubpath = 'api'
+  SwaggerModule.setup(apiSubpath, app, document);
 
   await app.listen(3000, '0.0.0.0');
+
+  const url = await app.getUrl();
+
+  console.log(`Application is running on: ${url}`);
+  console.log(`See API: ${url}/${apiSubpath}`);
 }
 bootstrap();
