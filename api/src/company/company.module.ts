@@ -1,10 +1,16 @@
 import { Module } from '@nestjs/common';
 import { CompanyController } from './company.controller';
-import { InMemoryCompanyService } from './inmemory.company.service';
+import { COMPANY_SERVICE } from './company-service.interface';
+import { InMemoryCompanyService } from './inmemory/company.service';
 
 @Module({
   imports: [],
   controllers: [CompanyController],
-  providers: [InMemoryCompanyService],
+  providers: [
+    {
+      provide: COMPANY_SERVICE,
+      useClass: InMemoryCompanyService,
+    },
+  ],
 })
 export class CompanyModule { }

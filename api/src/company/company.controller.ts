@@ -1,13 +1,18 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Param, Patch, Post } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Company } from './company.model';
-import { InMemoryCompanyService } from './inmemory.company.service';
+import { COMPANY_SERVICE, ICompanyService } from './company-service.interface';
+import { CreateCompanyDto } from "./dto/create-company.dto";
+import { UpdateCompanyDto } from "./dto/update-company.dto";
+import { InMemoryCompanyService } from './inmemory/company.service';
 
 @ApiTags('company')
 @Controller('company')
 export class CompanyController {
 
-  constructor(private readonly companyService: InMemoryCompanyService) { }
+  constructor(
+    @Inject(COMPANY_SERVICE)
+    private readonly companyService: ICompanyService
+  ) { }
 
   @Get('v1')
   @ApiOperation({ summary: 'Look up metadata for a company.' })
@@ -17,8 +22,6 @@ export class CompanyController {
   }
 
   @Get('v1/companies')
-  // TODO: Remove this operation once we can connect to a real database or system. 
-  // Returning a million companies won't be useful or practical.
   @ApiOperation({ summary: 'List all companies.' })
   @ApiResponse({ description: 'All the available companies.' })
   companies() {
@@ -28,8 +31,8 @@ export class CompanyController {
   @Post('v1/add')
   @ApiOperation({ summary: 'Add a company.' })
   @ApiResponse({ description: 'The new company, including any initialised fields.' })
-  @ApiBody({ type: Company, description: 'The new company' })
-  add(@Body() company: Company) {
+  @ApiBody({ type: CreateCompanyDto, description: 'The new company' })
+  add(@Body() company: CreateCompanyDto) {
     return { company: this.companyService.add(company) };
   }
 
@@ -42,8 +45,6 @@ export class CompanyController {
 
   @Delete('v1/delete/:id')
   @ApiOperation({ summary: 'Delete a company given its id.' })
-  // TODO: Make this operation return nothing once we can connect to a real database or system. 
-  // Calculating the number of remaining companies won't be useful or practical then.
   @ApiResponse({ description: 'The number of remaining companies.' })
   delete(@Param('id') id: string) {
     return { nr_companies: this.companyService.delete(id) };
@@ -52,8 +53,8 @@ export class CompanyController {
   @Patch('v1/update/:id')
   @ApiOperation({ summary: 'Update a company.' })
   @ApiResponse({ description: 'The updated company.' })
-  @ApiBody({ type: Company, description: 'The fields to update. Absent fields will be ignored.' })
-  update(@Param('id') id: string, @Body() company: Company) {
+  @ApiBody({ type: UpdateCompanyDto, description: 'The fields to update. Absent fields will be ignored.' })
+  update(@Param('id') id: string, @Body() company: UpdateCompanyDto) {
     return { company: this.companyService.update(id, company) };
   }
 }
