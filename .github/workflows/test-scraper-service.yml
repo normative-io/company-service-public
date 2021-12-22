@@ -1,0 +1,26 @@
+name: test scraper-service
+
+on:
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./scraper-service
+    steps:
+      - name: checkout the files
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+          ssh-key: ${{ secrets.SERVICE_ACCOUNT_SSH_KEY }}
+
+      - name: install dependencies
+        run: npm install
+
+      - name: run unit tests
+        run: npm run test
+
+      - name: run e2e tests
+        run: npm run test:e2e
