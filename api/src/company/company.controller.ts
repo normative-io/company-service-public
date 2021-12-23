@@ -3,7 +3,6 @@ import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { COMPANY_SERVICE, ICompanyService } from './company-service.interface';
 import { CreateCompanyDto } from "./dto/create-company.dto";
 import { UpdateCompanyDto } from "./dto/update-company.dto";
-import { InMemoryCompanyService } from './inmemory/company.service';
 
 @ApiTags('company')
 @Controller('company')
@@ -32,8 +31,8 @@ export class CompanyController {
   @ApiOperation({ summary: 'Add a company.' })
   @ApiResponse({ description: 'The new company, including any initialised fields.' })
   @ApiBody({ type: CreateCompanyDto, description: 'The new company' })
-  add(@Body() company: CreateCompanyDto) {
-    return { company: this.companyService.add(company) };
+  add(@Body() createCompanyDto: CreateCompanyDto) {
+    return { company: this.companyService.add(createCompanyDto) };
   }
 
   @Get('v1/:id')
@@ -54,7 +53,8 @@ export class CompanyController {
   @ApiOperation({ summary: 'Update a company.' })
   @ApiResponse({ description: 'The updated company.' })
   @ApiBody({ type: UpdateCompanyDto, description: 'The fields to update. Absent fields will be ignored.' })
-  update(@Param('id') id: string, @Body() company: UpdateCompanyDto) {
-    return { company: this.companyService.update(id, company) };
+  update(@Param('id') id: string, @Body() updateCompanyDto: UpdateCompanyDto) {
+    return { company: this.companyService.update(id, updateCompanyDto) };
   }
+
 }

@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
 import { CompanyController } from './company.controller';
 import { COMPANY_SERVICE } from './company-service.interface';
-import { InMemoryCompanyService } from './inmemory/company.service';
+import { CompanyService } from './company.service';
+import { CompanyRepositoryArray } from './repository/repository-array';
+import { COMPANY_REPOSITORY } from './repository/repository-interface';
 
 @Module({
   imports: [],
@@ -9,7 +11,11 @@ import { InMemoryCompanyService } from './inmemory/company.service';
   providers: [
     {
       provide: COMPANY_SERVICE,
-      useClass: InMemoryCompanyService,
+      useClass: CompanyService,
+    },
+    {
+      provide: COMPANY_REPOSITORY,
+      useClass: CompanyRepositoryArray,
     },
   ],
 })
