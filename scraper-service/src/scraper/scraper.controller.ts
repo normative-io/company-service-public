@@ -1,13 +1,16 @@
-import { Controller, Get } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get } from '@nestjs/common';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { FetchByCompanyIdDto } from './dto/fetch.dto';
 
 @ApiTags('scraper')
 @Controller('scraper')
 export class ScraperController {
-  @Get('v1')
-  @ApiOperation({ summary: 'Request on-demand lookup of a company.' })
+  @Get('fetch/byCompanyId')
+  @ApiOperation({ summary: 'Request on-demand lookup by company id.' })
   @ApiResponse({ description: 'The metadata of the matching company.' })
-  v1() {
-    return { description: 'example-company' };
+  @ApiBody({ type: FetchByCompanyIdDto, description: 'The new company' })
+  byCompanyId(@Body() company: FetchByCompanyIdDto) {
+    // TODO: implement fetching via registered scrapers.
+    return { country: company.country, companyId: company.companyId };
   }
 }
