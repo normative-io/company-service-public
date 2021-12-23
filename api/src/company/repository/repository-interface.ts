@@ -8,4 +8,6 @@ export interface ICompanyRepository {
     listAll(): Company[];
     getById(id: string): Company;
     delete(id: string);
+    findById(id: string): Company;
+    findByName(name: string): Company[];
 }

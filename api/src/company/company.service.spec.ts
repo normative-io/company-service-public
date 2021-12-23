@@ -113,4 +113,61 @@ describe('CompanyService', () => {
         expect(function () { service.delete(''); })
             .toThrowError(UnprocessableEntityException);
     })
+
+    it('should find a company by id', () => {
+        const company = service.add({ name: '1' });
+
+        expect(service.find({ id: company.id })).toEqual([
+            { id: company.id, name: '1', created: expect.any(Date) },
+        ]);
+    })
+
+    it('should find all companies that match a name', () => {
+        service.add({ name: '1' });
+        service.add({ name: '1' });
+
+        expect(service.find({ name: '1' })).toEqual([
+            { id: expect.any(String), name: '1', created: expect.any(Date) },
+            { id: expect.any(String), name: '1', created: expect.any(Date) },
+        ]);
+    })
+
+    it('should find a company if one individual field matches', () => {
+        service.add({ name: '1' });
+
+        expect(service.find({ id: 'non-existent-id', name: '1' })).toEqual([
+            { id: expect.any(String), name: '1', created: expect.any(Date) },
+        ]);
+    })
+
+    it('should find companies that match individual fields', () => {
+        const company1 = service.add({ name: '1' });
+        service.add({ name: '2' });
+
+        expect(service.find({ id: company1.id, name: '2' })).toEqual([
+            { id: company1.id, name: '1', created: expect.any(Date) },
+            { id: expect.any(String), name: '2', created: expect.any(Date) },
+        ]);
+    })
+
+    it('should find and deduplicate companies that match multiple individual fields', () => {
+        const company = service.add({ name: '1' });
+
+        expect(service.find({ id: company.id, name: '1' })).toEqual([
+            { id: expect.any(String), name: '1', created: expect.any(Date) },
+        ]);
+    })
+
+    it('should not find a company if nothing matches', () => {
+        expect(service.find({ name: 'non-existent-name' }))
+            .toEqual([]);
+    })
+
+    it('should not find a company if we do not ask for any field', () => {
+        service.add({ name: '1' });
+        service.add({ name: '2' });
+        service.add({ name: '3' });
+
+        expect(service.find({})).toEqual([]);
+    })
 });

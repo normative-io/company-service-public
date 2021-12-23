@@ -4,6 +4,7 @@ import { UpdateCompanyDto } from "./dto/update-company.dto";
 import { ICompanyService } from "./company-service.interface";
 import { Company } from "./company.model";
 import { COMPANY_REPOSITORY, ICompanyRepository } from "./repository/repository-interface";
+import { FindCompanyDto } from "./dto/find-company.dto";
 
 @Injectable()
 export class CompanyService implements ICompanyService {
@@ -37,6 +38,26 @@ export class CompanyService implements ICompanyService {
 
     delete(id: string) {
         this.companyRepo.delete(id);
+    }
+
+    find(findCompanyDto: FindCompanyDto): Company[] {
+        var results = [];
+        if (findCompanyDto.id) {
+            const company = this.companyRepo.findById(findCompanyDto.id);
+            if (company) {
+                results.push(company);
+            }
+        }
+        if (findCompanyDto.name) {
+            results.push(...this.companyRepo.findByName(findCompanyDto.name));
+        }
+        var deduped = results.filter(function (elem, index, self) {
+            return index === self.indexOf(elem);
+        })
+        if (!deduped) {
+            console.log(`Could not find company with metadata ${JSON.stringify(findCompanyDto, undefined, 2)}`);
+        }
+        return deduped;
     }
 
 }
