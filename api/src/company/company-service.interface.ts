@@ -1,5 +1,6 @@
 import { Company } from "./company.model";
 import { CreateCompanyDto } from "./dto/create-company.dto";
+import { FindCompanyDto } from "./dto/find-company.dto";
 import { UpdateCompanyDto } from "./dto/update-company.dto";
 
 export const COMPANY_SERVICE = 'COMPANY_SERVICE';
@@ -12,4 +13,5 @@ export interface ICompanyService {
     getById(id: string): Company;
     update(id: string, updateCompanyDto: UpdateCompanyDto);
     delete(id: string);
+    find(findCompanyDto: FindCompanyDto): Company[];
 }

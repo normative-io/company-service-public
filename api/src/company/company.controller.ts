@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Inject, Param, Patch, Post } from '@nest
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { COMPANY_SERVICE, ICompanyService } from './company-service.interface';
 import { CreateCompanyDto } from "./dto/create-company.dto";
+import { FindCompanyDto } from './dto/find-company.dto';
 import { UpdateCompanyDto } from "./dto/update-company.dto";
 
 @ApiTags('company')
@@ -55,6 +56,14 @@ export class CompanyController {
   @ApiBody({ type: UpdateCompanyDto, description: 'The fields to update. Absent fields will be ignored.' })
   update(@Param('id') id: string, @Body() updateCompanyDto: UpdateCompanyDto) {
     return { company: this.companyService.update(id, updateCompanyDto) };
+  }
+
+  @Post('v1/find')
+  @ApiOperation({ summary: 'Find companies by metadata.' })
+  @ApiResponse({ description: 'The matching companies.' })
+  @ApiBody({ type: FindCompanyDto, description: 'The fields to look for; companies matching any field will be returned.' })
+  find(@Body() findCompanyDto: FindCompanyDto) {
+    return [...this.companyService.find(findCompanyDto)];
   }
 
 }

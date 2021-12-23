@@ -112,4 +112,16 @@ describe('CompanyController', () => {
       .toThrowError(NotFoundException);
   })
 
+  it('should find a company', () => {
+    // We first need to create a few companies.
+    controller.add({ name: '1' });
+    controller.add({ name: '2' });
+    controller.add({ name: '2' });
+
+    expect(controller.find({ name: '2' })).toEqual([
+      { id: expect.any(String), name: '2', created: expect.any(Date) },
+      { id: expect.any(String), name: '2', created: expect.any(Date) },
+    ]);
+  })
+
 });
