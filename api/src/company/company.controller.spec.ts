@@ -2,7 +2,9 @@ import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { COMPANY_SERVICE } from './company-service.interface';
 import { CompanyController } from './company.controller';
-import { InMemoryCompanyService } from './inmemory/company.service';
+import { CompanyService } from './company.service';
+import { CompanyRepositoryArray } from './repository/repository-array';
+import { COMPANY_REPOSITORY } from './repository/repository-interface';
 
 describe('CompanyController', () => {
   let controller: CompanyController;
@@ -13,7 +15,11 @@ describe('CompanyController', () => {
       providers: [
         {
           provide: COMPANY_SERVICE,
-          useClass: InMemoryCompanyService,
+          useClass: CompanyService,
+        },
+        {
+          provide: COMPANY_REPOSITORY,
+          useClass: CompanyRepositoryArray,
         },
       ],
     }).compile();

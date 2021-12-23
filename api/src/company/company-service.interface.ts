@@ -11,7 +11,5 @@ export interface ICompanyService {
     listAll(): Company[];
     getById(id: string): Company;
     update(id: string, updateCompanyDto: UpdateCompanyDto);
-    // TODO: Reconsider the return value of 'delete' once we can connect to a real database or system.
-    // Calculating the number of remaining companies won't be useful or practical then.
-    delete(id: string): number;
+    delete(id: string);
 }

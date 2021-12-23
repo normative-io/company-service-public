@@ -1,16 +1,23 @@
 import { NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { InMemoryCompanyService } from './company.service';
+import { CompanyRepositoryArray } from './repository/repository-array';
+import { COMPANY_REPOSITORY } from './repository/repository-interface';
+import { CompanyService } from './company.service';
 
-describe('InMemoryCompanyService', () => {
-    let service: InMemoryCompanyService;
+describe('CompanyService', () => {
+    let service: CompanyService;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            providers: [InMemoryCompanyService],
+            providers: [CompanyService,
+                {
+                    provide: COMPANY_REPOSITORY,
+                    useClass: CompanyRepositoryArray,
+                },
+            ],
         }).compile();
 
-        service = module.get<InMemoryCompanyService>(InMemoryCompanyService);
+        service = module.get<CompanyService>(CompanyService);
     });
 
     it('should be defined', () => {
