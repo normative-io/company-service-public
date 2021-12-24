@@ -5,13 +5,16 @@ import { ICompanyService } from "./company-service.interface";
 import { Company } from "./company.model";
 import { COMPANY_REPOSITORY, ICompanyRepository } from "./repository/repository-interface";
 import { FindCompanyDto } from "./dto/find-company.dto";
+import { IScraperService, SCRAPER_SERVICE } from "./scraper/service-interface";
 
 @Injectable()
 export class CompanyService implements ICompanyService {
 
     constructor(
         @Inject(COMPANY_REPOSITORY)
-        private readonly companyRepo: ICompanyRepository
+        private readonly companyRepo: ICompanyRepository,
+        @Inject(SCRAPER_SERVICE)
+        private readonly scraperService: IScraperService,
     ) { }
 
     listAll() {
@@ -51,13 +54,25 @@ export class CompanyService implements ICompanyService {
         if (findCompanyDto.name) {
             results.push(...this.companyRepo.findByName(findCompanyDto.name));
         }
-        var deduped = results.filter(function (elem, index, self) {
-            return index === self.indexOf(elem);
-        })
-        if (!deduped) {
-            console.log(`Could not find company with metadata ${JSON.stringify(findCompanyDto, undefined, 2)}`);
+        if (results.length === 0) {
+            console.log(`Could not find company with metadata ${JSON.stringify(findCompanyDto, undefined, 2)} in the repo`);
+            // We don't want to contact the scraper service if the request is empty.
+            if (Object.keys(findCompanyDto).length != 0) {
+                console.log(`Contacting ScraperService`);
+                const fetched = this.scraperService.fetchByCompanyId(findCompanyDto);
+                console.log(`Fetched companies: ${JSON.stringify(fetched, undefined, 2)}`);
+                fetched.forEach(createCompanyDto => {
+                    const company = this.add(createCompanyDto);
+                    results.push(company);
+                });
+            }
         }
-        return deduped;
+        if (results.length === 0) {
+            console.log(`Could not find company with metadata ${JSON.stringify(findCompanyDto, undefined, 2)} anywhere`);
+        }
+        return results.filter(function (elem, index, self) {
+            return index === self.indexOf(elem);
+        }); // Dedup before returning.
     }
 
 }

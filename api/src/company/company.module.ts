@@ -4,6 +4,8 @@ import { COMPANY_SERVICE } from './company-service.interface';
 import { CompanyService } from './company.service';
 import { CompanyRepositoryArray } from './repository/repository-array';
 import { COMPANY_REPOSITORY } from './repository/repository-interface';
+import { SCRAPER_SERVICE } from './scraper/service-interface';
+import { LocalScraperService } from './scraper/service-local';
 
 @Module({
   imports: [],
@@ -16,6 +18,10 @@ import { COMPANY_REPOSITORY } from './repository/repository-interface';
     {
       provide: COMPANY_REPOSITORY,
       useClass: CompanyRepositoryArray,
+    },
+    {
+      provide: SCRAPER_SERVICE,
+      useClass: LocalScraperService,
     },
   ],
 })
