@@ -20,6 +20,18 @@ export class Company {
     public name: string
 
     @ApiProperty({
+        description: 'The country code that this company is registered in.',
+        example: 'CH',
+    })
+    public country?: string;
+
+    @ApiProperty({
+        description: 'The identifier for the company (ex: VAT, EIN, etc..)',
+        example: '123',
+    })
+    public companyId?: string;
+
+    @ApiProperty({
         type: Date,
         description: 'The date the company was added to the service. Defaults to the current date'
     })
@@ -28,11 +40,15 @@ export class Company {
     constructor(createCompanyDto: CreateCompanyDto) {
         this.id = randomUUID();
         this.name = createCompanyDto.name;
+        this.country = createCompanyDto.country;
+        this.companyId = createCompanyDto.companyId;
         const now = new Date();
         this.created = now;
     }
 
-    update(company: UpdateCompanyDto) {
-        if (company.name) { this.name = company.name };
+    update(updateCompanyDto: UpdateCompanyDto) {
+        if (updateCompanyDto.name) { this.name = updateCompanyDto.name };
+        if (updateCompanyDto.country) { this.country = updateCompanyDto.country };
+        if (updateCompanyDto.companyId) { this.companyId = updateCompanyDto.companyId };
     }
 }

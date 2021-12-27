@@ -3,9 +3,20 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CompanyRepositoryArray } from './repository/repository-array';
 import { COMPANY_REPOSITORY } from './repository/repository-interface';
 import { CompanyService } from './company.service';
+import { SCRAPER_SERVICE } from './scraper/service-interface';
+import { CreateCompanyDto } from './dto/create-company.dto';
 
 describe('CompanyService', () => {
     let service: CompanyService;
+    // To be returned by the scraper service's fetchCompanyById operation.
+    // Set by the tests that need it.
+    let scraperServiceFoundById: CreateCompanyDto[];
+
+    const mockScraperService = {
+        fetchByCompanyId: jest.fn(() => {
+            return scraperServiceFoundById;
+        })
+    }
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
@@ -13,6 +24,10 @@ describe('CompanyService', () => {
                 {
                     provide: COMPANY_REPOSITORY,
                     useClass: CompanyRepositoryArray,
+                },
+                {
+                    provide: SCRAPER_SERVICE,
+                    useValue: mockScraperService,
                 },
             ],
         }).compile();
@@ -25,10 +40,12 @@ describe('CompanyService', () => {
     });
 
     it('should create a company', () => {
-        expect(service.add({ name: 'Fantastic Company' })).toEqual({
+        expect(service.add({ name: 'Fantastic Company', country: 'CH', companyId: '456' })).toEqual({
             id: expect.any(String),
             name: 'Fantastic Company',
             created: expect.any(Date),
+            country: 'CH',
+            companyId: '456',
         });
     })
 
@@ -36,10 +53,12 @@ describe('CompanyService', () => {
         const company1 = service.add({ name: 'Fantastic Company' });
         service.add({ name: 'Most fantastic Company' });
 
-        expect(service.update(company1.id, { name: 'Awesome Company' })).toEqual({
+        expect(service.update(company1.id, { name: 'Awesome Company', country: 'CH', companyId: '456' })).toEqual({
             id: company1.id,
             name: 'Awesome Company',
             created: expect.any(Date),
+            country: 'CH',
+            companyId: '456',
         });
     })
 
@@ -158,16 +177,52 @@ describe('CompanyService', () => {
         ]);
     })
 
-    it('should not find a company if nothing matches', () => {
-        expect(service.find({ name: 'non-existent-name' }))
-            .toEqual([]);
-    })
+    describe('when the company is not found in the first repo', () => {
+        describe('and the company is found by the scraper service', () => {
+            beforeEach(() => {
+                scraperServiceFoundById = [{ name: 'company found', country: 'CH', companyId: '456' }];
+            })
+            it('should create and find a company', () => {
+                expect(service.find({ name: 'non-existent-name' }))
+                    .toEqual([
+                        { id: expect.any(String), name: 'company found', created: expect.any(Date), country: 'CH', companyId: '456' },
+                    ]);
+                // TODO: Verify that the companies are now in the repo.
+            })
+        })
 
-    it('should not find a company if we do not ask for any field', () => {
-        service.add({ name: '1' });
-        service.add({ name: '2' });
-        service.add({ name: '3' });
+        describe('and multiple companies are found by the scraper service', () => {
+            beforeEach(() => {
+                scraperServiceFoundById = [{ name: 'company found' }, { name: 'another company found', country: 'CH', companyId: '456' }];
+            })
+            it('should create and find all companies', () => {
+                expect(service.find({ name: 'non-existent-name' }))
+                    .toEqual([
+                        { id: expect.any(String), name: 'company found', created: expect.any(Date) },
+                        { id: expect.any(String), name: 'another company found', created: expect.any(Date), country: 'CH', companyId: '456' },
+                    ]);
+                // TODO: Verify that the companies are now in the repo.
+            })
+        })
 
-        expect(service.find({})).toEqual([]);
+        describe('and the company is not found by the scraper service', () => {
+            beforeEach(() => {
+                scraperServiceFoundById = [];
+            })
+            it('should not find a company', () => {
+                expect(service.find({ name: 'non-existent-name' }))
+                    .toEqual([]);
+            })
+        })
+
+        it('should not contact the scraper service if we did not ask for any field', () => {
+            jest.clearAllMocks();
+            service.add({ name: '1' });
+            service.add({ name: '2' });
+            service.add({ name: '3' });
+
+            expect(service.find({})).toEqual([]);
+            expect(mockScraperService.fetchByCompanyId).not.toHaveBeenCalled();
+        })
     })
 });

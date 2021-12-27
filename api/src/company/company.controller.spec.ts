@@ -5,6 +5,8 @@ import { CompanyController } from './company.controller';
 import { CompanyService } from './company.service';
 import { CompanyRepositoryArray } from './repository/repository-array';
 import { COMPANY_REPOSITORY } from './repository/repository-interface';
+import { SCRAPER_SERVICE } from './scraper/service-interface';
+import { LocalScraperService } from './scraper/service-local';
 
 describe('CompanyController', () => {
   let controller: CompanyController;
@@ -20,6 +22,10 @@ describe('CompanyController', () => {
         {
           provide: COMPANY_REPOSITORY,
           useClass: CompanyRepositoryArray,
+        },
+        {
+          provide: SCRAPER_SERVICE,
+          useClass: LocalScraperService,
         },
       ],
     }).compile();

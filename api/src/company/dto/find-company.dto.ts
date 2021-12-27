@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { CreateCompanyDto } from './create-company.dto';
 
-export class FindCompanyDto {
+export class FindCompanyDto extends CreateCompanyDto {
 
     @ApiProperty({
         type: String,
@@ -9,9 +10,4 @@ export class FindCompanyDto {
     })
     readonly id?: string
 
-    @ApiProperty({
-        description: 'The name of the company',
-        example: 'An awesome company'
-    })
-    readonly name?: string
 }
