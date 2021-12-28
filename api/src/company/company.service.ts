@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException, UnprocessableEntityException } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { CreateCompanyDto } from "./dto/create-company.dto";
 import { UpdateCompanyDto } from "./dto/update-company.dto";
 import { ICompanyService } from "./company-service.interface";
@@ -6,6 +6,7 @@ import { Company } from "./company.model";
 import { COMPANY_REPOSITORY, ICompanyRepository } from "./repository/repository-interface";
 import { FindCompanyDto } from "./dto/find-company.dto";
 import { IScraperService, SCRAPER_SERVICE } from "./scraper/service-interface";
+import { CompanyFoundInServiceDto } from "./dto/company-found.dto";
 
 @Injectable()
 export class CompanyService implements ICompanyService {
@@ -43,7 +44,7 @@ export class CompanyService implements ICompanyService {
         this.companyRepo.delete(id);
     }
 
-    find(findCompanyDto: FindCompanyDto): Company[] {
+    find(findCompanyDto: FindCompanyDto): CompanyFoundInServiceDto[] {
         var results = [];
         if (findCompanyDto.id) {
             const company = this.companyRepo.findById(findCompanyDto.id);
@@ -61,8 +62,8 @@ export class CompanyService implements ICompanyService {
                 console.log(`Contacting ScraperService`);
                 const fetched = this.scraperService.fetchByCompanyId(findCompanyDto);
                 console.log(`Fetched companies: ${JSON.stringify(fetched, undefined, 2)}`);
-                fetched.forEach(createCompanyDto => {
-                    const company = this.add(createCompanyDto);
+                fetched.forEach(companyFoundDto => {
+                    const company = this.add(companyFoundDto);
                     results.push(company);
                 });
             }

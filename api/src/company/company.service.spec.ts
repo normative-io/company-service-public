@@ -4,13 +4,13 @@ import { CompanyRepositoryArray } from './repository/repository-array';
 import { COMPANY_REPOSITORY } from './repository/repository-interface';
 import { CompanyService } from './company.service';
 import { SCRAPER_SERVICE } from './scraper/service-interface';
-import { CreateCompanyDto } from './dto/create-company.dto';
+import { CompanyFoundInScraperDto } from './dto/company-found.dto';
 
 describe('CompanyService', () => {
     let service: CompanyService;
     // To be returned by the scraper service's fetchCompanyById operation.
     // Set by the tests that need it.
-    let scraperServiceFoundById: CreateCompanyDto[];
+    let scraperServiceFoundById: CompanyFoundInScraperDto[];
 
     const mockScraperService = {
         fetchByCompanyId: jest.fn(() => {
@@ -183,11 +183,16 @@ describe('CompanyService', () => {
                 scraperServiceFoundById = [{ name: 'company found', country: 'CH', companyId: '456' }];
             })
             it('should create and find a company', () => {
-                expect(service.find({ name: 'non-existent-name' }))
+                const found = service.find({ name: 'non-existent-name' });
+                expect(found)
                     .toEqual([
                         { id: expect.any(String), name: 'company found', created: expect.any(Date), country: 'CH', companyId: '456' },
                     ]);
-                // TODO: Verify that the companies are now in the repo.
+
+                expect(service.getById(found[0].id))
+                    .toEqual(
+                        { id: expect.any(String), name: 'company found', created: expect.any(Date), country: 'CH', companyId: '456' },
+                    );
             })
         })
 
@@ -196,12 +201,20 @@ describe('CompanyService', () => {
                 scraperServiceFoundById = [{ name: 'company found' }, { name: 'another company found', country: 'CH', companyId: '456' }];
             })
             it('should create and find all companies', () => {
-                expect(service.find({ name: 'non-existent-name' }))
+                const found = service.find({ name: 'non-existent-name' });
+                expect(found)
                     .toEqual([
                         { id: expect.any(String), name: 'company found', created: expect.any(Date) },
                         { id: expect.any(String), name: 'another company found', created: expect.any(Date), country: 'CH', companyId: '456' },
                     ]);
-                // TODO: Verify that the companies are now in the repo.
+                expect(service.getById(found[0].id))
+                    .toEqual(
+                        { id: expect.any(String), name: 'company found', created: expect.any(Date) },
+                    );
+                expect(service.getById(found[1].id))
+                    .toEqual(
+                        { id: expect.any(String), name: 'another company found', created: expect.any(Date), country: 'CH', companyId: '456' },
+                    );
             })
         })
 
