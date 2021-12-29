@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UnprocessableEntityException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { CompanyFoundInScraperDto } from "../dto/company-found.dto";
 import { FindCompanyDto } from "../dto/find-company.dto";
 import { IScraperService } from "./service-interface";
@@ -15,8 +15,12 @@ export class LocalScraperService implements IScraperService {
         // Simply pretend we've found a company.
         const name = findCompanyDto.name ? `${findCompanyDto.name} - fetched` : 'Dummy company name';
         return [{
-            name: name,
-            ...findCompanyDto,
+            confidence: 0.1,
+            debugString: 'LocalScraperService',
+            company: {
+                ...findCompanyDto,
+                name: name,
+            }
         }];
     }
 

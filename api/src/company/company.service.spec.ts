@@ -137,7 +137,7 @@ describe('CompanyService', () => {
         const company = service.add({ name: '1' });
 
         expect(service.find({ id: company.id })).toEqual([
-            { id: company.id, name: '1', created: expect.any(Date) },
+            { company: { id: company.id, name: '1', created: expect.any(Date) }, confidence: expect.any(Number), debugString: expect.any(String) },
         ]);
     })
 
@@ -146,8 +146,8 @@ describe('CompanyService', () => {
         service.add({ name: '1' });
 
         expect(service.find({ name: '1' })).toEqual([
-            { id: expect.any(String), name: '1', created: expect.any(Date) },
-            { id: expect.any(String), name: '1', created: expect.any(Date) },
+            { company: { id: expect.any(String), name: '1', created: expect.any(Date) }, confidence: expect.any(Number), debugString: expect.any(String) },
+            { company: { id: expect.any(String), name: '1', created: expect.any(Date) }, confidence: expect.any(Number), debugString: expect.any(String) },
         ]);
     })
 
@@ -155,17 +155,30 @@ describe('CompanyService', () => {
         service.add({ name: '1' });
 
         expect(service.find({ id: 'non-existent-id', name: '1' })).toEqual([
-            { id: expect.any(String), name: '1', created: expect.any(Date) },
+            { company: { id: expect.any(String), name: '1', created: expect.any(Date) }, confidence: expect.any(Number), debugString: expect.any(String) },
         ]);
     })
 
-    it('should find companies that match individual fields', () => {
+    it('should not contact the scaper service if there are matches in the repo', () => {
+        jest.clearAllMocks();
+
+        service.add({ name: '1' });
+
+        expect(service.find({ id: 'non-existent-id', name: '1' })).toEqual([
+            { company: { id: expect.any(String), name: '1', created: expect.any(Date) }, confidence: expect.any(Number), debugString: expect.any(String) },
+        ]);
+
+        expect(mockScraperService.fetchByCompanyId).not.toHaveBeenCalled();
+    })
+
+    it('should find companies that match individual fields, ordered by confidence', () => {
         const company1 = service.add({ name: '1' });
         service.add({ name: '2' });
 
         expect(service.find({ id: company1.id, name: '2' })).toEqual([
-            { id: company1.id, name: '1', created: expect.any(Date) },
-            { id: expect.any(String), name: '2', created: expect.any(Date) },
+            // A match by id has higher confidence than the match by name.
+            { company: { id: company1.id, name: '1', created: expect.any(Date) }, confidence: expect.any(Number), debugString: expect.any(String) },
+            { company: { id: expect.any(String), name: '2', created: expect.any(Date) }, confidence: expect.any(Number), debugString: expect.any(String) },
         ]);
     })
 
@@ -173,48 +186,72 @@ describe('CompanyService', () => {
         const company = service.add({ name: '1' });
 
         expect(service.find({ id: company.id, name: '1' })).toEqual([
-            { id: expect.any(String), name: '1', created: expect.any(Date) },
+            { company: { id: expect.any(String), name: '1', created: expect.any(Date) }, confidence: expect.any(Number), debugString: expect.any(String) },
         ]);
     })
 
     describe('when the company is not found in the first repo', () => {
         describe('and the company is found by the scraper service', () => {
             beforeEach(() => {
-                scraperServiceFoundById = [{ name: 'company found', country: 'CH', companyId: '456' }];
+                scraperServiceFoundById = [{ company: { name: 'company found', country: 'CH', companyId: '456' } }];
             })
             it('should create and find a company', () => {
                 const found = service.find({ name: 'non-existent-name' });
                 expect(found)
                     .toEqual([
-                        { id: expect.any(String), name: 'company found', created: expect.any(Date), country: 'CH', companyId: '456' },
+                        { company: { id: expect.any(String), name: 'company found', created: expect.any(Date), country: 'CH', companyId: '456' } },
                     ]);
 
-                expect(service.getById(found[0].id))
+                expect(service.getById(found[0].company.id))
                     .toEqual(
-                        { id: expect.any(String), name: 'company found', created: expect.any(Date), country: 'CH', companyId: '456' },
+                        { id: expect.any(String), name: 'company found', created: expect.any(Date), country: 'CH', companyId: '456' } ,
                     );
             })
         })
 
         describe('and multiple companies are found by the scraper service', () => {
             beforeEach(() => {
-                scraperServiceFoundById = [{ name: 'company found' }, { name: 'another company found', country: 'CH', companyId: '456' }];
+                scraperServiceFoundById = [{ company: { name: 'company found' } }, { company: { name: 'another company found', country: 'CH', companyId: '456' } }];
             })
-            it('should create and find all companies', () => {
-                const found = service.find({ name: 'non-existent-name' });
+            it('should find and create all companies', () => {
+                const found = service.find({ name: 'irrelevant' });
                 expect(found)
                     .toEqual([
-                        { id: expect.any(String), name: 'company found', created: expect.any(Date) },
-                        { id: expect.any(String), name: 'another company found', created: expect.any(Date), country: 'CH', companyId: '456' },
+                        { company: { id: expect.any(String), name: 'company found', created: expect.any(Date) } },
+                        { company: { id: expect.any(String), name: 'another company found', created: expect.any(Date), country: 'CH', companyId: '456' } },
                     ]);
-                expect(service.getById(found[0].id))
+                expect(service.getById(found[0].company.id))
                     .toEqual(
                         { id: expect.any(String), name: 'company found', created: expect.any(Date) },
                     );
-                expect(service.getById(found[1].id))
+                expect(service.getById(found[1].company.id))
                     .toEqual(
                         { id: expect.any(String), name: 'another company found', created: expect.any(Date), country: 'CH', companyId: '456' },
                     );
+            })
+
+            describe('and results contain a confidence value', () => {
+                beforeEach(() => {
+                    scraperServiceFoundById = [
+                        { company: { name: '1' }, confidence: 0.5 },
+                        { company: { name: '2' }, confidence: 0.7 },
+                        { company: { name: '3' }, confidence: 0.9 },
+                        { company: { name: '4' }, confidence: 0.6 },
+                        { company: { name: '5' } },
+                    ];
+                })
+                it('results should be sorted by confidence in descending order', () => {
+                    const found = service.find({ name: 'irrelevant' });
+                    expect(found)
+                        .toEqual([
+                            { company: { name: '3', id: expect.any(String), created: expect.any(Date) }, confidence: 0.9 },
+                            { company: { name: '2', id: expect.any(String), created: expect.any(Date) }, confidence: 0.7 },
+                            { company: { name: '4', id: expect.any(String), created: expect.any(Date) }, confidence: 0.6 },
+                            { company: { name: '1', id: expect.any(String), created: expect.any(Date) }, confidence: 0.5 },
+                            // Items without confidences come last.
+                            { company: { name: '5', id: expect.any(String), created: expect.any(Date) } },
+                        ]);
+                })
             })
         })
 

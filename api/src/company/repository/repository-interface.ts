@@ -1,4 +1,5 @@
 import { Company } from "../company.model";
+import { CompanyFoundInRepositoryDto } from "../dto/company-found.dto";
 
 export const COMPANY_REPOSITORY = 'COMPANY_REPOSITORY';
 
