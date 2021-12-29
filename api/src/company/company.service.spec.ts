@@ -133,59 +133,59 @@ describe('CompanyService', () => {
             .toThrowError(UnprocessableEntityException);
     })
 
-    it('should find a company by id', () => {
+    it('should find a company by id', async () => {
         const company = service.add({ name: '1' });
 
-        expect(service.find({ id: company.id })).toEqual([
+        expect(await service.find({ id: company.id })).toEqual([
             { company: { id: company.id, name: '1', created: expect.any(Date) }, confidence: expect.any(Number), debugString: expect.any(String) },
         ]);
     })
 
-    it('should find all companies that match a name', () => {
+    it('should find all companies that match a name', async () => {
         service.add({ name: '1' });
         service.add({ name: '1' });
 
-        expect(service.find({ name: '1' })).toEqual([
+        expect(await service.find({ name: '1' })).toEqual([
             { company: { id: expect.any(String), name: '1', created: expect.any(Date) }, confidence: expect.any(Number), debugString: expect.any(String) },
             { company: { id: expect.any(String), name: '1', created: expect.any(Date) }, confidence: expect.any(Number), debugString: expect.any(String) },
         ]);
     })
 
-    it('should find a company if one individual field matches', () => {
+    it('should find a company if one individual field matches', async () => {
         service.add({ name: '1' });
 
-        expect(service.find({ id: 'non-existent-id', name: '1' })).toEqual([
+        expect(await service.find({ id: 'non-existent-id', name: '1' })).toEqual([
             { company: { id: expect.any(String), name: '1', created: expect.any(Date) }, confidence: expect.any(Number), debugString: expect.any(String) },
         ]);
     })
 
-    it('should not contact the scaper service if there are matches in the repo', () => {
+    it('should not contact the scaper service if there are matches in the repo', async () => {
         jest.clearAllMocks();
 
         service.add({ name: '1' });
 
-        expect(service.find({ id: 'non-existent-id', name: '1' })).toEqual([
+        expect(await service.find({ id: 'non-existent-id', name: '1' })).toEqual([
             { company: { id: expect.any(String), name: '1', created: expect.any(Date) }, confidence: expect.any(Number), debugString: expect.any(String) },
         ]);
 
         expect(mockScraperService.fetchByCompanyId).not.toHaveBeenCalled();
     })
 
-    it('should find companies that match individual fields, ordered by confidence', () => {
+    it('should find companies that match individual fields, ordered by confidence', async () => {
         const company1 = service.add({ name: '1' });
         service.add({ name: '2' });
 
-        expect(service.find({ id: company1.id, name: '2' })).toEqual([
+        expect(await service.find({ id: company1.id, name: '2' })).toEqual([
             // A match by id has higher confidence than the match by name.
             { company: { id: company1.id, name: '1', created: expect.any(Date) }, confidence: expect.any(Number), debugString: expect.any(String) },
             { company: { id: expect.any(String), name: '2', created: expect.any(Date) }, confidence: expect.any(Number), debugString: expect.any(String) },
         ]);
     })
 
-    it('should find and deduplicate companies that match multiple individual fields', () => {
+    it('should find and deduplicate companies that match multiple individual fields', async () => {
         const company = service.add({ name: '1' });
 
-        expect(service.find({ id: company.id, name: '1' })).toEqual([
+        expect(await service.find({ id: company.id, name: '1' })).toEqual([
             { company: { id: expect.any(String), name: '1', created: expect.any(Date) }, confidence: expect.any(Number), debugString: expect.any(String) },
         ]);
     })
@@ -195,8 +195,8 @@ describe('CompanyService', () => {
             beforeEach(() => {
                 scraperServiceFoundById = [{ company: { name: 'company found', country: 'CH', companyId: '456' } }];
             })
-            it('should create and find a company', () => {
-                const found = service.find({ name: 'non-existent-name' });
+            it('should create and find a company', async () => {
+                const found = await service.find({ name: 'non-existent-name' });
                 expect(found)
                     .toEqual([
                         { company: { id: expect.any(String), name: 'company found', created: expect.any(Date), country: 'CH', companyId: '456' } },
@@ -213,8 +213,8 @@ describe('CompanyService', () => {
             beforeEach(() => {
                 scraperServiceFoundById = [{ company: { name: 'company found' } }, { company: { name: 'another company found', country: 'CH', companyId: '456' } }];
             })
-            it('should find and create all companies', () => {
-                const found = service.find({ name: 'irrelevant' });
+            it('should find and create all companies', async () => {
+                const found = await service.find({ name: 'irrelevant' });
                 expect(found)
                     .toEqual([
                         { company: { id: expect.any(String), name: 'company found', created: expect.any(Date) } },
@@ -240,8 +240,8 @@ describe('CompanyService', () => {
                         { company: { name: '5' } },
                     ];
                 })
-                it('results should be sorted by confidence in descending order', () => {
-                    const found = service.find({ name: 'irrelevant' });
+                it('results should be sorted by confidence in descending order', async () => {
+                    const found = await service.find({ name: 'irrelevant' });
                     expect(found)
                         .toEqual([
                             { company: { name: '3', id: expect.any(String), created: expect.any(Date) }, confidence: 0.9 },
@@ -259,19 +259,19 @@ describe('CompanyService', () => {
             beforeEach(() => {
                 scraperServiceFoundById = [];
             })
-            it('should not find a company', () => {
-                expect(service.find({ name: 'non-existent-name' }))
+            it('should not find a company', async () => {
+                expect(await service.find({ name: 'non-existent-name' }))
                     .toEqual([]);
             })
         })
 
-        it('should not contact the scraper service if we did not ask for any field', () => {
+        it('should not contact the scraper service if we did not ask for any field', async () => {
             jest.clearAllMocks();
             service.add({ name: '1' });
             service.add({ name: '2' });
             service.add({ name: '3' });
 
-            expect(service.find({})).toEqual([]);
+            expect(await service.find({})).toEqual([]);
             expect(mockScraperService.fetchByCompanyId).not.toHaveBeenCalled();
         })
     })

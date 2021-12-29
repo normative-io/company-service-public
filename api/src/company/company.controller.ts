@@ -62,8 +62,8 @@ export class CompanyController {
   @ApiOperation({ summary: 'Find companies by metadata.' })
   @ApiResponse({ description: 'The matching companies.' })
   @ApiBody({ type: FindCompanyDto, description: 'The fields to look for; companies matching any field will be returned.' })
-  find(@Body() findCompanyDto: FindCompanyDto) {
-    return [...this.companyService.find(findCompanyDto)];
+  async find(@Body() findCompanyDto: FindCompanyDto) {
+    return [...await this.companyService.find(findCompanyDto)];
   }
 
 }
