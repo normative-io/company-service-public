@@ -5,10 +5,11 @@ import { CompanyService } from './company.service';
 import { CompanyRepositoryArray } from './repository/repository-array';
 import { COMPANY_REPOSITORY } from './repository/repository-interface';
 import { SCRAPER_SERVICE } from './scraper/service-interface';
-import { LocalScraperService } from './scraper/service-local';
+import { HttpModule } from '@nestjs/axios';
+import { ScraperService } from './scraper/service-scraper';
 
 @Module({
-  imports: [],
+  imports: [HttpModule],
   controllers: [CompanyController],
   providers: [
     {
@@ -21,7 +22,7 @@ import { LocalScraperService } from './scraper/service-local';
     },
     {
       provide: SCRAPER_SERVICE,
-      useClass: LocalScraperService,
+      useClass: ScraperService,
     },
   ],
 })

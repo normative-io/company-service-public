@@ -14,5 +14,5 @@ export interface ICompanyService {
     getById(id: string): Company;
     update(id: string, updateCompanyDto: UpdateCompanyDto);
     delete(id: string);
-    find(findCompanyDto: FindCompanyDto): CompanyFoundInServiceDto[];
+    find(findCompanyDto: FindCompanyDto): Promise<CompanyFoundInServiceDto[]>;
 }

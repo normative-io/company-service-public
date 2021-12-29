@@ -48,7 +48,7 @@ export class CompanyService implements ICompanyService {
         this.companyRepo.delete(id);
     }
 
-    find(findCompanyDto: FindCompanyDto): CompanyFoundInServiceDto[] {
+    async find(findCompanyDto: FindCompanyDto): Promise<CompanyFoundInServiceDto[]> {
         var results = [];
         if (findCompanyDto.id) {
             const company = this.companyRepo.findById(findCompanyDto.id);
@@ -74,15 +74,20 @@ export class CompanyService implements ICompanyService {
             // We don't want to contact the scraper service if the request is empty.
             if (Object.keys(findCompanyDto).length != 0) {
                 console.log(`Contacting ScraperService`);
-                const fetched = this.scraperService.fetchByCompanyId(findCompanyDto);
-                console.log(`Fetched companies: ${JSON.stringify(fetched, undefined, 2)}`);
-                fetched.forEach(companyFoundDto => {
-                    const company = this.add(companyFoundDto.company);
-                    results.push({
-                        ...companyFoundDto,
-                        company: company,
+                // TODO: Catch errors here instead of swallowing them inside scraperService,
+                // so that we can return a descriptive message to the caller - eg if
+                // the ScraperService is down.
+                const fetched = await this.scraperService.fetchByCompanyId(findCompanyDto);
+                if (fetched) {
+                    console.log(`Fetched companies: ${JSON.stringify(fetched, undefined, 2)}`);
+                    fetched.forEach(companyFoundDto => {
+                        const company = this.add(companyFoundDto.company);
+                        results.push({
+                            ...companyFoundDto,
+                            company: company,
+                        });
                     });
-                });
+                }
             }
         }
         if (results.length === 0) {

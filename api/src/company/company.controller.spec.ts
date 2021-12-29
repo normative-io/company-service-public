@@ -6,10 +6,15 @@ import { CompanyService } from './company.service';
 import { CompanyRepositoryArray } from './repository/repository-array';
 import { COMPANY_REPOSITORY } from './repository/repository-interface';
 import { SCRAPER_SERVICE } from './scraper/service-interface';
-import { LocalScraperService } from './scraper/service-local';
 
 describe('CompanyController', () => {
   let controller: CompanyController;
+
+  const mockScraperService = {
+    fetchByCompanyId: jest.fn(() => {
+      return [];
+    })
+  }
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
@@ -25,7 +30,7 @@ describe('CompanyController', () => {
         },
         {
           provide: SCRAPER_SERVICE,
-          useClass: LocalScraperService,
+          useValue: mockScraperService,
         },
       ],
     }).compile();
@@ -118,13 +123,13 @@ describe('CompanyController', () => {
       .toThrowError(NotFoundException);
   })
 
-  it('should find a company', () => {
+  it('should find a company', async () => {
     // We first need to create a few companies.
     controller.add({ name: '1' });
     controller.add({ name: '2' });
     controller.add({ name: '2' });
 
-    expect(controller.find({ name: '2' })).toEqual([
+    expect(await controller.find({ name: '2' })).toEqual([
       { company: { id: expect.any(String), name: '2', created: expect.any(Date) }, confidence: expect.any(Number), debugString: expect.any(String) },
       { company: { id: expect.any(String), name: '2', created: expect.any(Date) }, confidence: expect.any(Number), debugString: expect.any(String) },
     ]);

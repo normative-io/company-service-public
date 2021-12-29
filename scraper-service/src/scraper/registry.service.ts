@@ -17,6 +17,7 @@ export class ScraperRegistry {
   fetch(req: FetchByCompanyIdDto): FoundCompany[] {
     // TODO: call `check` for all registered scrapers.
     // TODO: call `fetch` in priority-order of matching scrapers.
+    console.log(`fetch request: ${JSON.stringify(req, undefined, 2)}`);
     return [{ confidence: 1.0, name: 'some-company-name' }];
   }
 }
