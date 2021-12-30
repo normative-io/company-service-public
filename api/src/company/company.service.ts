@@ -82,7 +82,12 @@ export class CompanyService implements ICompanyService {
             this.logger.verbose(`Could not find company anywhere; metadata: ${JSON.stringify(findCompanyDto, undefined, 2)}`);
             this.findNotFoundTotal.inc();
         }
-        return this.rank(results);
+        return results
+            .sort((a, b) => b.confidence - a.confidence)
+            .filter((elem, index, self) =>
+                // Keep if this is the first index for this company's id.
+                index === self.findIndex(c => c.company.id === elem.company.id)
+            );
     }
 
     private findInRepo(findCompanyDto: FindCompanyDto): CompanyFoundInServiceDto[] {
@@ -130,24 +135,6 @@ export class CompanyService implements ICompanyService {
             this.findScraperErrorTotal.inc();
         }
         return results;
-    }
-
-    private rank(companies: CompanyFoundInServiceDto[]): CompanyFoundInServiceDto[] {
-        companies.sort(this.compareByConfidenceDesc);
-        return companies.filter(function (elem, index, self) {
-            // Keep if this is the first index for this company's id.
-            return index === self.findIndex(c => c.company.id === elem.company.id);
-        });
-    }
-
-    private compareByConfidenceDesc(a: CompanyFoundInServiceDto, b: CompanyFoundInServiceDto) {
-        if (a.confidence > b.confidence) {
-            return -1;
-        }
-        if (a.confidence < b.confidence) {
-            return 1;
-        }
-        return 0;
     }
 
 }
