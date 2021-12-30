@@ -51,6 +51,19 @@ export class CompanyService implements ICompanyService {
     }
 
     async find(findCompanyDto: FindCompanyDto): Promise<CompanyFoundInServiceDto[]> {
+        var results = this.findInRepo(findCompanyDto);
+        if (results.length === 0) {
+            this.logger.verbose(`Could not find company in the repo; metadata: ${JSON.stringify(findCompanyDto, undefined, 2)}`);
+            results.push(...await this.findInScraperService(findCompanyDto));
+        }
+
+        if (results.length === 0) {
+            this.logger.verbose(`Could not find company anywhere; metadata: ${JSON.stringify(findCompanyDto, undefined, 2)}`);
+        }
+        return this.rank(results);
+    }
+
+    private findInRepo(findCompanyDto: FindCompanyDto): CompanyFoundInServiceDto[] {
         var results = [];
         if (findCompanyDto.id) {
             const company = this.companyRepo.findById(findCompanyDto.id);
@@ -71,34 +84,32 @@ export class CompanyService implements ICompanyService {
                 }
             }));
         }
-        if (results.length === 0) {
-            this.logger.verbose(`Could not find company with metadata ${JSON.stringify(findCompanyDto, undefined, 2)} in the repo`);
-            // We don't want to contact the scraper service if the request is empty.
-            if (Object.keys(findCompanyDto).length != 0) {
-                try {
-                    const fetched = await this.scraperService.fetchByCompanyId(findCompanyDto);
-                    if (fetched) {
-                        this.logger.verbose(`Fetched companies: ${JSON.stringify(fetched, undefined, 2)}`);
-                        fetched.forEach(companyFoundDto => {
-                            const company = this.add(companyFoundDto.company);
-                            results.push({
-                                ...companyFoundDto,
-                                company: company,
-                            });
-                        });
-                    }
-                } catch (e) {
-                    this.logger.error(`Could not get companies from ScraperService: ${e}`);
-                }
-            }
-        }
-        if (results.length === 0) {
-            this.logger.verbose(`Could not find company with metadata ${JSON.stringify(findCompanyDto, undefined, 2)} anywhere`);
-        }
-        return this.rank(results);
+        return results;
     }
 
-    rank(companies: CompanyFoundInServiceDto[]): CompanyFoundInServiceDto[] {
+    private async findInScraperService(findCompanyDto: FindCompanyDto): Promise<CompanyFoundInServiceDto[]> {
+        // We don't want to contact the scraper service if the request is empty.
+        if (Object.keys(findCompanyDto).length === 0) {
+            return [];
+        }
+        var results = [];
+        try {
+            const fetched = await this.scraperService.fetchByCompanyId(findCompanyDto);
+            this.logger.verbose(`Fetched companies: ${JSON.stringify(fetched, undefined, 2)}`);
+            fetched.forEach(companyFoundDto => {
+                const company = this.add(companyFoundDto.company);
+                results.push({
+                    ...companyFoundDto,
+                    company: company,
+                });
+            });
+        } catch (e) {
+            this.logger.error(`Could not get companies from ScraperService: ${e}`);
+        }
+        return results;
+    }
+
+    private rank(companies: CompanyFoundInServiceDto[]): CompanyFoundInServiceDto[] {
         companies.sort(this.compareByConfidenceDesc);
         return companies.filter(function (elem, index, self) {
             // Keep if this is the first index for this company's id.
@@ -106,7 +117,7 @@ export class CompanyService implements ICompanyService {
         });
     }
 
-    compareByConfidenceDesc(a: CompanyFoundInServiceDto, b: CompanyFoundInServiceDto) {
+    private compareByConfidenceDesc(a: CompanyFoundInServiceDto, b: CompanyFoundInServiceDto) {
         if (a.confidence > b.confidence) {
             return -1;
         }
