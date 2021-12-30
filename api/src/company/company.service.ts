@@ -7,6 +7,8 @@ import { COMPANY_REPOSITORY, ICompanyRepository } from "./repository/repository-
 import { FindCompanyDto } from "./dto/find-company.dto";
 import { IScraperService, SCRAPER_SERVICE } from "./scraper/service-interface";
 import { CompanyFoundInServiceDto } from "./dto/company-found.dto";
+import { Counter } from "prom-client";
+import { InjectMetric } from "@willsoto/nestjs-prometheus";
 
 @Injectable()
 export class CompanyService implements ICompanyService {
@@ -22,6 +24,18 @@ export class CompanyService implements ICompanyService {
         private readonly companyRepo: ICompanyRepository,
         @Inject(SCRAPER_SERVICE)
         private readonly scraperService: IScraperService,
+        // Some metrics for the "find" operation are related to each other:
+        // find_inbound_total = find_outbound_found_in_repo_total + find_outbound_found_in_scrapers_total + find_outbound_not_found_total
+        @InjectMetric("find_inbound_total")
+        public findInboundTotal: Counter<string>,
+        @InjectMetric("find_outbound_found_in_repo_total")
+        public findFoundInRepoTotal: Counter<string>,
+        @InjectMetric("find_outbound_found_in_scrapers_total")
+        public findFoundInScrapersTotal: Counter<string>,
+        @InjectMetric("find_outbound_not_found_total")
+        public findNotFoundTotal: Counter<string>,
+        @InjectMetric("find_scrapers_error_total")
+        public findScraperErrorTotal: Counter<string>,
     ) { }
 
     listAll() {
@@ -51,14 +65,22 @@ export class CompanyService implements ICompanyService {
     }
 
     async find(findCompanyDto: FindCompanyDto): Promise<CompanyFoundInServiceDto[]> {
+        this.findInboundTotal.inc();
         var results = this.findInRepo(findCompanyDto);
-        if (results.length === 0) {
+        if (results.length != 0) {
+            this.findFoundInRepoTotal.inc();
+        } else {
             this.logger.verbose(`Could not find company in the repo; metadata: ${JSON.stringify(findCompanyDto, undefined, 2)}`);
-            results.push(...await this.findInScraperService(findCompanyDto));
+            const found = await this.findInScraperService(findCompanyDto);
+            if (found.length != 0) {
+                this.findFoundInScrapersTotal.inc();
+            }
+            results.push(...found);
         }
 
         if (results.length === 0) {
             this.logger.verbose(`Could not find company anywhere; metadata: ${JSON.stringify(findCompanyDto, undefined, 2)}`);
+            this.findNotFoundTotal.inc();
         }
         return this.rank(results);
     }
@@ -105,6 +127,7 @@ export class CompanyService implements ICompanyService {
             });
         } catch (e) {
             this.logger.error(`Could not get companies from ScraperService: ${e}`);
+            this.findScraperErrorTotal.inc();
         }
         return results;
     }
