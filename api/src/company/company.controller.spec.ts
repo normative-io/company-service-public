@@ -1,3 +1,4 @@
+import { HttpModule } from '@nestjs/axios';
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { COMPANY_SERVICE } from './company-service.interface';
@@ -5,7 +6,6 @@ import { CompanyController } from './company.controller';
 import { CompanyService } from './company.service';
 import { CompanyRepositoryArray } from './repository/repository-array';
 import { COMPANY_REPOSITORY } from './repository/repository-interface';
-import { SCRAPER_SERVICE } from './scraper/service-interface';
 import { TestMetrics } from './test-utils/company-service-metrics';
 
 describe('CompanyController', () => {
@@ -13,6 +13,7 @@ describe('CompanyController', () => {
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
+      imports: [HttpModule],
       controllers: [CompanyController],
       providers: [
         {
@@ -22,14 +23,6 @@ describe('CompanyController', () => {
         {
           provide: COMPANY_REPOSITORY,
           useClass: CompanyRepositoryArray,
-        },
-        {
-          provide: SCRAPER_SERVICE,
-          useValue: {
-            fetchByCompanyId: jest.fn(() => {
-              return [];
-            })
-          },
         },
         ...TestMetrics,
       ],
