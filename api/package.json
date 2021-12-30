@@ -27,8 +27,10 @@
     "@nestjs/core": "^8.0.0",
     "@nestjs/platform-fastify": "^8.2.4",
     "@nestjs/swagger": "^5.1.5",
+    "@willsoto/nestjs-prometheus": "^4.4.0",
     "axios": "^0.24.0",
     "fastify-swagger": "^4.13.0",
+    "prom-client": "^14.0.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0"
