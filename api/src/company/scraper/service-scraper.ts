@@ -4,6 +4,7 @@ import { AxiosRequestConfig } from "axios";
 import { CompanyFoundInScraperDto } from "../dto/company-found.dto";
 import { FindCompanyDto } from "../dto/find-company.dto";
 import { IScraperService } from "./service-interface";
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class ScraperService implements IScraperService {
@@ -14,7 +15,7 @@ export class ScraperService implements IScraperService {
 
     async fetchByCompanyId(findCompanyDto: FindCompanyDto): Promise<CompanyFoundInScraperDto[]> {
         const address = 'http://127.0.0.1:3001/scraper/fetch/byCompanyId';
-        this.logger.log(`Making request to ${address}`);
+        this.logger.log(`Making fetch/byCompanyId request on ScraperService on ${address}`);
 
         const requestConfig: AxiosRequestConfig = {
             headers: {
@@ -22,20 +23,16 @@ export class ScraperService implements IScraperService {
             },
         };
 
-        try {
-            // TODO: Find a different way to do this request. toPromise() is deprecated.
-            const response = await this.httpService.post(address, findCompanyDto, requestConfig).toPromise();
-            this.logger.log(`Response: ${JSON.stringify(response.data, undefined, 2)}`);
+        const response = await firstValueFrom(
+            this.httpService.post(address, findCompanyDto, requestConfig));
+        this.logger.verbose(`fetch/byCompanyId got response: ${JSON.stringify(response.data, undefined, 2)}`);
 
-            return response.data.map(function (elem) {
-                return {
-                    confidence: elem.confidence,
-                    debugString: 'From ScraperService',
-                    company: elem,
-                };
-            });
-        } catch (e) {
-            this.logger.error(`${e}. Make sure the Scraper Service is listening on ${address}`);
-        }
+        return response.data.map(function (elem) {
+            return {
+                confidence: elem.confidence,
+                debugString: 'From ScraperService',
+                company: elem,
+            };
+        });
     }
 }
