@@ -30,7 +30,7 @@ export class ScraperService implements IScraperService {
         return response.data.map(function (elem) {
             return {
                 confidence: elem.confidence,
-                debugString: 'From ScraperService',
+                foundBy: elem.scraperName ? `Scraper ${elem.scraperName}` : undefined,
                 company: elem,
             };
         });

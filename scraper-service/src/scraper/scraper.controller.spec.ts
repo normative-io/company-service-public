@@ -23,7 +23,7 @@ describe('ScraperController', () => {
 
   it('should find a Danish company by companyId', () => {
     expect(controller.byCompanyId({ country: 'DK', companyId: '123' })).toEqual(
-      [{ confidence: 1.0, name: 'danish-company-123' }],
+      [{ confidence: 1.0, name: 'danish-company-123', scraperName: 'denmark-scraper' }],
     );
   });
 

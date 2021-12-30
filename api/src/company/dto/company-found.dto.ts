@@ -7,9 +7,9 @@ class CompanyFoundDto {
     @ApiProperty({
         type: String,
         description: 'Information about how this company was found, for debugging',
-        example: 'In the repository'
+        example: 'Repository'
     })
-    readonly debugString?: string
+    readonly foundBy?: string
 
     @ApiProperty({
         type: Number,
@@ -27,6 +27,12 @@ export class CompanyFoundInScraperDto extends CompanyFoundDto {
         description: 'Metadata about the company'
     })
     readonly company: CreateCompanyDto
+
+    @ApiProperty({
+        type: String,
+        description: 'The name of the scraper that found the company'
+    })
+    readonly scraperName?: string
 
 }
 

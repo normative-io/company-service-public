@@ -97,7 +97,7 @@ export class CompanyService implements ICompanyService {
             if (company) {
                 results.push({
                     confidence: CompanyService.confidenceById,
-                    debugString: 'Repository by id',
+                    foundBy: 'Repository by id',
                     company: company,
                 });
             }
@@ -106,7 +106,7 @@ export class CompanyService implements ICompanyService {
             results.push(...this.companyRepo.findByName(findCompanyDto.name).map(function (company) {
                 return {
                     confidence: CompanyService.confidenceByName,
-                    debugString: 'Repository by name',
+                    foundBy: 'Repository by name',
                     company: company,
                 }
             }));
@@ -133,6 +133,9 @@ export class CompanyService implements ICompanyService {
         } catch (e) {
             this.logger.error(`Could not get companies from ScraperService: ${e}`);
             this.findScraperErrorTotal.inc();
+            // Throw the error, so that the request fails - otherwise we might miss
+            // the fact that something went wrong.
+            throw e;
         }
         return results;
     }
