@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, Logger } from "@nestjs/common";
 import { CreateCompanyDto } from "./dto/create-company.dto";
 import { UpdateCompanyDto } from "./dto/update-company.dto";
 import { ICompanyService } from "./company-service.interface";
@@ -10,6 +10,8 @@ import { CompanyFoundInServiceDto } from "./dto/company-found.dto";
 
 @Injectable()
 export class CompanyService implements ICompanyService {
+
+    private readonly logger = new Logger(CompanyService.name);
 
     // These confidence values have been chosen intuitively.
     static readonly confidenceById = 1;
@@ -70,28 +72,28 @@ export class CompanyService implements ICompanyService {
             }));
         }
         if (results.length === 0) {
-            console.log(`Could not find company with metadata ${JSON.stringify(findCompanyDto, undefined, 2)} in the repo`);
+            this.logger.verbose(`Could not find company with metadata ${JSON.stringify(findCompanyDto, undefined, 2)} in the repo`);
             // We don't want to contact the scraper service if the request is empty.
             if (Object.keys(findCompanyDto).length != 0) {
-                console.log(`Contacting ScraperService`);
-                // TODO: Catch errors here instead of swallowing them inside scraperService,
-                // so that we can return a descriptive message to the caller - eg if
-                // the ScraperService is down.
-                const fetched = await this.scraperService.fetchByCompanyId(findCompanyDto);
-                if (fetched) {
-                    console.log(`Fetched companies: ${JSON.stringify(fetched, undefined, 2)}`);
-                    fetched.forEach(companyFoundDto => {
-                        const company = this.add(companyFoundDto.company);
-                        results.push({
-                            ...companyFoundDto,
-                            company: company,
+                try {
+                    const fetched = await this.scraperService.fetchByCompanyId(findCompanyDto);
+                    if (fetched) {
+                        this.logger.verbose(`Fetched companies: ${JSON.stringify(fetched, undefined, 2)}`);
+                        fetched.forEach(companyFoundDto => {
+                            const company = this.add(companyFoundDto.company);
+                            results.push({
+                                ...companyFoundDto,
+                                company: company,
+                            });
                         });
-                    });
+                    }
+                } catch (e) {
+                    this.logger.error(`Could not get companies from ScraperService: ${e}`);
                 }
             }
         }
         if (results.length === 0) {
-            console.log(`Could not find company with metadata ${JSON.stringify(findCompanyDto, undefined, 2)} anywhere`);
+            this.logger.verbose(`Could not find company with metadata ${JSON.stringify(findCompanyDto, undefined, 2)} anywhere`);
         }
         return this.rank(results);
     }
