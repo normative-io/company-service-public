@@ -3,38 +3,31 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CompanyRepositoryArray } from './repository/repository-array';
 import { COMPANY_REPOSITORY } from './repository/repository-interface';
 import { CompanyService } from './company.service';
-import { SCRAPER_SERVICE } from './scraper/service-interface';
-import { CompanyFoundInScraperDto } from './dto/company-found.dto';
 import { TestMetrics } from './test-utils/company-service-metrics';
+import { HttpModule, HttpService } from '@nestjs/axios';
+import { AxiosResponse } from 'axios';
+import { of } from 'rxjs';
 
 describe('CompanyService', () => {
     let service: CompanyService;
-    // To be returned by the scraper service's fetchCompanyById operation.
-    // Set by the tests that need it.
-    let scraperServiceFoundById: CompanyFoundInScraperDto[];
-
-    const mockScraperService = {
-        fetchByCompanyId: jest.fn(() => {
-            return scraperServiceFoundById;
-        })
-    }
+    let httpService: HttpService;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
+            imports: [HttpModule],
             providers: [CompanyService,
                 {
                     provide: COMPANY_REPOSITORY,
                     useClass: CompanyRepositoryArray,
-                },
-                {
-                    provide: SCRAPER_SERVICE,
-                    useValue: mockScraperService,
                 },
                 ...TestMetrics,
             ],
         }).compile();
 
         service = module.get<CompanyService>(CompanyService);
+        httpService = module.get<HttpService>(HttpService);
+        // By default, don't return anything.
+        jest.spyOn(httpService, 'post').mockImplementation(() => of(undefined));
     });
 
     it('should be defined', () => {
@@ -170,7 +163,7 @@ describe('CompanyService', () => {
             { company: { id: expect.any(String), name: '1', created: expect.any(Date) }, confidence: expect.any(Number), foundBy: expect.any(String) },
         ]);
 
-        expect(mockScraperService.fetchByCompanyId).not.toHaveBeenCalled();
+        expect(httpService.post).not.toHaveBeenCalled();
     })
 
     it('should find companies that match individual fields, ordered by confidence', async () => {
@@ -195,13 +188,18 @@ describe('CompanyService', () => {
     describe('when the company is not found in the first repo', () => {
         describe('and the company is found by the scraper service', () => {
             beforeEach(() => {
-                scraperServiceFoundById = [{ company: { name: 'company found', country: 'CH', companyId: '456' }, foundBy: 'Scraper CH' }];
+                let httpResponse: AxiosResponse = {
+                    data: [{ name: 'company found', country: 'CH', companyId: '456', confidence: 1, scraperName: 'CH' }],
+                    status: 200, statusText: 'OK',
+                    headers: {}, config: {},
+                };
+                jest.spyOn(httpService, 'post').mockImplementation(() => of(httpResponse));
             })
             it('should create and find a company', async () => {
                 const found = await service.find({ name: 'non-existent-name' });
                 expect(found)
                     .toEqual([
-                        { company: { id: expect.any(String), name: 'company found', created: expect.any(Date), country: 'CH', companyId: '456' }, foundBy: 'Scraper CH' },
+                        { company: { id: expect.any(String), name: 'company found', created: expect.any(Date), country: 'CH', companyId: '456' }, confidence: 1, foundBy: 'Scraper CH' },
                     ]);
 
                 expect(service.getById(found[0].company.id))
@@ -213,7 +211,12 @@ describe('CompanyService', () => {
 
         describe('and multiple companies are found by the scraper service', () => {
             beforeEach(() => {
-                scraperServiceFoundById = [{ company: { name: 'company found' } }, { company: { name: 'another company found', country: 'CH', companyId: '456' } }];
+                let httpResponse: AxiosResponse = {
+                    data: [{ name: 'company found' }, { name: 'another company found', country: 'CH', companyId: '456' }],
+                    status: 200, statusText: 'OK',
+                    headers: {}, config: {},
+                };
+                jest.spyOn(httpService, 'post').mockImplementation(() => of(httpResponse));
             })
             it('should find and create all companies', async () => {
                 const found = await service.find({ name: 'irrelevant' });
@@ -234,13 +237,18 @@ describe('CompanyService', () => {
 
             describe('and results contain a confidence value', () => {
                 beforeEach(() => {
-                    scraperServiceFoundById = [
-                        { company: { name: '1' }, confidence: 0.5 },
-                        { company: { name: '2' }, confidence: 0.7 },
-                        { company: { name: '3' }, confidence: 0.9 },
-                        { company: { name: '4' }, confidence: 0.6 },
-                        { company: { name: '5' } },
-                    ];
+                    let httpResponse: AxiosResponse = {
+                        data: [
+                            { name: '1', confidence: 0.5 },
+                            { name: '2', confidence: 0.7 },
+                            { name: '3', confidence: 0.9 },
+                            { name: '4', confidence: 0.6 },
+                            { name: '5' },
+                        ],
+                        status: 200, statusText: 'OK',
+                        headers: {}, config: {},
+                    };
+                    jest.spyOn(httpService, 'post').mockImplementation(() => of(httpResponse));
                 })
                 it('results should be sorted by confidence in descending order', async () => {
                     const found = await service.find({ name: 'irrelevant' });
@@ -259,7 +267,12 @@ describe('CompanyService', () => {
 
         describe('and the company is not found by the scraper service', () => {
             beforeEach(() => {
-                scraperServiceFoundById = [];
+                let httpResponse: AxiosResponse = {
+                    data: [],
+                    status: 200, statusText: 'OK',
+                    headers: {}, config: {},
+                };
+                jest.spyOn(httpService, 'post').mockImplementation(() => of(httpResponse));
             })
             it('should not find a company', async () => {
                 expect(await service.find({ name: 'non-existent-name' }))
@@ -274,7 +287,7 @@ describe('CompanyService', () => {
             service.add({ name: '3' });
 
             expect(await service.find({})).toEqual([]);
-            expect(mockScraperService.fetchByCompanyId).not.toHaveBeenCalled();
+            expect(httpService.post).not.toHaveBeenCalled();
         })
     })
 });

@@ -4,9 +4,7 @@ import { COMPANY_SERVICE } from './company-service.interface';
 import { CompanyService } from './company.service';
 import { CompanyRepositoryArray } from './repository/repository-array';
 import { COMPANY_REPOSITORY } from './repository/repository-interface';
-import { SCRAPER_SERVICE } from './scraper/service-interface';
 import { HttpModule } from '@nestjs/axios';
-import { ScraperService } from './scraper/service-scraper';
 import { PrometheusModule, makeCounterProvider } from "@willsoto/nestjs-prometheus";
 
 @Module({
@@ -20,10 +18,6 @@ import { PrometheusModule, makeCounterProvider } from "@willsoto/nestjs-promethe
     {
       provide: COMPANY_REPOSITORY,
       useClass: CompanyRepositoryArray,
-    },
-    {
-      provide: SCRAPER_SERVICE,
-      useClass: ScraperService,
     },
 
     makeCounterProvider({ name: "find_inbound_total", help: "The number of find inbound requests" }),
