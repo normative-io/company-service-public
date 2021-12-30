@@ -1,3 +1,4 @@
+import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ScraperRegistry, SCRAPER_REGISTRY } from './registry.service';
 import { ScraperController } from './scraper.controller';
@@ -7,6 +8,7 @@ describe('ScraperController', () => {
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
+      imports: [ConfigModule.forRoot()],
       controllers: [ScraperController],
       providers: [
         {

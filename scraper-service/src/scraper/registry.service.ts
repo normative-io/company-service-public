@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
 import { FetchByCompanyIdDto } from '../dto/fetch.dto';
 import { FoundCompany, IScraper } from '../dto/scraper.interface';
@@ -5,12 +6,19 @@ import { DenmarkScraper } from './examples/denmark-scraper';
 
 export const SCRAPER_REGISTRY = 'SCRAPER_REGISTRY';
 
+const DEFAULT_SCRAPER_PATHS = 'examples/';
+
 @Injectable()
 export class ScraperRegistry {
   scrapers: IScraper[];
 
-  constructor() {
+  constructor(private configService: ConfigService) {
     // TODO: dynamically load scraper classes from a folder specified via an env var.
+    const scraperPaths = this.configService
+      .get<string>('SCRAPER_PATHS', DEFAULT_SCRAPER_PATHS)
+      .split(',');
+    console.log(`Using scraper paths: ${scraperPaths}`);
+
     this.scrapers = [new DenmarkScraper()];
   }
 
