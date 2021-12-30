@@ -1,9 +1,10 @@
-import { Inject, Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { Module } from '@nestjs/common';
 import { ScraperRegistry, SCRAPER_REGISTRY } from './registry.service';
 import { ScraperController } from './scraper.controller';
 
 @Module({
-  imports: [],
+  imports: [ConfigModule],
   controllers: [ScraperController],
   providers: [
     {
