@@ -44,7 +44,12 @@ export class ScraperRegistry {
       );
       const res = s.fetch(req);
       if (res.foundCompanies.length > 0) {
-        return res.foundCompanies;
+        return res.foundCompanies.map(function (e) {
+          return {
+            scraperName: s.name(),
+            ...e,
+          }
+        });
       }
     }
     return [];

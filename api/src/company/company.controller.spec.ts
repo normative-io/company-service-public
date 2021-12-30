@@ -130,8 +130,8 @@ describe('CompanyController', () => {
     controller.add({ name: '2' });
 
     expect(await controller.find({ name: '2' })).toEqual([
-      { company: { id: expect.any(String), name: '2', created: expect.any(Date) }, confidence: expect.any(Number), debugString: expect.any(String) },
-      { company: { id: expect.any(String), name: '2', created: expect.any(Date) }, confidence: expect.any(Number), debugString: expect.any(String) },
+      { company: { id: expect.any(String), name: '2', created: expect.any(Date) }, confidence: expect.any(Number), foundBy: expect.any(String) },
+      { company: { id: expect.any(String), name: '2', created: expect.any(Date) }, confidence: expect.any(Number), foundBy: expect.any(String) },
     ]);
   })
 

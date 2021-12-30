@@ -36,4 +36,8 @@ export class FoundCompany {
 
   // Name of the company.
   readonly name: string;
+
+  // Scraper that found the company.
+  readonly scraperName?: string;
+
 }
