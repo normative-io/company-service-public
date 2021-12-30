@@ -6,7 +6,7 @@ import { CompanyService } from './company.service';
 import { CompanyRepositoryArray } from './repository/repository-array';
 import { COMPANY_REPOSITORY } from './repository/repository-interface';
 import { SCRAPER_SERVICE } from './scraper/service-interface';
-import { PrometheusModule, makeCounterProvider } from "@willsoto/nestjs-prometheus";
+import { TestMetrics } from './test-utils/company-service-metrics';
 
 describe('CompanyController', () => {
   let controller: CompanyController;
@@ -19,7 +19,6 @@ describe('CompanyController', () => {
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
-      imports: [PrometheusModule],
       controllers: [CompanyController],
       providers: [
         {
@@ -34,12 +33,7 @@ describe('CompanyController', () => {
           provide: SCRAPER_SERVICE,
           useValue: mockScraperService,
         },
-        // TODO: Do we really need to duplicate everything here in order to make the tests pass????
-        makeCounterProvider({ name: "find_inbound_total", help: "find_inbound_total" }),
-        makeCounterProvider({ name: "find_outbound_found_in_repo_total", help: "find_outbound_found_in_repo_total" }),
-        makeCounterProvider({ name: "find_outbound_found_in_scrapers_total", help: "find_outbound_found_in_scrapers_total" }),
-        makeCounterProvider({ name: "find_outbound_not_found_total", help: "find_outbound_not_found_total" }),
-        makeCounterProvider({ name: "find_scrapers_error_total", help: "find_scrapers_error_total" }),
+        ...TestMetrics,
       ],
     }).compile();
 
