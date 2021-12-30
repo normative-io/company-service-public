@@ -21,3 +21,6 @@ export class DenmarkScraper implements IScraper {
     };
   }
 }
+
+// Scrapers must export a `Scraper` class that implements `IScraper`.
+module.exports.Scraper = DenmarkScraper;

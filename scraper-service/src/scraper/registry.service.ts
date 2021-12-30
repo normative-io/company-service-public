@@ -1,25 +1,54 @@
 import { ConfigService } from '@nestjs/config';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { FetchByCompanyIdDto } from '../dto/fetch.dto';
 import { FoundCompany, IScraper } from '../dto/scraper.interface';
-import { DenmarkScraper } from './examples/denmark-scraper';
+const fg = require('fast-glob');
+const path = require('path');
 
 export const SCRAPER_REGISTRY = 'SCRAPER_REGISTRY';
 
-const DEFAULT_SCRAPER_PATHS = 'examples/';
+// Env var name for where the registry should look for scrapers.
+// The value is a comma-separated list of globs that represent
+// filepaths relative from the root application directory.
+const SCRAPER_GLOBS = 'SCRAPER_GLOBS';
+// If SCRAPER_GLOBS is not set, use this value.
+const DEFAULT_SCRAPER_GLOBS = 'src/scraper/examples/**/*.ts';
 
 @Injectable()
 export class ScraperRegistry {
   scrapers: IScraper[];
 
   constructor(private configService: ConfigService) {
-    // TODO: dynamically load scraper classes from a folder specified via an env var.
-    const scraperPaths = this.configService
-      .get<string>('SCRAPER_PATHS', DEFAULT_SCRAPER_PATHS)
+    const scraperGlobs = this.configService
+      .get<string>(SCRAPER_GLOBS, DEFAULT_SCRAPER_GLOBS)
       .split(',');
-    console.log(`Using scraper paths: ${scraperPaths}`);
+    console.log(`Searching for scrapers in: ${scraperGlobs}`);
 
-    this.scrapers = [new DenmarkScraper()];
+    const scraperNames = new Set<string>();
+    this.scrapers = [];
+    for (const scraperPath of fg.sync(scraperGlobs)) {
+      // require() will need a relative path from the current script.
+      // Local files are marked with a `./` prefix.
+      const relPath = './' + path.relative(__dirname, scraperPath);
+      const scraperSource = require(relPath);
+      const scraper = new scraperSource.Scraper();
+
+      const name = scraper.name();
+      if (!name) {
+        throw new Error(`Empty scraper name in ${scraperPath}`);
+      }
+      if (scraperNames.has(name)) {
+        throw new Error(`Duplicate scraper name: ${name} in ${scraperPath}`);
+      }
+      scraperNames.add(name);
+
+      this.scrapers.push(scraper);
+      console.log(`Registered scraper: ${name}`);
+    }
+
+    if (this.scrapers.length === 0) {
+      throw new NotFoundException(`No scrapers found in: ${scraperGlobs}`);
+    }
   }
 
   // TODO: change return data type to include metadata about which scrapers were used.
@@ -34,7 +63,7 @@ export class ScraperRegistry {
     // Fetch from each applicable scraper until a value is found.
     // Note: in the future, we may want to execute every
     // applicable scraper and/or run them all in parallel.
-    for (let s of applicableScrapers) {
+    for (const s of applicableScrapers) {
       console.log(
         `attempting fetch for request ${JSON.stringify(
           req,
