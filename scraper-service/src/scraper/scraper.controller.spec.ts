@@ -19,9 +19,15 @@ describe('ScraperController', () => {
     controller = app.get<ScraperController>(ScraperController);
   });
 
-  it('should fetch a company by companyId', () => {
-    expect(controller.byCompanyId({ country: 'CH', companyId: '123' })).toEqual(
-      [{ confidence: 1.0, name: 'some-company-name' }],
+  it('should find a Danish company by companyId', () => {
+    expect(controller.byCompanyId({ country: 'DK', companyId: '123' })).toEqual(
+      [{ confidence: 1.0, name: 'danish-company-123' }],
+    );
+  });
+
+  it('should not find a Swiss company by companyId', () => {
+    expect(controller.byCompanyId({ country: 'CH', companyId: '456' })).toEqual(
+      [],
     );
   });
 });

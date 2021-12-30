@@ -21,7 +21,7 @@ export class CheckResult {
   // If scraperA has a lower value priority than scraperB, then scraperA should be fetched from
   // before attempting a fetch from scraperB.
   // Scrapers equal in priority will be fetched from in an undefined order.
-  readonly priority: number;
+  readonly priority?: number;
 }
 
 export class FetchResult {
