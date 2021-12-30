@@ -11,12 +11,6 @@ import { TestMetrics } from './test-utils/company-service-metrics';
 describe('CompanyController', () => {
   let controller: CompanyController;
 
-  const mockScraperService = {
-    fetchByCompanyId: jest.fn(() => {
-      return [];
-    })
-  }
-
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [CompanyController],
@@ -31,7 +25,11 @@ describe('CompanyController', () => {
         },
         {
           provide: SCRAPER_SERVICE,
-          useValue: mockScraperService,
+          useValue: {
+            fetchByCompanyId: jest.fn(() => {
+              return [];
+            })
+          },
         },
         ...TestMetrics,
       ],
