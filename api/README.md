@@ -14,6 +14,10 @@ $ npm install
 ## Running
 
 ```bash
+
+# Pre-requisites
+$ cp config/local.env .env
+
 # development
 $ npm run start
 
@@ -30,15 +34,9 @@ Note that the `docker-compose` file is in the parent folder; this is
 because Company Service API depends on Scraper Service being up and
 running, and this dependency is reflected in such file.
 
-IMPORTANT: Before starting the application in Docker, change the value
-of `scraperServiceAddress` in the `company.service.ts` file to point to
-`scraper_dev` (instead of `127.0.0.1`).
-
-TODO: Use configuration files to inject the proper value depending
-on the environment.
-
 ```bash
-# development. Note that this command starts scraper_dev too.
+# development. Note scraper_dev starts too.
+$ cp config/docker_dev.env .env
 $ (cd .. && docker-compose up api_dev)
 
 # production mode: TODO

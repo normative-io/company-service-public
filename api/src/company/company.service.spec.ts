@@ -7,6 +7,7 @@ import { TestMetrics } from './test-utils/company-service-metrics';
 import { HttpModule, HttpService } from '@nestjs/axios';
 import { AxiosResponse } from 'axios';
 import { of } from 'rxjs';
+import { ConfigModule } from '@nestjs/config';
 
 describe('CompanyService', () => {
     let service: CompanyService;
@@ -14,7 +15,7 @@ describe('CompanyService', () => {
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            imports: [HttpModule],
+            imports: [HttpModule, ConfigModule.forRoot()],
             providers: [CompanyService,
                 {
                     provide: COMPANY_REPOSITORY,
