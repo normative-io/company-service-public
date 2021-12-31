@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  api_dev:
+    container_name: api_dev
+    image: api-dev:1.0.0
+    build:
+      context: .
+      target: development
+      dockerfile: ./api/Dockerfile
+    command: npm run start:debug
+    ports:
+      - 3000:3000
+      - 9229:9229
+    networks:
+      - nestjs-network
+    volumes:
+      - ./api:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+    links:
+      - scraper_dev
+  scraper_dev:
+    container_name: scraper_dev
+    image: scraper-dev:1.0.0
+    build:
+      context: .
+      target: development
+      dockerfile: ./scraper-service/Dockerfile
+    command: npm run start:debug
+    ports:
+      - 3001:3001
+      - 9230:9230
+    networks:
+      - nestjs-network
+    volumes:
+      - ./scraper-service:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+
+# TODO: Add prod services.
+
+networks:
+  nestjs-network: null
