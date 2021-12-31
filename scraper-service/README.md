@@ -21,6 +21,17 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## Running in Docker
+
+Note that the `docker-compose` file is in the parent folder.
+
+```bash
+# development
+$ (cd .. && docker-compose up scraper_dev)
+
+# production mode: TODO
+```
+
 ## Testing
 
 ```bash

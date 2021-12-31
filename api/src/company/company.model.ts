@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { randomUUID } from "crypto";
+import { v4 as uuid } from 'uuid';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 
@@ -38,7 +38,7 @@ export class Company {
     readonly created: Date
 
     constructor(createCompanyDto: CreateCompanyDto) {
-        this.id = randomUUID();
+        this.id = uuid();
         this.name = createCompanyDto.name;
         this.country = createCompanyDto.country;
         this.companyId = createCompanyDto.companyId;
