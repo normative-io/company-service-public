@@ -30,12 +30,15 @@ export class FetchResult {
 export class FoundCompany {
   // A percentage value (as a value between 0.0 and 1.0) of how confident this data matches the fetch request.
   // This allows clients to make heuristics if there are multiple candidates found.
-  readonly confidence: number;
-
-  // Name of the company.
-  readonly name: string;
-
-  // Scraper that found the company.
-  readonly scraperName?: string;
-
+  constructor(
+    public readonly confidence: number,
+    // Name of the company.
+    public readonly name: string,
+    // ISIC rev 4 of the company
+    public readonly isic: string,
+    // Organization number of the company (Tax ID when applicable)
+    public readonly orgNr?: string,
+    // Scraper that found the company.
+    public readonly scraperName?: string,
+  ) {}
 }
