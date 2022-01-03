@@ -19,17 +19,21 @@ export class ScraperRegistry {
   scrapers: IScraper[];
 
   constructor(private configService: ConfigService) {
-    const scraperGlobs = this.configService
-      .get<string>(SCRAPER_GLOBS, DEFAULT_SCRAPER_GLOBS)
-      .split(',');
+    const scraperGlobs = this.configService.get<string>(SCRAPER_GLOBS, DEFAULT_SCRAPER_GLOBS).split(',');
     console.log(`Searching for scrapers in: ${scraperGlobs}`);
 
     const scraperNames = new Set<string>();
     this.scrapers = [];
-    for (const scraperPath of fg.sync(scraperGlobs)) {
+    for (let scraperPath of fg.sync(scraperGlobs)) {
+      if (__dirname.includes('/scraper-service/dist/')) {
+        // We are running in the context of Javascript: redirect to point to the JS version of the file.
+        scraperPath = scraperPath.replace('src/', 'dist/').replace('.ts', '.js');
+      }
+
       // require() will need a relative path from the current script.
       // Local files are marked with a `./` prefix.
       const relPath = './' + path.relative(__dirname, scraperPath);
+      console.log(`Loading scraper from file: ${relPath}`);
       const scraperSource = require(relPath);
       const scraper = new scraperSource.Scraper();
 
@@ -64,20 +68,14 @@ export class ScraperRegistry {
     // Note: in the future, we may want to execute every
     // applicable scraper and/or run them all in parallel.
     for (const s of applicableScrapers) {
-      console.log(
-        `attempting fetch for request ${JSON.stringify(
-          req,
-          undefined,
-          2,
-        )} using scraper: ${s.name()}`,
-      );
+      console.log(`attempting fetch for request ${JSON.stringify(req, undefined, 2)} using scraper: ${s.name()}`);
       const res = s.fetch(req);
       if (res.foundCompanies.length > 0) {
         return res.foundCompanies.map(function (e) {
           return {
             scraperName: s.name(),
             ...e,
-          }
+          };
         });
       }
     }
