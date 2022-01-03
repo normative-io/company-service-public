@@ -6,9 +6,10 @@ import { CompanyRepositoryArray } from './repository/repository-array';
 import { COMPANY_REPOSITORY } from './repository/repository-interface';
 import { HttpModule } from '@nestjs/axios';
 import { PrometheusModule, makeCounterProvider } from "@willsoto/nestjs-prometheus";
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [HttpModule, PrometheusModule.register()],
+  imports: [HttpModule, PrometheusModule.register(), ConfigModule],
   controllers: [CompanyController],
   providers: [
     {

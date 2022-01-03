@@ -11,11 +11,10 @@ import { InjectMetric } from "@willsoto/nestjs-prometheus";
 import { HttpService } from "@nestjs/axios";
 import { AxiosRequestConfig } from "axios";
 import { firstValueFrom } from "rxjs";
+import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class CompanyService implements ICompanyService {
-
-    static readonly scraperServiceAddress = 'http://127.0.0.1:3001/scraper/fetch/byCompanyId';
 
     static readonly requestConfig: AxiosRequestConfig = {
         headers: { 'Content-Type': 'application/json' },
@@ -27,10 +26,13 @@ export class CompanyService implements ICompanyService {
     static readonly confidenceById = 1;
     static readonly confidenceByName = 0.9;
 
+    private scraperServiceAddress;
+
     constructor(
         @Inject(COMPANY_REPOSITORY)
         private readonly companyRepo: ICompanyRepository,
         private readonly httpService: HttpService,
+        private configService: ConfigService,
         // Some metrics for the "find" operation are related to each other:
         // find_inbound_total = find_outbound_found_in_repo_total + find_outbound_found_in_scrapers_total + find_outbound_not_found_total
         @InjectMetric("find_inbound_total")
@@ -43,7 +45,12 @@ export class CompanyService implements ICompanyService {
         public findNotFoundTotal: Counter<string>,
         @InjectMetric("find_scrapers_error_total")
         public findScraperErrorTotal: Counter<string>,
-    ) { }
+    ) {
+        const scraperAddress = this.configService
+            .get<string>('SCRAPER_ADDRESS');
+        this.scraperServiceAddress = `http://${scraperAddress}/scraper/fetch/byCompanyId`;
+        this.logger.log(`Will use Scraper Service on address: ${this.scraperServiceAddress}`);
+    }
 
     listAll() {
         const all = this.companyRepo.listAll();
@@ -129,7 +136,7 @@ export class CompanyService implements ICompanyService {
         var results = [];
         try {
             const response = await firstValueFrom(
-                this.httpService.post(CompanyService.scraperServiceAddress, findCompanyDto, CompanyService.requestConfig));
+                this.httpService.post(this.scraperServiceAddress, findCompanyDto, CompanyService.requestConfig));
             this.logger.verbose(`fetch/byCompanyId got response: ${JSON.stringify(response.data, undefined, 2)}`);
 
             response.data.forEach((dto) => {
