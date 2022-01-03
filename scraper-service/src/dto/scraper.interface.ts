@@ -7,7 +7,7 @@ export interface IScraper {
   check(FetchByCompanyIdDto): CheckResult;
 
   // Fetch performs the scraping business logic for the given request.
-  fetch(FetchByCompanyIdDto): FetchResult;
+  lookup(FetchByCompanyIdDto): Promise<FetchResult>;
 }
 
 export class CheckResult {
