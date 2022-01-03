@@ -25,7 +25,7 @@ export class ScraperRegistry {
     const scraperNames = new Set<string>();
     this.scrapers = [];
     for (let scraperPath of fg.sync(scraperGlobs)) {
-      if (__dirname.includes('/scraper-service/dist/')) {
+      if (__dirname.includes('dist/')) {
         // We are running in the context of Javascript: redirect to point to the JS version of the file.
         scraperPath = scraperPath.replace('src/', 'dist/').replace('.ts', '.js');
       }
