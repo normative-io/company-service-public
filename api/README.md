@@ -5,9 +5,15 @@ The primary entrypoint for clients of the company service.
 Note that `find` operations require the ScraperService to be
 up and running.
 
+## Prerequisites
+
+Besides [node](https://nodejs.org/), [nvm](https://github.com/nvm-sh/nvm)
+should also be installed locally.
+
 ## Installation
 
 ```bash
+$ nvm use
 $ npm install
 ```
 
