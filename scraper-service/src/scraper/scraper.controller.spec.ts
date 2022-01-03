@@ -22,14 +22,12 @@ describe('ScraperController', () => {
   });
 
   it('should find a Danish company by companyId', () => {
-    expect(controller.byCompanyId({ country: 'DK', companyId: '123' })).toEqual(
-      [{ confidence: 1.0, name: 'danish-company-123', scraperName: 'denmark-scraper' }],
-    );
+    expect(controller.byCompanyId({ country: 'DK', companyId: '123' })).toEqual([
+      { confidence: 1.0, name: 'danish-company-123', scraperName: 'denmark-scraper' },
+    ]);
   });
 
   it('should not find a Swiss company by companyId', () => {
-    expect(controller.byCompanyId({ country: 'CH', companyId: '456' })).toEqual(
-      [],
-    );
+    expect(controller.byCompanyId({ country: 'CH', companyId: '456' })).toEqual([]);
   });
 });
