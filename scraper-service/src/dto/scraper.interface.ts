@@ -1,5 +1,3 @@
-import { FetchByCompanyIdDto } from './fetch.dto';
-
 // Defines the interface that all scrapers must implement in order to be registered with the scraper-service.
 export interface IScraper {
   // A human-readable name of this scraper.
