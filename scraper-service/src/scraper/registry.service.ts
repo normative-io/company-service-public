@@ -56,29 +56,31 @@ export class ScraperRegistry {
   }
 
   // TODO: change return data type to include metadata about which scrapers were used.
-  fetch(req: FetchByCompanyIdDto): FoundCompany[] {
+  async fetch(req: FetchByCompanyIdDto): Promise<FoundCompany[]> {
     console.log(`fetch request: ${JSON.stringify(req, undefined, 2)}`);
-
-    // Determine the set of scrapers to use.
-    const applicableScrapers = this.scrapers
-      .filter((s) => s.check(req).isApplicable)
-      .sort((a, b) => a.check(req).priority - b.check(req).priority);
 
     // Fetch from each applicable scraper until a value is found.
     // Note: in the future, we may want to execute every
     // applicable scraper and/or run them all in parallel.
-    for (const s of applicableScrapers) {
-      console.log(`attempting fetch for request ${JSON.stringify(req, undefined, 2)} using scraper: ${s.name()}`);
-      const res = s.fetch(req);
+    for (const scraper of this.applicableScrapers(req)) {
+      console.log(`attempting fetch for request ${JSON.stringify(req, undefined, 2)} using scraper: ${scraper.name()}`);
+      const res = await scraper.lookup(req);
       if (res.foundCompanies.length > 0) {
-        return res.foundCompanies.map(function (e) {
+        return res.foundCompanies.map(function (company) {
           return {
-            scraperName: s.name(),
-            ...e,
+            scraperName: scraper.name(),
+            ...company,
           };
         });
       }
     }
     return [];
+  }
+
+  // Determine the set of scrapers to use.
+  applicableScrapers(req: FetchByCompanyIdDto): IScraper[] {
+    return this.scrapers
+      .filter((scraper) => scraper.check(req).isApplicable)
+      .sort((a, b) => a.check(req).priority - b.check(req).priority);
   }
 }
