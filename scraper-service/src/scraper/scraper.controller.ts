@@ -15,7 +15,7 @@ export class ScraperController {
   @ApiOperation({ summary: 'Request on-demand lookup by company id.' })
   @ApiResponse({ description: 'The metadata of the matching company.' })
   @ApiBody({ type: FetchByCompanyIdDto, description: 'The new company' })
-  byCompanyId(@Body() company: FetchByCompanyIdDto) {
-    return this.scraperRegistry.fetch(company);
+  async byCompanyId(@Body() company: FetchByCompanyIdDto) {
+    return await this.scraperRegistry.fetch(company);
   }
 }

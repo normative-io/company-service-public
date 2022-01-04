@@ -1,0 +1,413 @@
+{
+  "took": 24,
+  "timed_out": false,
+  "_shards": {
+    "total": 6,
+    "successful": 6,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": 1,
+    "max_score": 12.561951,
+    "hits": [
+      {
+        "_index": "cvr-v-20200115",
+        "_type": "_doc",
+        "_id": "4008910846",
+        "_score": 12.561951,
+        "_source": {
+          "Vrvirksomhed": {
+            "cvrNummer": 37018848,
+            "regNummer": [],
+            "brancheAnsvarskode": null,
+            "reklamebeskyttet": false,
+            "navne": [
+              {
+                "navn": "Meta Mind AB",
+                "periode": {
+                  "gyldigFra": "2021-06-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2021-06-15T11:35:04.000+02:00"
+              }
+            ],
+            "binavne": [],
+            "postadresse": [],
+            "beliggenhedsadresse": [
+              {
+                "landekode": "DK",
+                "fritekst": null,
+                "vejkode": 6516,
+                "kommune": {
+                  "kommuneKode": 101,
+                  "kommuneNavn": "KØBENHAVN",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerFra": 14,
+                "adresseId": null,
+                "sidstValideret": null,
+                "husnummerTil": null,
+                "bogstavFra": null,
+                "bogstavTil": null,
+                "etage": null,
+                "sidedoer": null,
+                "conavn": "Kasper Hulthin",
+                "postboks": null,
+                "vejnavn": "Skovbogårds Allé",
+                "bynavn": null,
+                "postnummer": 2500,
+                "postdistrikt": "Valby",
+                "periode": {
+                  "gyldigFra": "2021-06-01",
+                  "gyldigTil": "2021-09-06"
+                },
+                "sidstOpdateret": "2021-09-08T12:22:43.000+02:00"
+              },
+              {
+                "landekode": "DK",
+                "fritekst": null,
+                "vejkode": 1844,
+                "kommune": {
+                  "kommuneKode": 101,
+                  "kommuneNavn": "KØBENHAVN",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerFra": 68,
+                "adresseId": "0616f8f8-0d03-4092-bbb4-38c99d229b3f",
+                "sidstValideret": "2021-09-08T12:23:32.372+02:00",
+                "husnummerTil": null,
+                "bogstavFra": null,
+                "bogstavTil": null,
+                "etage": "1",
+                "sidedoer": null,
+                "conavn": "SoHo",
+                "postboks": null,
+                "vejnavn": "Flæsketorvet",
+                "bynavn": null,
+                "postnummer": 1711,
+                "postdistrikt": "København V",
+                "periode": {
+                  "gyldigFra": "2021-09-07",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2021-09-08T12:22:43.000+02:00"
+              }
+            ],
+            "telefonNummer": [],
+            "telefaxNummer": [],
+            "sekundaertTelefonNummer": [],
+            "sekundaertTelefaxNummer": [],
+            "elektroniskPost": [],
+            "hjemmeside": [],
+            "obligatoriskEmail": [],
+            "livsforloeb": [
+              {
+                "periode": {
+                  "gyldigFra": "2021-06-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2021-06-15T11:35:04.000+02:00"
+              }
+            ],
+            "hovedbranche": [
+              {
+                "branchekode": "620100",
+                "branchetekst": "Computerprogrammering",
+                "periode": {
+                  "gyldigFra": "2021-06-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2021-06-15T11:35:04.000+02:00"
+              }
+            ],
+            "bibranche1": [],
+            "bibranche2": [],
+            "bibranche3": [],
+            "status": [],
+            "virksomhedsstatus": [],
+            "virksomhedsform": [
+              {
+                "virksomhedsformkode": 210,
+                "kortBeskrivelse": "UDL",
+                "langBeskrivelse": "Anden udenlandsk virksomhed",
+                "ansvarligDataleverandoer": "T&S",
+                "periode": {
+                  "gyldigFra": "2021-06-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2021-06-15T11:35:04.000+02:00"
+              }
+            ],
+            "aarsbeskaeftigelse": [],
+            "kvartalsbeskaeftigelse": [],
+            "maanedsbeskaeftigelse": [],
+            "erstMaanedsbeskaeftigelse": [
+              {
+                "aar": 2021,
+                "maaned": 7,
+                "antalAarsvaerk": 1,
+                "antalAnsatte": 1,
+                "sidstOpdateret": "2021-09-17T23:38:08.000+02:00",
+                "intervalKodeAntalAarsvaerk": "ANTAL_1_1",
+                "intervalKodeAntalAnsatte": "ANTAL_1_1"
+              },
+              {
+                "aar": 2021,
+                "maaned": 8,
+                "antalAarsvaerk": 0.41,
+                "antalAnsatte": 2,
+                "sidstOpdateret": "2021-10-20T00:42:31.000+02:00",
+                "intervalKodeAntalAarsvaerk": "ANTAL_0_0",
+                "intervalKodeAntalAnsatte": "ANTAL_2_4"
+              },
+              {
+                "aar": 2021,
+                "maaned": 9,
+                "antalAarsvaerk": 0.91,
+                "antalAnsatte": 3,
+                "sidstOpdateret": "2021-11-19T21:05:15.000+01:00",
+                "intervalKodeAntalAarsvaerk": "ANTAL_1_1",
+                "intervalKodeAntalAnsatte": "ANTAL_2_4"
+              },
+              {
+                "aar": 2021,
+                "maaned": 10,
+                "antalAarsvaerk": 5,
+                "antalAnsatte": 3,
+                "sidstOpdateret": "2021-12-17T22:21:03.000+01:00",
+                "intervalKodeAntalAarsvaerk": "ANTAL_5_9",
+                "intervalKodeAntalAnsatte": "ANTAL_2_4"
+              }
+            ],
+            "attributter": [],
+            "penheder": [
+              {
+                "pNummer": 1027258340,
+                "periode": {
+                  "gyldigFra": "2021-06-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2021-06-15T11:35:04.000+02:00"
+              }
+            ],
+            "deltagerRelation": [
+              {
+                "deltager": {
+                  "enhedsNummer": 4008910845,
+                  "enhedstype": "ANDEN_DELTAGER",
+                  "forretningsnoegle": 4008910845,
+                  "organisationstype": null,
+                  "sidstIndlaest": "2021-12-18T23:19:03.403+01:00",
+                  "sidstOpdateret": "2021-06-16T07:00:05.000+02:00",
+                  "navne": [
+                    {
+                      "navn": "Meta Mind AB",
+                      "periode": {
+                        "gyldigFra": null,
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": null
+                    }
+                  ],
+                  "adresseHemmelig": false,
+                  "adresseHemmeligUndtagelse": false,
+                  "adresseOpdateringOphoert": false,
+                  "beliggenhedsadresse": [
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": null,
+                      "kommune": null,
+                      "husnummerFra": null,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": null,
+                      "sidedoer": null,
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": null,
+                      "bynavn": null,
+                      "postnummer": null,
+                      "postdistrikt": null,
+                      "periode": {
+                        "gyldigFra": "2021-06-16",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2021-06-16T05:00:05.000Z"
+                    }
+                  ],
+                  "postadresse": []
+                },
+                "kontorsteder": [],
+                "organisationer": [
+                  {
+                    "enhedsNummerOrganisation": 0,
+                    "hovedtype": "FULDT_ANSVARLIG_DELTAGERE",
+                    "organisationsNavn": [
+                      {
+                        "navn": "Interessenter",
+                        "periode": {
+                          "gyldigFra": null,
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": null
+                      }
+                    ],
+                    "attributter": [
+                      {
+                        "sekvensnr": 0,
+                        "type": "FUNKTION",
+                        "vaerditype": "string",
+                        "vaerdier": [
+                          {
+                            "vaerdi": "Interessenter",
+                            "periode": {
+                              "gyldigFra": "2021-06-01",
+                              "gyldigTil": null
+                            },
+                            "sidstOpdateret": null
+                          }
+                        ]
+                      }
+                    ],
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "FUNKTION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "INTERESSENTER",
+                                "periode": {
+                                  "gyldigFra": "2021-06-01",
+                                  "gyldigTil": null
+                                },
+                                "sidstOpdateret": "2021-06-15T11:35:04.000+02:00"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "fusioner": [],
+            "spaltninger": [],
+            "virksomhedMetadata": {
+              "nyesteNavn": {
+                "navn": "Meta Mind AB",
+                "periode": {
+                  "gyldigFra": "2021-06-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2021-06-15T11:35:04.000+02:00"
+              },
+              "nyesteBinavne": [],
+              "nyesteVirksomhedsform": {
+                "virksomhedsformkode": 210,
+                "kortBeskrivelse": "UDL",
+                "langBeskrivelse": "Anden udenlandsk virksomhed",
+                "ansvarligDataleverandoer": "T&S",
+                "periode": {
+                  "gyldigFra": "2021-06-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2021-06-15T11:35:04.000+02:00"
+              },
+              "nyesteBeliggenhedsadresse": {
+                "landekode": "DK",
+                "fritekst": null,
+                "vejkode": 1844,
+                "kommune": {
+                  "kommuneKode": 101,
+                  "kommuneNavn": "KØBENHAVN",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerFra": 68,
+                "adresseId": "0616f8f8-0d03-4092-bbb4-38c99d229b3f",
+                "sidstValideret": "2021-09-08T12:23:32.372+02:00",
+                "husnummerTil": null,
+                "bogstavFra": null,
+                "bogstavTil": null,
+                "etage": "1",
+                "sidedoer": null,
+                "conavn": "SoHo",
+                "postboks": null,
+                "vejnavn": "Flæsketorvet",
+                "bynavn": null,
+                "postnummer": 1711,
+                "postdistrikt": "København V",
+                "periode": {
+                  "gyldigFra": "2021-09-07",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2021-09-08T12:22:43.000+02:00"
+              },
+              "nyesteHovedbranche": {
+                "branchekode": "620100",
+                "branchetekst": "Computerprogrammering",
+                "periode": {
+                  "gyldigFra": "2021-06-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2021-06-15T11:35:04.000+02:00"
+              },
+              "nyesteBibranche1": null,
+              "nyesteBibranche2": null,
+              "nyesteBibranche3": null,
+              "nyesteStatus": null,
+              "nyesteKontaktoplysninger": [],
+              "antalPenheder": 1,
+              "nyesteAarsbeskaeftigelse": null,
+              "nyesteKvartalsbeskaeftigelse": null,
+              "nyesteMaanedsbeskaeftigelse": null,
+              "nyesteErstMaanedsbeskaeftigelse": {
+                "aar": 2021,
+                "maaned": 10,
+                "antalAarsvaerk": 5,
+                "antalAnsatte": 3,
+                "sidstOpdateret": "2021-12-17T22:21:03.000+01:00",
+                "intervalKodeAntalAarsvaerk": "ANTAL_5_9",
+                "intervalKodeAntalAnsatte": "ANTAL_2_4"
+              },
+              "sammensatStatus": "Aktiv",
+              "stiftelsesDato": "2021-06-01",
+              "virkningsDato": "2021-06-01"
+            },
+            "samtId": 6,
+            "fejlRegistreret": false,
+            "dataAdgang": 0,
+            "enhedsNummer": 4008910846,
+            "enhedstype": "VIRKSOMHED",
+            "sidstIndlaest": "2021-12-18T23:19:03.403+01:00",
+            "sidstOpdateret": "2021-09-08T12:22:43.000+02:00",
+            "fejlVedIndlaesning": false,
+            "naermesteFremtidigeDato": null,
+            "fejlBeskrivelse": null,
+            "virkningsAktoer": "BT"
+          }
+        }
+      }
+    ]
+  }
+}

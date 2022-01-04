@@ -1,5 +1,3 @@
-import { FetchByCompanyIdDto } from './fetch.dto';
-
 // Defines the interface that all scrapers must implement in order to be registered with the scraper-service.
 export interface IScraper {
   // A human-readable name of this scraper.
@@ -9,7 +7,7 @@ export interface IScraper {
   check(FetchByCompanyIdDto): CheckResult;
 
   // Fetch performs the scraping business logic for the given request.
-  fetch(FetchByCompanyIdDto): FetchResult;
+  lookup(FetchByCompanyIdDto): Promise<FetchResult>;
 }
 
 export class CheckResult {
@@ -30,13 +28,17 @@ export class FetchResult {
 }
 
 export class FoundCompany {
-  // A percentage value (as a value between 0.0 and 1.0) of how confident this data matches the fetch request.
-  // This allows clients to make heuristics if there are multiple candidates found.
-  readonly confidence: number;
-
-  // Name of the company.
-  readonly name: string;
-
-  // Scraper that found the company.
-  readonly scraperName?: string;
+  constructor(
+    // A percentage value (as a value between 0.0 and 1.0) of how confident this data matches the fetch request.
+    // This allows clients to make heuristics if there are multiple candidates found.
+    public readonly confidence: number,
+    // Name of the company.
+    public readonly name: string,
+    // ISIC rev 4 of the company
+    public readonly isic: string,
+    // Organization number of the company (Tax ID when applicable)
+    public readonly orgNr?: string,
+    // Scraper that found the company.
+    public readonly scraperName?: string,
+  ) {}
 }

@@ -1,8 +1,10 @@
 import { ConfigService } from '@nestjs/config';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { FetchByCompanyIdDto } from '../dto/fetch.dto';
 import { FoundCompany, IScraper } from '../dto/scraper.interface';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const fg = require('fast-glob');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path');
 
 export const SCRAPER_REGISTRY = 'SCRAPER_REGISTRY';
@@ -12,15 +14,16 @@ export const SCRAPER_REGISTRY = 'SCRAPER_REGISTRY';
 // filepaths relative from the root application directory.
 const SCRAPER_GLOBS = 'SCRAPER_GLOBS';
 // If SCRAPER_GLOBS is not set, use this value.
-const DEFAULT_SCRAPER_GLOBS = 'src/scraper/examples/**/*.ts';
+const DEFAULT_SCRAPER_GLOBS = 'src/scraper/examples/*/index.ts';
 
 @Injectable()
 export class ScraperRegistry {
+  logger = new Logger(ScraperRegistry.name);
   scrapers: IScraper[];
 
   constructor(private configService: ConfigService) {
     const scraperGlobs = this.configService.get<string>(SCRAPER_GLOBS, DEFAULT_SCRAPER_GLOBS).split(',');
-    console.log(`Searching for scrapers in: ${scraperGlobs}`);
+    this.logger.log(`Searching for scrapers in: ${scraperGlobs}`);
 
     const scraperNames = new Set<string>();
     this.scrapers = [];
@@ -33,7 +36,8 @@ export class ScraperRegistry {
       // require() will need a relative path from the current script.
       // Local files are marked with a `./` prefix.
       const relPath = './' + path.relative(__dirname, scraperPath);
-      console.log(`Loading scraper from file: ${relPath}`);
+      this.logger.log(`Loading scraper from file: ${relPath}`);
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const scraperSource = require(relPath);
       const scraper = new scraperSource.Scraper();
 
@@ -47,7 +51,7 @@ export class ScraperRegistry {
       scraperNames.add(name);
 
       this.scrapers.push(scraper);
-      console.log(`Registered scraper: ${name}`);
+      this.logger.log(`Registered scraper: ${name}`);
     }
 
     if (this.scrapers.length === 0) {
@@ -56,29 +60,33 @@ export class ScraperRegistry {
   }
 
   // TODO: change return data type to include metadata about which scrapers were used.
-  fetch(req: FetchByCompanyIdDto): FoundCompany[] {
-    console.log(`fetch request: ${JSON.stringify(req, undefined, 2)}`);
-
-    // Determine the set of scrapers to use.
-    const applicableScrapers = this.scrapers
-      .filter((s) => s.check(req).isApplicable)
-      .sort((a, b) => a.check(req).priority - b.check(req).priority);
+  async fetch(req: FetchByCompanyIdDto): Promise<FoundCompany[]> {
+    this.logger.debug(`fetch request: ${JSON.stringify(req, undefined, 2)}`);
 
     // Fetch from each applicable scraper until a value is found.
     // Note: in the future, we may want to execute every
     // applicable scraper and/or run them all in parallel.
-    for (const s of applicableScrapers) {
-      console.log(`attempting fetch for request ${JSON.stringify(req, undefined, 2)} using scraper: ${s.name()}`);
-      const res = s.fetch(req);
+    for (const scraper of this.applicableScrapers(req)) {
+      this.logger.debug(
+        `attempting fetch for request ${JSON.stringify(req, undefined, 2)} using scraper: ${scraper.name()}`,
+      );
+      const res = await scraper.lookup(req);
       if (res.foundCompanies.length > 0) {
-        return res.foundCompanies.map(function (e) {
+        return res.foundCompanies.map(function (company) {
           return {
-            scraperName: s.name(),
-            ...e,
+            scraperName: scraper.name(),
+            ...company,
           };
         });
       }
     }
     return [];
+  }
+
+  // Determine the set of scrapers to use.
+  applicableScrapers(req: FetchByCompanyIdDto): IScraper[] {
+    return this.scrapers
+      .filter((scraper) => scraper.check(req).isApplicable)
+      .sort((a, b) => a.check(req).priority - b.check(req).priority);
   }
 }
