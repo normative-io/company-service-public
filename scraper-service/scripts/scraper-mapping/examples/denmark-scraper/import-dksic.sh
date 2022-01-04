@@ -11,4 +11,4 @@ sqlite3 sicmapping.db < dksic-create.sql
 sqlite3 sicmapping.db < dksic-import.sql
 sqlite3 sicmapping.db < dksic-adapter.sql > $outname
 rm sicmapping.db
-npx prettier --print-width 120 -w $outname
+npx prettier --config=../../../../../.prettierrc -w $outname

@@ -11,4 +11,4 @@ sqlite3 isicmapping.db < nace2isic-create.sql
 sqlite3 isicmapping.db < nace2isic-import.sql
 sqlite3 isicmapping.db < nace2isic-adapter.sql > $outname
 rm isicmapping.db
-npx prettier --print-width 120 -w $outname
+npx prettier --config=../../../../.prettierrc -w $outname
