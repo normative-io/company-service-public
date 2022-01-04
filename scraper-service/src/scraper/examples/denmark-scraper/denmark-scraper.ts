@@ -88,7 +88,8 @@ export class DenmarkScraper implements IScraper {
         // Companies without names are probably invalid and will not be returned
         continue;
       }
-      const name = names[names.length - 1];
+      // Names are returned in chronological order, the latest is the current
+      const name = names.pop();
       const taxID = hit._source.Vrvirksomhed.cvrNummer.toString();
       this.logger.debug(`Found tax id: ${taxID}`);
       /*
