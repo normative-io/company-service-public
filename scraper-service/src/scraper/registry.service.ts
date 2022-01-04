@@ -1,5 +1,5 @@
 import { ConfigService } from '@nestjs/config';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { FetchByCompanyIdDto } from '../dto/fetch.dto';
 import { FoundCompany, IScraper } from '../dto/scraper.interface';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -23,7 +23,7 @@ export class ScraperRegistry {
 
   constructor(private configService: ConfigService) {
     const scraperGlobs = this.configService.get<string>(SCRAPER_GLOBS, DEFAULT_SCRAPER_GLOBS).split(',');
-    console.log(`Searching for scrapers in: ${scraperGlobs}`);
+    this.logger.log(`Searching for scrapers in: ${scraperGlobs}`);
 
     const scraperNames = new Set<string>();
     this.scrapers = [];
@@ -36,7 +36,7 @@ export class ScraperRegistry {
       // require() will need a relative path from the current script.
       // Local files are marked with a `./` prefix.
       const relPath = './' + path.relative(__dirname, scraperPath);
-      console.log(`Loading scraper from file: ${relPath}`);
+      this.logger.log(`Loading scraper from file: ${relPath}`);
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const scraperSource = require(relPath);
       const scraper = new scraperSource.Scraper();
@@ -51,7 +51,7 @@ export class ScraperRegistry {
       scraperNames.add(name);
 
       this.scrapers.push(scraper);
-      console.log(`Registered scraper: ${name}`);
+      this.logger.log(`Registered scraper: ${name}`);
     }
 
     if (this.scrapers.length === 0) {
@@ -61,13 +61,15 @@ export class ScraperRegistry {
 
   // TODO: change return data type to include metadata about which scrapers were used.
   async fetch(req: FetchByCompanyIdDto): Promise<FoundCompany[]> {
-    console.log(`fetch request: ${JSON.stringify(req, undefined, 2)}`);
+    this.logger.debug(`fetch request: ${JSON.stringify(req, undefined, 2)}`);
 
     // Fetch from each applicable scraper until a value is found.
     // Note: in the future, we may want to execute every
     // applicable scraper and/or run them all in parallel.
     for (const scraper of this.applicableScrapers(req)) {
-      console.log(`attempting fetch for request ${JSON.stringify(req, undefined, 2)} using scraper: ${scraper.name()}`);
+      this.logger.debug(
+        `attempting fetch for request ${JSON.stringify(req, undefined, 2)} using scraper: ${scraper.name()}`,
+      );
       const res = await scraper.lookup(req);
       if (res.foundCompanies.length > 0) {
         return res.foundCompanies.map(function (company) {
