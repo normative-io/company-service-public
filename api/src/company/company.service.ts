@@ -78,7 +78,7 @@ export class CompanyService implements ICompanyService {
 
   async find(findCompanyDto: FindCompanyDto): Promise<CompanyFoundInServiceDto[]> {
     this.findInboundTotal.inc();
-    var results = this.findInRepo(findCompanyDto);
+    const results = this.findInRepo(findCompanyDto);
     if (results.length != 0) {
       this.findFoundInRepoTotal.inc();
     } else {
@@ -106,7 +106,7 @@ export class CompanyService implements ICompanyService {
   }
 
   private findInRepo(findCompanyDto: FindCompanyDto): CompanyFoundInServiceDto[] {
-    var results = [];
+    const results = [];
     if (findCompanyDto.id) {
       const company = this.companyRepo.findById(findCompanyDto.id);
       if (company) {
@@ -136,7 +136,7 @@ export class CompanyService implements ICompanyService {
     if (Object.keys(findCompanyDto).length === 0) {
       return [];
     }
-    var results = [];
+    const results = [];
     try {
       const response = await firstValueFrom(
         this.httpService.post(this.scraperServiceAddress, findCompanyDto, CompanyService.requestConfig),

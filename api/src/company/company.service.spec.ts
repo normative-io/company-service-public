@@ -229,7 +229,7 @@ describe('CompanyService', () => {
   describe('when the company is not found in the first repo', () => {
     describe('and the company is found by the scraper service', () => {
       beforeEach(() => {
-        let httpResponse: AxiosResponse = {
+        const httpResponse: AxiosResponse = {
           data: [{ name: 'company found', country: 'CH', companyId: '456', confidence: 1, scraperName: 'CH' }],
           status: 200,
           statusText: 'OK',
@@ -266,7 +266,7 @@ describe('CompanyService', () => {
 
     describe('and multiple companies are found by the scraper service', () => {
       beforeEach(() => {
-        let httpResponse: AxiosResponse = {
+        const httpResponse: AxiosResponse = {
           data: [{ name: 'company found' }, { name: 'another company found', country: 'CH', companyId: '456' }],
           status: 200,
           statusText: 'OK',
@@ -305,7 +305,7 @@ describe('CompanyService', () => {
 
       describe('and results contain a confidence value', () => {
         beforeEach(() => {
-          let httpResponse: AxiosResponse = {
+          const httpResponse: AxiosResponse = {
             data: [
               { name: '1', confidence: 0.5 },
               { name: '2', confidence: 0.7 },
@@ -336,7 +336,7 @@ describe('CompanyService', () => {
 
     describe('and the company is not found by the scraper service', () => {
       beforeEach(() => {
-        let httpResponse: AxiosResponse = {
+        const httpResponse: AxiosResponse = {
           data: [],
           status: 200,
           statusText: 'OK',
