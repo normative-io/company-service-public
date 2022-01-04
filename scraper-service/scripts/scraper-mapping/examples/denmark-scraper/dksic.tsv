@@ -1,0 +1,1741 @@
+ID	Niveau	Section	Hovedgruppe	Gruppe	Undergruppe	DB07	NB	Tekst	2-kode	3-kode	4-kode	6-kode										
+1	0	A						Landbrug, jagt, skovbrug og fiskeri														
+2	1	A	01					Plante- og husdyravl, jagt og serviceydelser i forbindelse hermed	01													
+3	2	A	01	01.1				Dyrkning af etårige afgrøder	01	011												
+4	3	A	01	01.1	01.11			Dyrkning af korn (undtagen ris), bælgfrugter og olieholdige frø	01	011	0111											
+5	4	A	01	01.1	01.11	01.11.00		Dyrkning af korn (undtagen ris), bælgfrugter og olieholdige frø	01	011	0111	011100										
+6	3	A	01	01.1	01.12			Dyrkning af ris	01	011	0112											
+7	4	A	01	01.1	01.12	01.12.00		Dyrkning af ris	01	011	0112	011200										
+8	3	A	01	01.1	01.13			Dyrkning af grøntsager og meloner, rødder og rodknolde	01	011	0113											
+9	4	A	01	01.1	01.13	01.13.00		Dyrkning af grøntsager og meloner, rødder og rodknolde	01	011	0113	011300										
+10	3	A	01	01.1	01.14			Dyrkning af sukkerrør	01	011	0114											
+11	4	A	01	01.1	01.14	01.14.00		Dyrkning af sukkerrør	01	011	0114	011400										
+12	3	A	01	01.1	01.15			Dyrkning af tobak	01	011	0115											
+13	4	A	01	01.1	01.15	01.15.00		Dyrkning af tobak	01	011	0115	011500										
+14	3	A	01	01.1	01.16			Dyrkning af tekstilplanter	01	011	0116											
+15	4	A	01	01.1	01.16	01.16.00		Dyrkning af tekstilplanter	01	011	0116	011600										
+16	3	A	01	01.1	01.19			Dyrkning af andre etårige afgrøder	01	011	0119											
+17	4	A	01	01.1	01.19	01.19.00		Dyrkning af andre etårige afgrøder	01	011	0119	011900										
+18	2	A	01	01.2				Dyrkning af flerårige afgrøder	01	012												
+19	3	A	01	01.2	01.21			Dyrkning af druer	01	012	0121											
+20	4	A	01	01.2	01.21	01.21.00		Dyrkning af druer	01	012	0121	012100										
+21	3	A	01	01.2	01.22			Dyrkning af tropiske og subtropiske frugter	01	012	0122											
+22	4	A	01	01.2	01.22	01.22.00		Dyrkning af tropiske og subtropiske frugter	01	012	0122	012200										
+23	3	A	01	01.2	01.23			Dyrkning af citrusfrugter	01	012	0123											
+24	4	A	01	01.2	01.23	01.23.00		Dyrkning af citrusfrugter	01	012	0123	012300										
+25	3	A	01	01.2	01.24			Dyrkning af kernefrugter og stenfrugter	01	012	0124											
+26	4	A	01	01.2	01.24	01.24.00		Dyrkning af kernefrugter og stenfrugter	01	012	0124	012400										
+27	3	A	01	01.2	01.25			Dyrkning af andre træfrugter, bær og nødder	01	012	0125											
+28	4	A	01	01.2	01.25	01.25.00		Dyrkning af andre træfrugter, bær og nødder	01	012	0125	012500										
+29	3	A	01	01.2	01.26			Dyrkning af olieholdige frugter	01	012	0126											
+30	4	A	01	01.2	01.26	01.26.00		Dyrkning af olieholdige frugter	01	012	0126	012600										
+31	3	A	01	01.2	01.27			Dyrkning af planter til fremstilling af drikkevarer	01	012	0127											
+32	4	A	01	01.2	01.27	01.27.00		Dyrkning af planter til fremstilling af drikkevarer	01	012	0127	012700										
+33	3	A	01	01.2	01.28			Dyrkning af krydderiplanter, aromaplanter og lægeplanter	01	012	0128											
+34	4	A	01	01.2	01.28	01.28.00		Dyrkning af krydderiplanter, aromaplanter og lægeplanter	01	012	0128	012800										
+35	3	A	01	01.2	01.29			Dyrkning af andre flerårige afgrøder	01	012	0129											
+36	4	A	01	01.2	01.29	01.29.00		Dyrkning af andre flerårige afgrøder	01	012	0129	012900										
+37	2	A	01	01.3				Planteformering	01	013												
+38	3	A	01	01.3	01.30			Planteformering	01	013	0130											
+39	4	A	01	01.3	01.30	01.30.00		Planteformering	01	013	0130	013000										
+40	2	A	01	01.4				Husdyravl	01	014												
+41	3	A	01	01.4	01.41			Avl af malkekvæg	01	014	0141											
+42	4	A	01	01.4	01.41	01.41.00		Avl af malkekvæg	01	014	0141	014100										
+43	3	A	01	01.4	01.42			Avl af andet kvæg og bøfler	01	014	0142											
+44	4	A	01	01.4	01.42	01.42.00		Avl af andet kvæg og bøfler	01	014	0142	014200										
+45	3	A	01	01.4	01.43			Avl af heste og dyr af hestefamilien	01	014	0143											
+46	4	A	01	01.4	01.43	01.43.00		Avl af heste og dyr af hestefamilien	01	014	0143	014300										
+47	3	A	01	01.4	01.44			Avl af kameler og dyr af kamelfamilien	01	014	0144											
+48	4	A	01	01.4	01.44	01.44.00		Avl af kameler og dyr af kamelfamilien	01	014	0144	014400										
+49	3	A	01	01.4	01.45			Avl af får og geder	01	014	0145											
+50	4	A	01	01.4	01.45	01.45.00		Avl af får og geder	01	014	0145	014500										
+51	3	A	01	01.4	01.46			Svineavl	01	014	0146											
+52	4	A	01	01.4	01.46	01.46.10		Avl af smågrise	01	014	0146	014610										
+53	4	A	01	01.4	01.46	01.46.20		Produktion af slagtesvin	01	014	0146	014620										
+54	3	A	01	01.4	01.47			Fjerkræavl	01	014	0147											
+55	4	A	01	01.4	01.47	01.47.00		Fjerkræavl	01	014	0147	014700										
+56	3	A	01	01.4	01.49			Avl af andre dyr	01	014	0149											
+57	4	A	01	01.4	01.49	01.49.10		Kenneler	01	014	0149	014910										
+58	4	A	01	01.4	01.49	01.49.20		Avl af pelsdyr mv.	01	014	0149	014920										
+59	2	A	01	01.5				Blandet drift	01	015												
+60	3	A	01	01.5	01.50			Blandet drift	01	015	0150											
+61	4	A	01	01.5	01.50	01.50.00		Blandet drift	01	015	0150	015000										
+62	2	A	01	01.6				Serviceydelser til landbrug og forarbejdning af afgrøder efter høst	01	016												
+63	3	A	01	01.6	01.61			Serviceydelser i forbindelse med planteavl	01	016	0161											
+64	4	A	01	01.6	01.61	01.61.00		Serviceydelser i forbindelse med planteavl	01	016	0161	016100										
+65	3	A	01	01.6	01.62			Serviceydelser i forbindelse med husdyravl	01	016	0162											
+66	4	A	01	01.6	01.62	01.62.00		Serviceydelser i forbindelse med husdyravl	01	016	0162	016200										
+67	3	A	01	01.6	01.63			Forarbejdning af afgrøder efter høst	01	016	0163											
+68	4	A	01	01.6	01.63	01.63.00		Forarbejdning af afgrøder efter høst	01	016	0163	016300										
+69	3	A	01	01.6	01.64			Forarbejdning af frø/sædekorn til udsæd	01	016	0164											
+70	4	A	01	01.6	01.64	01.64.00		Forarbejdning af frø/sædekorn til udsæd	01	016	0164	016400										
+71	2	A	01	01.7				Jagt, fældefangst og serviceydelser i forbindelse hermed	01	017												
+72	3	A	01	01.7	01.70			Jagt, fældefangst og serviceydelser i forbindelse hermed	01	017	0170											
+73	4	A	01	01.7	01.70	01.70.00		Jagt, fældefangst og serviceydelser i forbindelse hermed	01	017	0170	017000										
+74	1	A	02					Skovbrug og skovning	02													
+75	2	A	02	02.1				Dyrkning af træer og andre skovbrugsaktiviteter	02	021												
+76	3	A	02	02.1	02.10			Dyrkning af træer og andre skovbrugsaktiviteter	02	021	0210											
+77	4	A	02	02.1	02.10	02.10.00		Dyrkning af træer og andre skovbrugsaktiviteter	02	021	0210	021000										
+78	2	A	02	02.2				Skovning	02	022												
+79	3	A	02	02.2	02.20			Skovning	02	022	0220											
+80	4	A	02	02.2	02.20	02.20.00		Skovning	02	022	0220	022000										
+81	2	A	02	02.3				Indsamling af vildtvoksende forstmateriale undtagen træer	02	023												
+82	3	A	02	02.3	02.30			Indsamling af vildtvoksende forstmateriale undtagen træer	02	023	0230											
+83	4	A	02	02.3	02.30	02.30.00		Indsamling af vildtvoksende forstmateriale undtagen træer	02	023	0230	023000										
+84	2	A	02	02.4				Serviceydelser til skovbrug	02	024												
+85	3	A	02	02.4	02.40			Serviceydelser til skovbrug	02	024	0240											
+86	4	A	02	02.4	02.40	02.40.00		Serviceydelser til skovbrug	02	024	0240	024000										
+87	1	A	03					Fiskeri og akvakultur	03													
+88	2	A	03	03.1				Fiskeri	03	031												
+89	3	A	03	03.1	03.11			Havfiskeri	03	031	0311											
+90	4	A	03	03.1	03.11	03.11.00		Havfiskeri	03	031	0311	031100										
+91	3	A	03	03.1	03.12			Ferskvandsfiskeri	03	031	0312											
+92	4	A	03	03.1	03.12	03.12.00		Ferskvandsfiskeri	03	031	0312	031200										
+93	2	A	03	03.2				Akvakultur	03	032												
+94	3	A	03	03.2	03.21			Havbrug	03	032	0321											
+95	4	A	03	03.2	03.21	03.21.00		Havbrug	03	032	0321	032100										
+96	3	A	03	03.2	03.22			Ferskvandsbrug	03	032	0322											
+97	4	A	03	03.2	03.22	03.22.00		Ferskvandsbrug	03	032	0322	032200										
+98	0	B						Råstofindvinding														
+99	1	B	05					Indvinding af kul og brunkul	05													
+100	2	B	05	05.1				Indvinding af stenkul	05	051												
+101	3	B	05	05.1	05.10			Indvinding af stenkul	05	051	0510											
+102	4	B	05	05.1	05.10	05.10.00		Indvinding af stenkul	05	051	0510	051000										
+103	2	B	05	05.2				Indvinding af brunkul	05	052												
+104	3	B	05	05.2	05.20			Indvinding af brunkul	05	052	0520											
+105	4	B	05	05.2	05.20	05.20.00		Indvinding af brunkul	05	052	0520	052000										
+106	1	B	06					Indvinding af råolie og naturgas	06													
+107	2	B	06	06.1				Indvinding af råolie	06	061												
+108	3	B	06	06.1	06.10			Indvinding af råolie	06	061	0610											
+109	4	B	06	06.1	06.10	06.10.00		Indvinding af råolie	06	061	0610	061000										
+110	2	B	06	06.2				Indvinding af naturgas	06	062												
+111	3	B	06	06.2	06.20			Indvinding af naturgas	06	062	0620											
+112	4	B	06	06.2	06.20	06.20.00		Indvinding af naturgas	06	062	0620	062000										
+113	1	B	07					Brydning af metalmalme	07													
+114	2	B	07	07.1				Brydning af jernmalm	07	071												
+115	3	B	07	07.1	07.10			Brydning af jernmalm	07	071	0710											
+116	4	B	07	07.1	07.10	07.10.00		Brydning af jernmalm	07	071	0710	071000										
+117	2	B	07	07.2				Brydning af ikke-jernholdige metalmalme	07	072												
+118	3	B	07	07.2	07.21			Brydning af uran- og thoriummalme	07	072	0721											
+119	4	B	07	07.2	07.21	07.21.00		Brydning af uran- og thoriummalme	07	072	0721	072100										
+120	3	B	07	07.2	07.29			Brydning af andre ikke-jernholdige metalmalme	07	072	0729											
+121	4	B	07	07.2	07.29	07.29.00		Brydning af andre ikke-jernholdige metalmalme	07	072	0729	072900										
+122	1	B	08					Anden råstofindvinding	08													
+123	2	B	08	08.1				Brydning af sten og indvinding af sand og ler	08	081												
+124	3	B	08	08.1	08.11			Brydning af pynte- og bygningssten, kalksten, gips, kridt og skifer	08	081	0811											
+125	4	B	08	08.1	08.11	08.11.00		Brydning af pynte- og bygningssten, kalksten, gips, kridt og skifer	08	081	0811	081100										
+126	3	B	08	08.1	08.12			"Grus- og sandgravning; indvinding af ler og kaolin"	08	081	0812											
+127	4	B	08	08.1	08.12	08.12.00		"Grus- og sandgravning; indvinding af ler og kaolin"	08	081	0812	081200										
+128	2	B	08	08.9				Råstofindvinding i.a.n.	08	089												
+129	3	B	08	08.9	08.91			Indvinding af mineraler til fremstilling af kemiske produkter og gødningsstoffer	08	089	0891											
+130	4	B	08	08.9	08.91	08.91.00		Indvinding af mineraler til fremstilling af kemiske produkter og gødningsstoffer	08	089	0891	089100										
+131	3	B	08	08.9	08.92			Indvinding og agglomerering af tørv	08	089	0892											
+132	4	B	08	08.9	08.92	08.92.00		Indvinding og agglomerering af tørv	08	089	0892	089200										
+133	3	B	08	08.9	08.93			Saltindvinding	08	089	0893											
+134	4	B	08	08.9	08.93	08.93.00		Saltindvinding	08	089	0893	089300										
+135	3	B	08	08.9	08.99			Anden råstofindvinding i.a.n.	08	089	0899											
+136	4	B	08	08.9	08.99	08.99.00		Anden råstofindvinding i.a.n.	08	089	0899	089900										
+137	1	B	09					Serviceydelser i forbindelse med råstofindvinding	09													
+138	2	B	09	09.1				Serviceydelser i forbindelse med indvinding af råolie og naturgas	09	091												
+139	3	B	09	09.1	09.10			Serviceydelser i forbindelse med indvinding af råolie og naturgas	09	091	0910											
+140	4	B	09	09.1	09.10	09.10.00		Serviceydelser i forbindelse med indvinding af råolie og naturgas	09	091	0910	091000										
+141	2	B	09	09.9				Serviceydelser i forbindelse med anden råstofindvinding	09	099												
+142	3	B	09	09.9	09.90			Serviceydelser i forbindelse med anden råstofindvinding	09	099	0990											
+143	4	B	09	09.9	09.90	09.90.00		Serviceydelser i forbindelse med anden råstofindvinding	09	099	0990	099000										
+144	0	C						Fremstillingsvirksomhed														
+145	1	C	10					Fremstilling af fødevarer	10													
+146	2	C	10	10.1				Forarbejdning og konservering af kød og produktion af kødprodukter	10	101												
+147	3	C	10	10.1	10.11			Forarbejdning og konservering af kød 	10	101	1011											
+148	4	C	10	10.1	10.11	10.11.10		Forarbejdning af svinekød	10	101	1011	101110										
+149	4	C	10	10.1	10.11	10.11.90		Forarbejdning af andet kød	10	101	1011	101190										
+150	3	C	10	10.1	10.12			Forarbejdning og konservering af fjerkrækød	10	101	1012											
+151	4	C	10	10.1	10.12	10.12.00		Forarbejdning og konservering af fjerkrækød	10	101	1012	101200										
+152	3	C	10	10.1	10.13			Produktion af kød- og fjerkrækødprodukter	10	101	1013											
+153	4	C	10	10.1	10.13	10.13.00		Produktion af kød- og fjerkrækødprodukter	10	101	1013	101300										
+154	2	C	10	10.2				Forarbejdning og konservering af fisk, krebsdyr og bløddyr	10	102												
+155	3	C	10	10.2	10.20			Forarbejdning og konservering af fisk, krebsdyr og bløddyr	10	102	1020											
+156	4	C	10	10.2	10.20	10.20.10		Fremstilling af fiskemel	10	102	1020	102010										
+157	4	C	10	10.2	10.20	10.20.20		Forarbejdning og konservering af fisk, krebsdyr og bløddyr, undtagen fiskemel	10	102	1020	102020										
+158	2	C	10	10.3				Forarbejdning og konservering af frugt og grøntsager	10	103												
+159	3	C	10	10.3	10.31			Forarbejdning og konservering af kartofler	10	103	1031											
+160	4	C	10	10.3	10.31	10.31.00		Forarbejdning og konservering af kartofler	10	103	1031	103100										
+161	3	C	10	10.3	10.32			Fremstilling af frugt- og grøntsagssaft	10	103	1032											
+162	4	C	10	10.3	10.32	10.32.00		Fremstilling af frugt- og grøntsagssaft	10	103	1032	103200										
+163	3	C	10	10.3	10.39			Anden forarbejdning og konservering af frugt og grøntsager	10	103	1039											
+164	4	C	10	10.3	10.39	10.39.00		Anden forarbejdning og konservering af frugt og grøntsager	10	103	1039	103900										
+165	2	C	10	10.4				Fremstilling af vegetabilske og animalske olier og fedtstoffer	10	104												
+166	3	C	10	10.4	10.41			Fremstilling af olier og fedtstoffer	10	104	1041											
+167	4	C	10	10.4	10.41	10.41.00		Fremstilling af olier og fedtstoffer	10	104	1041	104100										
+168	3	C	10	10.4	10.42			Fremstilling af margarine o.l. spiselige fedtstoffer	10	104	1042											
+169	4	C	10	10.4	10.42	10.42.00		Fremstilling af margarine o.l. spiselige fedtstoffer	10	104	1042	104200										
+170	2	C	10	10.5				Fremstilling af mejeriprodukter	10	105												
+171	3	C	10	10.5	10.51			Mejerier samt ostefremstilling	10	105	1051											
+172	4	C	10	10.5	10.51	10.51.00		Mejerier samt ostefremstilling	10	105	1051	105100										
+173	3	C	10	10.5	10.52			Fremstilling af konsumis	10	105	1052											
+174	4	C	10	10.5	10.52	10.52.00		Fremstilling af konsumis	10	105	1052	105200										
+175	2	C	10	10.6				Fremstilling af mølleriprodukter, stivelse og stivelsesprodukter	10	106												
+176	3	C	10	10.6	10.61			Fremstilling af mølleriprodukter	10	106	1061											
+177	4	C	10	10.6	10.61	10.61.00		Fremstilling af mølleriprodukter	10	106	1061	106100										
+178	3	C	10	10.6	10.62			Fremstilling af stivelse og stivelsesprodukter	10	106	1062											
+179	4	C	10	10.6	10.62	10.62.00		Fremstilling af stivelse og stivelsesprodukter	10	106	1062	106200										
+180	2	C	10	10.7				Fremstilling af bageri- og dejprodukter	10	107												
+181	3	C	10	10.7	10.71			"Fremstilling af brød; fremstilling af friske kager, tærter mv."	10	107	1071											
+182	4	C	10	10.7	10.71	10.71.10		"Industriel fremstilling af brød; kager mv."	10	107	1071	107110										
+183	4	C	10	10.7	10.71	10.71.20		Fremstilling af friske bageriprodukter	10	107	1071	107120										
+184	3	C	10	10.7	10.72			"Fremstilling af tvebakker og kiks; fremstilling af konserverede kager, tærter mv."	10	107	1072											
+185	4	C	10	10.7	10.72	10.72.00		"Fremstilling af tvebakker og kiks; fremstilling af konserverede kager, tærter mv."	10	107	1072	107200										
+186	3	C	10	10.7	10.73			Fremstilling af makaroni, nudler, couscous og lignende dejvarer	10	107	1073											
+187	4	C	10	10.7	10.73	10.73.00		Fremstilling af makaroni, nudler, couscous og lignende dejvarer	10	107	1073	107300										
+188	2	C	10	10.8				Fremstilling af andre fødevarer	10	108												
+189	3	C	10	10.8	10.81			Fremstilling af sukker	10	108	1081											
+190	4	C	10	10.8	10.81	10.81.00		Fremstilling af sukker	10	108	1081	108100										
+191	3	C	10	10.8	10.82			Fremstilling af kakao, chokolade og sukkervarer	10	108	1082											
+192	4	C	10	10.8	10.82	10.82.00		Fremstilling af kakao, chokolade og sukkervarer	10	108	1082	108200										
+193	3	C	10	10.8	10.83			Forarbejdning af te og kaffe	10	108	1083											
+194	4	C	10	10.8	10.83	10.83.00		Forarbejdning af te og kaffe	10	108	1083	108300										
+195	3	C	10	10.8	10.84			Fremstilling af smagspræparater og krydderier	10	108	1084											
+196	4	C	10	10.8	10.84	10.84.00		Fremstilling af smagspræparater og krydderier	10	108	1084	108400										
+197	3	C	10	10.8	10.85			Fremstilling af færdigretter	10	108	1085											
+198	4	C	10	10.8	10.85	10.85.00		Fremstilling af færdigretter	10	108	1085	108500										
+199	3	C	10	10.8	10.86			Fremstilling af homogeniserede produkter og diætmad	10	108	1086											
+200	4	C	10	10.8	10.86	10.86.00		Fremstilling af homogeniserede produkter og diætmad	10	108	1086	108600										
+201	3	C	10	10.8	10.89			Fremstilling af andre fødevarer i.a.n.	10	108	1089											
+202	4	C	10	10.8	10.89	10.89.00		Fremstilling af andre fødevarer i.a.n.	10	108	1089	108900										
+203	2	C	10	10.9				Fremstilling af færdige foderblandinger	10	109												
+204	3	C	10	10.9	10.91			Fremstilling af færdige foderblandinger til landbrugsdyr	10	109	1091											
+205	4	C	10	10.9	10.91	10.91.00		Fremstilling af færdige foderblandinger til landbrugsdyr	10	109	1091	109100										
+206	3	C	10	10.9	10.92			Fremstilling af færdige foderblandinger til kæledyr	10	109	1092											
+207	4	C	10	10.9	10.92	10.92.00		Fremstilling af færdige foderblandinger til kæledyr	10	109	1092	109200										
+208	1	C	11					Fremstilling af drikkevarer	11													
+209	2	C	11	11.0				Fremstilling af drikkevarer	11	110												
+210	3	C	11	11.0	11.01			Destillation, rektifikation og blanding af alkohol	11	110	1101											
+211	4	C	11	11.0	11.01	11.01.00		Destillation, rektifikation og blanding af alkohol	11	110	1101	110100										
+212	3	C	11	11.0	11.02			Fremstilling af vin af druer	11	110	1102											
+213	4	C	11	11.0	11.02	11.02.00		Fremstilling af vin af druer	11	110	1102	110200										
+214	3	C	11	11.0	11.03			Fremstilling af cider og anden frugtvin	11	110	1103											
+215	4	C	11	11.0	11.03	11.03.00		Fremstilling af cider og anden frugtvin	11	110	1103	110300										
+216	3	C	11	11.0	11.04			Fremstilling af andre ikke-destillerede gærede drikkevarer	11	110	1104											
+217	4	C	11	11.0	11.04	11.04.00		Fremstilling af andre ikke-destillerede gærede drikkevarer	11	110	1104	110400										
+218	3	C	11	11.0	11.05			Fremstilling af øl	11	110	1105											
+219	4	C	11	11.0	11.05	11.05.00		Fremstilling af øl	11	110	1105	110500										
+220	3	C	11	11.0	11.06			Fremstilling af malt	11	110	1106											
+221	4	C	11	11.0	11.06	11.06.00		Fremstilling af malt	11	110	1106	110600										
+222	3	C	11	11.0	11.07			"Fremstilling af læskedrikke; fremstilling af mineralvand og andet vand på flaske"	11	110	1107											
+223	4	C	11	11.0	11.07	11.07.00		"Fremstilling af læskedrikke; fremstilling af mineralvand og andet vand på flaske"	11	110	1107	110700										
+224	1	C	12					Fremstilling af tobaksprodukter	12													
+225	2	C	12	12.0				Fremstilling af tobaksprodukter	12	120												
+226	3	C	12	12.0	12.00			Fremstilling af tobaksprodukter	12	120	1200											
+227	4	C	12	12.0	12.00	12.00.00		Fremstilling af tobaksprodukter	12	120	1200	120000										
+228	1	C	13					Fremstilling af tekstiler	13													
+229	2	C	13	13.1				Forbehandling og spinding af tekstilfibre	13	131												
+230	3	C	13	13.1	13.10			Forbehandling og spinding af tekstilfibre	13	131	1310											
+231	4	C	13	13.1	13.10	13.10.00		Forbehandling og spinding af tekstilfibre	13	131	1310	131000										
+232	2	C	13	13.2				Vævning af tekstiler	13	132												
+233	3	C	13	13.2	13.20			Vævning af tekstiler	13	132	1320											
+234	4	C	13	13.2	13.20	13.20.00		Vævning af tekstiler	13	132	1320	132000										
+235	2	C	13	13.3				Efterbehandling af tekstiler	13	133												
+236	3	C	13	13.3	13.30			Efterbehandling af tekstiler	13	133	1330											
+237	4	C	13	13.3	13.30	13.30.00		Efterbehandling af tekstiler	13	133	1330	133000										
+238	2	C	13	13.9				Fremstilling af andre tekstiler	13	139												
+239	3	C	13	13.9	13.91			Fremstilling af trikotagestoffer	13	139	1391											
+240	4	C	13	13.9	13.91	13.91.00		Fremstilling af trikotagestoffer	13	139	1391	139100										
+241	3	C	13	13.9	13.92			Fremstilling af færdige tekstilvarer undtagen beklædningsartikler	13	139	1392											
+242	4	C	13	13.9	13.92	13.92.10		Fremstilling af boligtekstiler	13	139	1392	139210										
+243	4	C	13	13.9	13.92	13.92.20		Fremstilling af færdige tekstilvarer undtagen boligtekstiler og beklædningsartikler	13	139	1392	139220										
+244	3	C	13	13.9	13.93			Fremstilling af tæpper	13	139	1393											
+245	4	C	13	13.9	13.93	13.93.00		Fremstilling af tæpper	13	139	1393	139300										
+246	3	C	13	13.9	13.94			Fremstilling af reb, tovværk, sejlgarn og netstoffer	13	139	1394											
+247	4	C	13	13.9	13.94	13.94.00		Fremstilling af reb, tovværk, sejlgarn og netstoffer	13	139	1394	139400										
+248	3	C	13	13.9	13.95			Fremstilling af fiberdug og varer af fiberdug undtagen beklædningsartikler	13	139	1395											
+249	4	C	13	13.9	13.95	13.95.00		Fremstilling af fiberdug og varer af fiberdug undtagen beklædningsartikler	13	139	1395	139500										
+250	3	C	13	13.9	13.96			Fremstilling af andre tekniske og industrielle tekstiler	13	139	1396											
+251	4	C	13	13.9	13.96	13.96.00		Fremstilling af andre tekniske og industrielle tekstiler	13	139	1396	139600										
+252	3	C	13	13.9	13.99			Fremstilling af andre tekstiler i.a.n.	13	139	1399											
+253	4	C	13	13.9	13.99	13.99.00		Fremstilling af andre tekstiler i.a.n.	13	139	1399	139900										
+254	1	C	14					Fremstilling af beklædningsartikler	14													
+255	2	C	14	14.1				Fremstilling af beklædningsartikler undtagen beklædningsartikler af pelsskind	14	141												
+256	3	C	14	14.1	14.11			Fremstilling af beklædningsartikler af læder	14	141	1411											
+257	4	C	14	14.1	14.11	14.11.00		Fremstilling af beklædningsartikler af læder	14	141	1411	141100										
+258	3	C	14	14.1	14.12			Fremstilling af arbejdsbeklædning	14	141	1412											
+259	4	C	14	14.1	14.12	14.12.00		Fremstilling af arbejdsbeklædning	14	141	1412	141200										
+260	3	C	14	14.1	14.13			Fremstilling af anden yderbeklædning	14	141	1413											
+261	4	C	14	14.1	14.13	14.13.00		Fremstilling af anden yderbeklædning	14	141	1413	141300										
+262	3	C	14	14.1	14.14			Fremstilling af underbeklædning	14	141	1414											
+263	4	C	14	14.1	14.14	14.14.00		Fremstilling af underbeklædning	14	141	1414	141400										
+264	3	C	14	14.1	14.19			Fremstilling af andre beklædningsartikler samt tilbehør	14	141	1419											
+265	4	C	14	14.1	14.19	14.19.00		Fremstilling af andre beklædningsartikler samt tilbehør	14	141	1419	141900										
+266	2	C	14	14.2				Fremstilling af varer af pelsskind	14	142												
+267	3	C	14	14.2	14.20			Fremstilling af varer af pelsskind	14	142	1420											
+268	4	C	14	14.2	14.20	14.20.00		Fremstilling af varer af pelsskind	14	142	1420	142000										
+269	2	C	14	14.3				Fremstilling af strikkede og hæklede beklædningsartikler	14	143												
+270	3	C	14	14.3	14.31			Fremstilling af strikkede og hæklede strømpevarer	14	143	1431											
+271	4	C	14	14.3	14.31	14.31.00		Fremstilling af strikkede og hæklede strømpevarer	14	143	1431	143100										
+272	3	C	14	14.3	14.39			Fremstilling af andre strikkede og hæklede beklædningsartikler	14	143	1439											
+273	4	C	14	14.3	14.39	14.39.00		Fremstilling af andre strikkede og hæklede beklædningsartikler	14	143	1439	143900										
+274	1	C	15					Fremstilling af læder og lædervarer	15													
+275	2	C	15	15.1				"Garvning og beredning af læder; fremstilling af tasker, kufferter, sadelmagervarer mv.; beredning og farvning af pelsskind"	15	151												
+276	3	C	15	15.1	15.11			"Garvning og beredning af læder; beredning og farvning af pelsskind"	15	151	1511											
+277	4	C	15	15.1	15.11	15.11.00		"Garvning og beredning af læder; beredning og farvning af pelsskind"	15	151	1511	151100										
+278	3	C	15	15.1	15.12			Fremstilling af tasker, kufferter , sadelmagervarer mv.	15	151	1512											
+279	4	C	15	15.1	15.12	15.12.00		Fremstilling af tasker, kufferter, sadelmagervarer mv.	15	151	1512	151200										
+280	2	C	15	15.2				Fremstilling af fodtøj	15	152												
+281	3	C	15	15.2	15.20			Fremstilling af fodtøj	15	152	1520											
+282	4	C	15	15.2	15.20	15.20.00		Fremstilling af fodtøj	15	152	1520	152000										
+283	1	C	16					"Fremstilling af træ og varer af træ og kork, undtagen møbler; fremstilling af varer af strå og flettematerialer"	16													
+284	2	C	16	16.1				Udsavning og høvling af træ	16	161												
+285	3	C	16	16.1	16.10			Udsavning og høvling af træ	16	161	1610											
+286	4	C	16	16.1	16.10	16.10.00		Udsavning og høvling af træ	16	161	1610	161000										
+287	2	C	16	16.2				Fremstilling af varer af træ, kork, strå og flettematerialer	16	162												
+288	3	C	16	16.2	16.21			Fremstilling af finerplader og træbaserede plader	16	162	1621											
+289	4	C	16	16.2	16.21	16.21.00		Fremstilling af finerplader og træbaserede plader	16	162	1621	162100										
+290	3	C	16	16.2	16.22			Fremstilling af sammensatte parketstave	16	162	1622											
+291	4	C	16	16.2	16.22	16.22.00		Fremstilling af sammensatte parketstave	16	162	1622	162200										
+292	3	C	16	16.2	16.23			Fremstilling af bygningstømmer og snedkeriartikler i øvrigt	16	162	1623											
+293	4	C	16	16.2	16.23	16.23.00		Fremstilling af bygningstømmer og snedkeriartikler i øvrigt	16	162	1623	162300										
+294	3	C	16	16.2	16.24			Fremstilling af træemballage	16	162	1624											
+295	4	C	16	16.2	16.24	16.24.00		Fremstilling af træemballage	16	162	1624	162400										
+296	3	C	16	16.2	16.29			"Fremstilling af andre træprodukter; fremstilling af varer af kork, strå og flettematerialer"	16	162	1629											
+297	4	C	16	16.2	16.29	16.29.00		"Fremstilling af andre træprodukter; fremstilling af varer af kork, strå og flettematerialer"	16	162	1629	162900										
+298	1	C	17					Fremstilling af papir og papirvarer	17													
+299	2	C	17	17.1				Fremstilling af papirmasse, papir og pap	17	171												
+300	3	C	17	17.1	17.11			Fremstilling af papirmasse	17	171	1711											
+301	4	C	17	17.1	17.11	17.11.00		Fremstilling af papirmasse	17	171	1711	171100										
+302	3	C	17	17.1	17.12			Fremstilling af papir og pap	17	171	1712											
+303	4	C	17	17.1	17.12	17.12.00		Fremstilling af papir og pap	17	171	1712	171200										
+304	2	C	17	17.2				Fremstilling af papir- og papvarer	17	172												
+305	3	C	17	17.2	17.21			Fremstilling af bølgepap og pap og emballage af papir og pap	17	172	1721											
+306	4	C	17	17.2	17.21	17.21.00		Fremstilling af bølgepap og pap og emballage af papir og pap	17	172	1721	172100										
+307	3	C	17	17.2	17.22			Fremstilling af husholdningsartikler og hygiejneartikler samt toiletartikler af papir og pap	17	172	1722											
+308	4	C	17	17.2	17.22	17.22.00		Fremstilling af husholdningsartikler og hygiejneartikler samt toiletartikler af papir og pap	17	172	1722	172200										
+309	3	C	17	17.2	17.23			Fremstilling af kontorartikler af papir	17	172	1723											
+310	4	C	17	17.2	17.23	17.23.00		Fremstilling af kontorartikler af papir	17	172	1723	172300										
+311	3	C	17	17.2	17.24			Fremstilling af tapet	17	172	1724											
+312	4	C	17	17.2	17.24	17.24.00		Fremstilling af tapet	17	172	1724	172400										
+313	3	C	17	17.2	17.29			Fremstilling af andre papir- og papvarer	17	172	1729											
+314	4	C	17	17.2	17.29	17.29.00		Fremstilling af andre papir- og papvarer	17	172	1729	172900										
+315	1	C	18					Trykning og reproduktion af indspillede medier	18													
+316	2	C	18	18.1				Trykning og serviceydelser i forbindelse hermed	18	181												
+317	3	C	18	18.1	18.11			Trykning af dagblade	18	181	1811											
+318	4	C	18	18.1	18.11	18.11.00		Trykning af dagblade	18	181	1811	181100										
+319	3	C	18	18.1	18.12			Anden trykning	18	181	1812											
+320	4	C	18	18.1	18.12	18.12.00		Anden trykning	18	181	1812	181200										
+321	3	C	18	18.1	18.13			Prepress- og premedia-arbejde	18	181	1813											
+322	4	C	18	18.1	18.13	18.13.00		Prepress- og premedia-arbejde	18	181	1813	181300										
+323	3	C	18	18.1	18.14			Bogbinding og lignende serviceydelser	18	181	1814											
+324	4	C	18	18.1	18.14	18.14.00		Bogbinding og lignende serviceydelser	18	181	1814	181400										
+325	2	C	18	18.2				Reproduktion af indspillede medier	18	182												
+326	3	C	18	18.2	18.20			Reproduktion af indspillede medier	18	182	1820											
+327	4	C	18	18.2	18.20	18.20.00		Reproduktion af indspillede medier	18	182	1820	182000										
+328	1	C	19					Fremstilling af koks og raffinerede mineralolieprodukter	19													
+329	2	C	19	19.1				Fremstilling af koks mv.	19	191												
+330	3	C	19	19.1	19.10			Fremstilling af koks mv.	19	191	1910											
+331	4	C	19	19.1	19.10	19.10.00		Fremstilling af koks mv.	19	191	1910	191000										
+332	2	C	19	19.2				Fremstilling af raffinerede mineralolieprodukter	19	192												
+333	3	C	19	19.2	19.20			Fremstilling af raffinerede mineralolieprodukter	19	192	1920											
+334	4	C	19	19.2	19.20	19.20.00		Fremstilling af raffinerede mineralolieprodukter	19	192	1920	192000										
+335	1	C	20					Fremstilling af kemiske produkter	20													
+336	2	C	20	20.1				Fremstilling af basiskemikalier, gødningsstoffer og nitrogenprodukter, plast og syntetisk gummi i ubearbejdet form	20	201												
+337	3	C	20	20.1	20.11			Fremstilling af industrigasser	20	201	2011											
+338	4	C	20	20.1	20.11	20.11.00		Fremstilling af industrigasser	20	201	2011	201100										
+339	3	C	20	20.1	20.12			Fremstilling af farvestoffer og pigmenter	20	201	2012											
+340	4	C	20	20.1	20.12	20.12.00		Fremstilling af farvestoffer og pigmenter	20	201	2012	201200										
+341	3	C	20	20.1	20.13			Fremstilling af andre uorganiske basiskemikalier	20	201	2013											
+342	4	C	20	20.1	20.13	20.13.00		Fremstilling af andre uorganiske basiskemikalier	20	201	2013	201300										
+343	3	C	20	20.1	20.14			Fremstilling af andre organiske basiskemikalier	20	201	2014											
+344	4	C	20	20.1	20.14	20.14.00		Fremstilling af andre organiske basiskemikalier	20	201	2014	201400										
+345	3	C	20	20.1	20.15			Fremstilling af gødningsstoffer og nitrogenprodukter	20	201	2015											
+346	4	C	20	20.1	20.15	20.15.00		Fremstilling af gødningsstoffer og nitrogenprodukter	20	201	2015	201500										
+347	3	C	20	20.1	20.16			Fremstilling af plast i ubearbejdet form	20	201	2016											
+348	4	C	20	20.1	20.16	20.16.00		Fremstilling af plast i ubearbejdet form	20	201	2016	201600										
+349	3	C	20	20.1	20.17			Fremstilling af syntetisk gummi i ubearbejdet form	20	201	2017											
+350	4	C	20	20.1	20.17	20.17.00		Fremstilling af syntetisk gummi i ubearbejdet form	20	201	2017	201700										
+351	2	C	20	20.2				Fremstilling af pesticider og andre agrokemiske produkter	20	202												
+352	3	C	20	20.2	20.20			Fremstilling af pesticider og andre agrokemiske produkter	20	202	2020											
+353	4	C	20	20.2	20.20	20.20.00		Fremstilling af pesticider og andre agrokemiske produkter	20	202	2020	202000										
+354	2	C	20	20.3				Fremstilling af maling, lak og lignende overfladebehandlingsmidler, trykfarver samt tætningsmaterialer	20	203												
+355	3	C	20	20.3	20.30			Fremstilling af maling, lak og lignende overfladebehandlingsmidler, trykfarver samt tætningsmaterialer	20	203	2030											
+356	4	C	20	20.3	20.30	20.30.00		Fremstilling af maling, lak og lignende overfladebehandlingsmidler, trykfarver samt tætningsmaterialer	20	203	2030	203000										
+357	2	C	20	20.4				Fremstilling af sæbe, rengørings- og rensemidler samt poleremidler, parfume, hårshampoo, tandpasta mv.	20	204												
+358	3	C	20	20.4	20.41			Fremstilling af sæbe, rengørings- og rensemidler samt poleremidler	20	204	2041											
+359	4	C	20	20.4	20.41	20.41.00		Fremstilling af sæbe, rengørings- og rensemidler samt poleremidler	20	204	2041	204100										
+360	3	C	20	20.4	20.42			Fremstilling af parfume, hårshampoo, tandpasta mv.	20	204	2042											
+361	4	C	20	20.4	20.42	20.42.00		Fremstilling af parfume, hårshampoo, tandpasta mv.	20	204	2042	204200										
+362	2	C	20	20.5				Fremstilling af andre kemiske produkter	20	205												
+363	3	C	20	20.5	20.51			Fremstilling af sprængstoffer	20	205	2051											
+364	4	C	20	20.5	20.51	20.51.00		Fremstilling af sprængstoffer	20	205	2051	205100										
+365	3	C	20	20.5	20.52			Fremstilling af lim	20	205	2052											
+366	4	C	20	20.5	20.52	20.52.00		Fremstilling af lim	20	205	2052	205200										
+367	3	C	20	20.5	20.53			Fremstilling af æteriske olier	20	205	2053											
+368	4	C	20	20.5	20.53	20.53.00		Fremstilling af æteriske olier	20	205	2053	205300										
+369	3	C	20	20.5	20.59			Fremstilling af andre kemiske produkter i.a.n.	20	205	2059											
+370	4	C	20	20.5	20.59	20.59.00		Fremstilling af andre kemiske produkter i.a.n.	20	205	2059	205900										
+371	2	C	20	20.6				Fremstilling af kemofibre	20	206												
+372	3	C	20	20.6	20.60			Fremstilling af kemofibre	20	206	2060											
+373	4	C	20	20.6	20.60	20.60.00		Fremstilling af kemofibre	20	206	2060	206000										
+374	1	C	21					Fremstilling af farmaceutiske råvarer og farmaceutiske præparater	21													
+375	2	C	21	21.1				Fremstilling af farmaceutiske råvarer	21	211												
+376	3	C	21	21.1	21.10			Fremstilling af farmaceutiske råvarer	21	211	2110											
+377	4	C	21	21.1	21.10	21.10.00		Fremstilling af farmaceutiske råvarer	21	211	2110	211000										
+378	2	C	21	21.2				Fremstilling af farmaceutiske præparater	21	212												
+379	3	C	21	21.2	21.20			Fremstilling af farmaceutiske præparater	21	212	2120											
+380	4	C	21	21.2	21.20	21.20.00		Fremstilling af farmaceutiske præparater	21	212	2120	212000										
+381	1	C	22					Fremstilling af gummi- og plastprodukter	22													
+382	2	C	22	22.1				Fremstilling af gummiprodukter	22	221												
+383	3	C	22	22.1	22.11			"Fremstilling af gummidæk og gummislanger; vulkanisering af dæk"	22	221	2211											
+384	4	C	22	22.1	22.11	22.11.00		"Fremstilling af gummidæk og gummislanger; vulkanisering af dæk"	22	221	2211	221100										
+385	3	C	22	22.1	22.19			Fremstilling af andre gummiprodukter	22	221	2219											
+386	4	C	22	22.1	22.19	22.19.00		Fremstilling af andre gummiprodukter	22	221	2219	221900										
+387	2	C	22	22.2				Fremstilling af plastprodukter	22	222												
+388	3	C	22	22.2	22.21			Fremstilling af plader, ark, rør og slanger samt profiler af plast	22	222	2221											
+389	4	C	22	22.2	22.21	22.21.00		Fremstilling af plader, ark, rør og slanger samt profiler af plast	22	222	2221	222100										
+390	3	C	22	22.2	22.22			Fremstilling af plastemballage	22	222	2222											
+391	4	C	22	22.2	22.22	22.22.00		Fremstilling af plastemballage	22	222	2222	222200										
+392	3	C	22	22.2	22.23			Fremstilling af bygningsartikler af plast	22	222	2223											
+393	4	C	22	22.2	22.23	22.23.00		Fremstilling af bygningsartikler af plast	22	222	2223	222300										
+394	3	C	22	22.2	22.29			Fremstilling af andre plastprodukter	22	222	2229											
+395	4	C	22	22.2	22.29	22.29.00		Fremstilling af andre plastprodukter	22	222	2229	222900										
+396	1	C	23					Fremstilling af andre ikke-metalholdige mineralske produkter	23													
+397	2	C	23	23.1				Fremstilling af glas og glasprodukter	23	231												
+398	3	C	23	23.1	23.11			Fremstilling af planglas	23	231	2311											
+399	4	C	23	23.1	23.11	23.11.00		Fremstilling af planglas	23	231	2311	231100										
+400	3	C	23	23.1	23.12			Formning og forarbejdning af planglas	23	231	2312											
+401	4	C	23	23.1	23.12	23.12.00		Formning og forarbejdning af planglas	23	231	2312	231200										
+402	3	C	23	23.1	23.13			Fremstilling af flasker, drikkeglas mv.	23	231	2313											
+403	4	C	23	23.1	23.13	23.13.00		Fremstilling af flasker, drikkeglas mv.	23	231	2313	231300										
+404	3	C	23	23.1	23.14			Fremstilling af glasfiber	23	231	2314											
+405	4	C	23	23.1	23.14	23.14.00		Fremstilling af glasfiber	23	231	2314	231400										
+406	3	C	23	23.1	23.19			Fremstilling og bearbejdning af andet glas (herunder teknisk glas)	23	231	2319											
+407	4	C	23	23.1	23.19	23.19.00		Fremstilling og bearbejdning af andet glas (herunder teknisk glas)	23	231	2319	231900										
+408	2	C	23	23.2				Fremstilling af ildfaste produkter	23	232												
+409	3	C	23	23.2	23.20			Fremstilling af ildfaste produkter	23	232	2320											
+410	4	C	23	23.2	23.20	23.20.00		Fremstilling af ildfaste produkter	23	232	2320	232000										
+411	2	C	23	23.3				Fremstilling af byggematerialer af ler	23	233												
+412	3	C	23	23.3	23.31			Fremstilling af keramiske teglsten og gulvfliser	23	233	2331											
+413	4	C	23	23.3	23.31	23.31.00		Fremstilling af keramiske teglsten og gulvfliser	23	233	2331	233100										
+414	3	C	23	23.3	23.32			Fremstilling af mursten, teglsten og byggematerialer af brændt ler	23	233	2332											
+415	4	C	23	23.3	23.32	23.32.00		Fremstilling af mursten, teglsten og byggematerialer af brændt ler	23	233	2332	233200										
+416	2	C	23	23.4				Fremstilling af andre porcelænsvarer og keramiske produkter	23	234												
+417	3	C	23	23.4	23.41			Fremstilling af keramiske husholdningsartikler og pyntegenstande	23	234	2341											
+418	4	C	23	23.4	23.41	23.41.00		Fremstilling af keramiske husholdningsartikler og pyntegenstande	23	234	2341	234100										
+419	3	C	23	23.4	23.42			Fremstilling af keramiske sanitetsartikler	23	234	2342											
+420	4	C	23	23.4	23.42	23.42.00		Fremstilling af keramiske sanitetsartikler	23	234	2342	234200										
+421	3	C	23	23.4	23.43			Fremstilling af keramiske isolatorer og isoleringsdele	23	234	2343											
+422	4	C	23	23.4	23.43	23.43.00		Fremstilling af keramiske isolatorer og isoleringsdele	23	234	2343	234300										
+423	3	C	23	23.4	23.44			Fremstilling af andre keramiske produkter til teknisk brug	23	234	2344											
+424	4	C	23	23.4	23.44	23.44.00		Fremstilling af andre keramiske produkter til teknisk brug	23	234	2344	234400										
+425	3	C	23	23.4	23.49			Fremstilling af andre keramiske produkter	23	234	2349											
+426	4	C	23	23.4	23.49	23.49.00		Fremstilling af andre keramiske produkter	23	234	2349	234900										
+427	2	C	23	23.5				Fremstilling af cement, kalk og gips	23	235												
+428	3	C	23	23.5	23.51			Fremstilling af cement	23	235	2351											
+429	4	C	23	23.5	23.51	23.51.00		Fremstilling af cement	23	235	2351	235100										
+430	3	C	23	23.5	23.52			Fremstilling af kalk og gips	23	235	2352											
+431	4	C	23	23.5	23.52	23.52.00		Fremstilling af kalk og gips	23	235	2352	235200										
+432	2	C	23	23.6				Fremstilling af produkter af beton, cement og gips	23	236												
+433	3	C	23	23.6	23.61			Fremstilling af byggematerialer af beton	23	236	2361											
+434	4	C	23	23.6	23.61	23.61.00		Fremstilling af byggematerialer af beton	23	236	2361	236100										
+435	3	C	23	23.6	23.62			Fremstilling af byggematerialer af gips	23	236	2362											
+436	4	C	23	23.6	23.62	23.62.00		Fremstilling af byggematerialer af gips	23	236	2362	236200										
+437	3	C	23	23.6	23.63			Fremstilling af færdigblandet beton	23	236	2363											
+438	4	C	23	23.6	23.63	23.63.00		Fremstilling af færdigblandet beton	23	236	2363	236300										
+439	3	C	23	23.6	23.64			Fremstilling af mørtel	23	236	2364											
+440	4	C	23	23.6	23.64	23.64.00		Fremstilling af mørtel	23	236	2364	236400										
+441	3	C	23	23.6	23.65			Fremstilling af fibercement	23	236	2365											
+442	4	C	23	23.6	23.65	23.65.00		Fremstilling af fibercement	23	236	2365	236500										
+443	3	C	23	23.6	23.69			Fremstilling af andre beton-, gips- og cementprodukter	23	236	2369											
+444	4	C	23	23.6	23.69	23.69.00		Fremstilling af andre beton-, gips- og cementprodukter	23	236	2369	236900										
+445	2	C	23	23.7				Tilhugning, tilskæring og færdigbearbejdning af sten	23	237												
+446	3	C	23	23.7	23.70			Tilhugning, tilskæring og færdigbearbejdning af sten	23	237	2370											
+447	4	C	23	23.7	23.70	23.70.00		Tilhugning, tilskæring og færdigbearbejdning af sten	23	237	2370	237000										
+448	2	C	23	23.9				Fremstilling af slibemidler og ikke-metalholdige mineralske produkter i.a.n.	23	239												
+449	3	C	23	23.9	23.91			Fremstilling af slibemidler	23	239	2391											
+450	4	C	23	23.9	23.91	23.91.00		Fremstilling af slibemidler	23	239	2391	239100										
+451	3	C	23	23.9	23.99			Fremstilling af andre ikke-metalholdige mineralske produkter i.a.n.	23	239	2399											
+452	4	C	23	23.9	23.99	23.99.10		Fremstilling af asfalt og tagpap	23	239	2399	239910										
+453	4	C	23	23.9	23.99	23.99.90		Fremstilling af andre ikke-metalholdige mineralske produkter i.a.n.	23	239	2399	239990										
+454	1	C	24					Fremstilling af metal	24													
+455	2	C	24	24.1				Fremstilling af råjern og råstål samt jernlegeringer	24	241												
+456	3	C	24	24.1	24.10			Fremstilling af råjern og råstål samt jernlegeringer	24	241	2410											
+457	4	C	24	24.1	24.10	24.10.00		Fremstilling af råjern og råstål samt jernlegeringer	24	241	2410	241000										
+458	2	C	24	24.2				Fremstilling af rør og hule profiler og tilhørende fittings af stål	24	242												
+459	3	C	24	24.2	24.20			Fremstilling af rør og hule profiler og tilhørende fittings af stål	24	242	2420											
+460	4	C	24	24.2	24.20	24.20.00		Fremstilling af rør og hule profiler og tilhørende fittings af stål	24	242	2420	242000										
+461	2	C	24	24.3				Fremstilling af andre produkter af den primære forarbejdning af stål	24	243												
+462	3	C	24	24.3	24.31			Fremstilling af stænger ved koldtrækning	24	243	2431											
+463	4	C	24	24.3	24.31	24.31.00		Fremstilling af stænger ved koldtrækning	24	243	2431	243100										
+464	3	C	24	24.3	24.32			Fremstilling af stålbånd ved koldvalsning	24	243	2432											
+465	4	C	24	24.3	24.32	24.32.00		Fremstilling af stålbånd ved koldvalsning	24	243	2432	243200										
+466	3	C	24	24.3	24.33			Koldbehandling	24	243	2433											
+467	4	C	24	24.3	24.33	24.33.00		Koldbehandling	24	243	2433	243300										
+468	3	C	24	24.3	24.34			Fremstilling af tråd ved koldtrækning	24	243	2434											
+469	4	C	24	24.3	24.34	24.34.00		Fremstilling af tråd ved koldtrækning	24	243	2434	243400										
+470	2	C	24	24.4				Fremstilling af ædelmetaller og andre ikke-jernholdige metaller	24	244												
+471	3	C	24	24.4	24.41			Fremstilling af ædelmetaller	24	244	2441											
+472	4	C	24	24.4	24.41	24.41.00		Fremstilling af ædelmetaller	24	244	2441	244100										
+473	3	C	24	24.4	24.42			Fremstilling af aluminium	24	244	2442											
+474	4	C	24	24.4	24.42	24.42.00		Fremstilling af aluminium	24	244	2442	244200										
+475	3	C	24	24.4	24.43			Fremstilling af bly, zink og tin	24	244	2443											
+476	4	C	24	24.4	24.43	24.43.00		Fremstilling af bly, zink og tin	24	244	2443	244300										
+477	3	C	24	24.4	24.44			Fremstilling af kobber	24	244	2444											
+478	4	C	24	24.4	24.44	24.44.00		Fremstilling af kobber	24	244	2444	244400										
+479	3	C	24	24.4	24.45			Anden fremstilling af ikke-jernholdige metaller	24	244	2445											
+480	4	C	24	24.4	24.45	24.45.00		Anden fremstilling af ikke-jernholdige metaller	24	244	2445	244500										
+481	3	C	24	24.4	24.46			Oparbejdning af nukleart brændsel	24	244	2446											
+482	4	C	24	24.4	24.46	24.46.00		Oparbejdning af nukleart brændsel	24	244	2446	244600										
+483	2	C	24	24.5				Støbning af metalprodukter	24	245												
+484	3	C	24	24.5	24.51			Støbning af jernprodukter	24	245	2451											
+485	4	C	24	24.5	24.51	24.51.00		Støbning af jernprodukter	24	245	2451	245100										
+486	3	C	24	24.5	24.52			Støbning af stålprodukter	24	245	2452											
+487	4	C	24	24.5	24.52	24.52.00		Støbning af stålprodukter	24	245	2452	245200										
+488	3	C	24	24.5	24.53			Støbning af letmetalprodukter	24	245	2453											
+489	4	C	24	24.5	24.53	24.53.00		Støbning af letmetalprodukter	24	245	2453	245300										
+490	3	C	24	24.5	24.54			Støbning af andre ikke-jernholdige metalprodukter	24	245	2454											
+491	4	C	24	24.5	24.54	24.54.00		Støbning af andre ikke-jernholdige metalprodukter	24	245	2454	245400										
+492	1	C	25					Jern- og metalvareindustri, undtagen maskiner og udstyr	25													
+493	2	C	25	25.1				Fremstilling af metalkonstruktioner	25	251												
+494	3	C	25	25.1	25.11			Fremstilling af metalkonstruktioner og dele heraf	25	251	2511											
+495	4	C	25	25.1	25.11	25.11.00		Fremstilling af metalkonstruktioner og dele heraf	25	251	2511	251100										
+496	3	C	25	25.1	25.12			Fremstilling af døre og vinduer af metal	25	251	2512											
+497	4	C	25	25.1	25.12	25.12.00		Fremstilling af døre og vinduer af metal	25	251	2512	251200										
+498	2	C	25	25.2				Fremstilling af tanke og beholdere af metal	25	252												
+499	3	C	25	25.2	25.21			Fremstilling af radiatorer og kedler til centralvarmeanlæg	25	252	2521											
+500	4	C	25	25.2	25.21	25.21.00		Fremstilling af radiatorer og kedler til centralvarmeanlæg	25	252	2521	252100										
+501	3	C	25	25.2	25.29			Fremstilling af andre tanke og beholdere af metal	25	252	2529											
+502	4	C	25	25.2	25.29	25.29.00		Fremstilling af andre tanke og beholdere af metal	25	252	2529	252900										
+503	2	C	25	25.3				Fremstilling af dampkedler undtagen centralvarmekedler	25	253												
+504	3	C	25	25.3	25.30			Fremstilling af dampkedler undtagen centralvarmekedler	25	253	2530											
+505	4	C	25	25.3	25.30	25.30.00		Fremstilling af dampkedler undtagen centralvarmekedler	25	253	2530	253000										
+506	2	C	25	25.4				Fremstilling af våben og ammunition	25	254												
+507	3	C	25	25.4	25.40			Fremstilling af våben og ammunition	25	254	2540											
+508	4	C	25	25.4	25.40	25.40.00		Fremstilling af våben og ammunition	25	254	2540	254000										
+509	2	C	25	25.5				"Smedning, presning, sænksmedning og valsning af metal; pulvermetallurgi"	25	255												
+510	3	C	25	25.5	25.50			"Smedning, presning, sænksmedning og valsning af metal; pulvermetallurgi"	25	255	2550											
+511	4	C	25	25.5	25.50	25.50.00		"Smedning, presning, sænksmedning og valsning af metal; pulvermetallurgi"	25	255	2550	255000										
+512	2	C	25	25.6				Overfladebehandling af metal, maskinforarbejdning	25	256												
+513	3	C	25	25.6	25.61			Overfladebehandling af metal	25	256	2561											
+514	4	C	25	25.6	25.61	25.61.00		Overfladebehandling af metal	25	256	2561	256100										
+515	3	C	25	25.6	25.62			Maskinforarbejdning	25	256	2562											
+516	4	C	25	25.6	25.62	25.62.00		Maskinforarbejdning	25	256	2562	256200										
+517	2	C	25	25.7				Fremstilling af bestik, skære- og klipperedskaber, håndværktøj og diverse metalprodukter	25	257												
+518	3	C	25	25.7	25.71			Fremstilling af bestik, skære- og klipperedskaber	25	257	2571											
+519	4	C	25	25.7	25.71	25.71.00		Fremstilling af bestik, skære- og klipperedskaber	25	257	2571	257100										
+520	3	C	25	25.7	25.72			Fremstilling af låse og hængsler	25	257	2572											
+521	4	C	25	25.7	25.72	25.72.00		Fremstilling af låse og hængsler	25	257	2572	257200										
+522	3	C	25	25.7	25.73			Fremstilling af håndværktøj	25	257	2573											
+523	4	C	25	25.7	25.73	25.73.00		Fremstilling af håndværktøj	25	257	2573	257300										
+524	2	C	25	25.9				Fremstilling af andre færdige metalprodukter	25	259												
+525	3	C	25	25.9	25.91			Fremstilling af metaltønder og lignende beholdere	25	259	2591											
+526	4	C	25	25.9	25.91	25.91.00		Fremstilling af metaltønder og lignende beholdere	25	259	2591	259100										
+527	3	C	25	25.9	25.92			Fremstilling af letmetalemballage	25	259	2592											
+528	4	C	25	25.9	25.92	25.92.00		Fremstilling af letmetalemballage	25	259	2592	259200										
+529	3	C	25	25.9	25.93			Fremstilling af trådvarer, kæder og fjedre	25	259	2593											
+530	4	C	25	25.9	25.93	25.93.00		Fremstilling af trådvarer, kæder og fjedre	25	259	2593	259300										
+531	3	C	25	25.9	25.94			Fremstilling af lukkeanordninger, bolte, skruer og møtrikker	25	259	2594											
+532	4	C	25	25.9	25.94	25.94.00		Fremstilling af lukkeanordninger, bolte, skruer og møtrikker	25	259	2594	259400										
+533	3	C	25	25.9	25.99			Fremstilling af andre færdige metalprodukter i.a.n.	25	259	2599											
+534	4	C	25	25.9	25.99	25.99.00		Fremstilling af andre færdige metalprodukter i.a.n.	25	259	2599	259900										
+535	1	C	26					Fremstilling af computere, elektroniske og optiske produkter	26													
+536	2	C	26	26.1				Fremstilling af elektroniske komponenter og plader	26	261												
+537	3	C	26	26.1	26.11			Fremstilling af elektroniske komponenter og plader	26	261	2611											
+538	4	C	26	26.1	26.11	26.11.00		Fremstilling af elektroniske komponenter og plader	26	261	2611	261100										
+539	3	C	26	26.1	26.12			Fremstilling af printplader o.l.	26	261	2612											
+540	4	C	26	26.1	26.12	26.12.00		Fremstilling af printplader o.l.	26	261	2612	261200										
+541	2	C	26	26.2				Fremstilling af computere og ydre enheder	26	262												
+542	3	C	26	26.2	26.20			Fremstilling af computere og ydre enheder	26	262	2620											
+543	4	C	26	26.2	26.20	26.20.00		Fremstilling af computere og ydre enheder	26	262	2620	262000										
+544	2	C	26	26.3				Fremstilling af kommunikationsudstyr	26	263												
+545	3	C	26	26.3	26.30			Fremstilling af kommunikationsudstyr	26	263	2630											
+546	4	C	26	26.3	26.30	26.30.00		Fremstilling af kommunikationsudstyr	26	263	2630	263000										
+547	2	C	26	26.4				Fremstilling af elektronik til husholdninger	26	264												
+548	3	C	26	26.4	26.40			Fremstilling af elektronik til husholdninger	26	264	2640											
+549	4	C	26	26.4	26.40	26.40.00		Fremstilling af elektronik til husholdninger	26	264	2640	264000										
+550	2	C	26	26.5				"Fremstilling af udstyr til måling, afprøvning, navigation og kontrol; ure"	26	265												
+551	3	C	26	26.5	26.51			Fremstilling af udstyr til måling, afprøvning, navigation og kontrol	26	265	2651											
+552	4	C	26	26.5	26.51	26.51.00		Fremstilling af udstyr til måling, afprøvning, navigation og kontrol	26	265	2651	265100										
+553	3	C	26	26.5	26.52			Fremstilling af ure	26	265	2652											
+554	4	C	26	26.5	26.52	26.52.00		Fremstilling af ure	26	265	2652	265200										
+555	2	C	26	26.6				Fremstilling af bestrålingsudstyr og elektromedicinsk og elektroterapeutisk udstyr	26	266												
+556	3	C	26	26.6	26.60			Fremstilling af bestrålingsudstyr og elektromedicinsk og elektroterapeutisk udstyr	26	266	2660											
+557	4	C	26	26.6	26.60	26.60.10		Fremstilling af høreapparater og dele hertil	26	266	2660	266010										
+558	4	C	26	26.6	26.60	26.60.90		Fremstilling af bestrålingsudstyr og elektromedicinsk og elektroterapeutisk udstyr	26	266	2660	266090										
+559	2	C	26	26.7				Fremstilling af optiske instrumenter og fotografisk udstyr	26	267												
+560	3	C	26	26.7	26.70			Fremstilling af optiske instrumenter og fotografisk udstyr	26	267	2670											
+561	4	C	26	26.7	26.70	26.70.00		Fremstilling af optiske instrumenter og fotografisk udstyr	26	267	2670	267000										
+562	2	C	26	26.8				Fremstilling af magnetiske og optiske media	26	268												
+563	3	C	26	26.8	26.80			Fremstilling af magnetiske og optiske media	26	268	2680											
+564	4	C	26	26.8	26.80	26.80.00		Fremstilling af magnetiske og optiske media	26	268	2680	268000										
+565	1	C	27					Fremstilling af elektrisk udstyr	27													
+566	2	C	27	27.1				Fremstilling af elektriske motorer, generatorer, transformere og elektriske fordelings- og kontroltavler	27	271												
+567	3	C	27	27.1	27.11			Fremstilling af elektriske motorer, generatorer og transformere	27	271	2711											
+568	4	C	27	27.1	27.11	27.11.00		Fremstilling af elektriske motorer, generatorer og transformere	27	271	2711	271100										
+569	3	C	27	27.1	27.12			Fremstilling af elektriske fordelings- og kontrolapparater	27	271	2712											
+570	4	C	27	27.1	27.12	27.12.00		Fremstilling af elektriske fordelings- og kontrolapparater	27	271	2712	271200										
+571	2	C	27	27.2				Fremstilling af batterier og akkumulatorer	27	272												
+572	3	C	27	27.2	27.20			Fremstilling af batterier og akkumulatorer	27	272	2720											
+573	4	C	27	27.2	27.20	27.20.00		Fremstilling af batterier og akkumulatorer	27	272	2720	272000										
+574	2	C	27	27.3				Fremstilling af ledninger og kabler og tilbehør hertil	27	273												
+575	3	C	27	27.3	27.31			Fremstilling af lyslederkabler	27	273	2731											
+576	4	C	27	27.3	27.31	27.31.00		Fremstilling af lyslederkabler	27	273	2731	273100										
+577	3	C	27	27.3	27.32			Fremstilling af andre elektroniske og elektriske ledninger og kabler	27	273	2732											
+578	4	C	27	27.3	27.32	27.32.00		Fremstilling af andre elektroniske og elektriske ledninger og kabler	27	273	2732	273200										
+579	3	C	27	27.3	27.33			Fremstilling af tilbehør til ledninger og kabler	27	273	2733											
+580	4	C	27	27.3	27.33	27.33.00		Fremstilling af tilbehør til ledninger og kabler	27	273	2733	273300										
+581	2	C	27	27.4				Fremstilling af elektriske belysningsartikler	27	274												
+582	3	C	27	27.4	27.40			Fremstilling af elektriske belysningsartikler	27	274	2740											
+583	4	C	27	27.4	27.40	27.40.00		Fremstilling af elektriske belysningsartikler	27	274	2740	274000										
+584	2	C	27	27.5				Fremstilling af husholdningsapparater	27	275												
+585	3	C	27	27.5	27.51			Fremstilling af elektriske husholdningsapparater	27	275	2751											
+586	4	C	27	27.5	27.51	27.51.00		Fremstilling af elektriske husholdningsapparater	27	275	2751	275100										
+587	3	C	27	27.5	27.52			Fremstilling af ikke-elektriske husholdningsapparater	27	275	2752											
+588	4	C	27	27.5	27.52	27.52.00		Fremstilling af ikke-elektriske husholdningsapparater	27	275	2752	275200										
+589	2	C	27	27.9				Fremstilling af andet elektrisk udstyr	27	279												
+590	3	C	27	27.9	27.90			Fremstilling af andet elektrisk udstyr	27	279	2790											
+591	4	C	27	27.9	27.90	27.90.00		Fremstilling af andet elektrisk udstyr	27	279	2790	279000										
+592	1	C	28					Fremstilling af maskiner og udstyr i.a.n.	28													
+593	2	C	28	28.1				Fremstilling af maskiner til generelle formål	28	281												
+594	3	C	28	28.1	28.11			Fremstilling af motorer og turbiner undtagen motorer til flyvemaskiner, motorkøretøjer og knallerter	28	281	2811											
+595	4	C	28	28.1	28.11	28.11.10		Fremstilling af vindmøller og dele hertil	28	281	2811	281110										
+596	4	C	28	28.1	28.11	28.11.90		Fremstilling af motorer og turbiner undtagen motorer til vindmøller, flyvemaskiner, motorkøretøjer og knallerter	28	281	2811	281190										
+597	3	C	28	28.1	28.12			Fremstilling af hydraulisk udstyr	28	281	2812											
+598	4	C	28	28.1	28.12	28.12.00		Fremstilling af hydraulisk udstyr	28	281	2812	281200										
+599	3	C	28	28.1	28.13			Fremstilling af andre pumper og kompressorer	28	281	2813											
+600	4	C	28	28.1	28.13	28.13.00		Fremstilling af andre pumper og kompressorer	28	281	2813	281300										
+601	3	C	28	28.1	28.14			Fremstilling af andre haner og ventiler	28	281	2814											
+602	4	C	28	28.1	28.14	28.14.00		Fremstilling af andre haner og ventiler	28	281	2814	281400										
+603	3	C	28	28.1	28.15			Fremstilling af lejer, tandhjul, tandhjulsudvekslinger og drivelementer	28	281	2815											
+604	4	C	28	28.1	28.15	28.15.00		Fremstilling af lejer, tandhjul, tandhjulsudvekslinger og drivelementer	28	281	2815	281500										
+605	2	C	28	28.2				Fremstilling af øvrige maskiner til generelle formål	28	282												
+606	3	C	28	28.2	28.21			Fremstilling af ovne, ildsteder og fyringsaggregater	28	282	2821											
+607	4	C	28	28.2	28.21	28.21.00		Fremstilling af ovne, ildsteder og fyringsaggregater	28	282	2821	282100										
+608	3	C	28	28.2	28.22			Fremstilling af løfte- og håndteringsudstyr	28	282	2822											
+609	4	C	28	28.2	28.22	28.22.00		Fremstilling af løfte- og håndteringsudstyr	28	282	2822	282200										
+610	3	C	28	28.2	28.23			Fremstilling af kontormaskiner og -udstyr (undtagen computere og ydre enheder)	28	282	2823											
+611	4	C	28	28.2	28.23	28.23.00		Fremstilling af kontormaskiner og -udstyr (undtagen computere og ydre enheder)	28	282	2823	282300										
+612	3	C	28	28.2	28.24			Fremstilling af motordrevet håndværktøj	28	282	2824											
+613	4	C	28	28.2	28.24	28.24.00		Fremstilling af motordrevet håndværktøj	28	282	2824	282400										
+614	3	C	28	28.2	28.25			Fremstilling af køle- og ventilationsanlæg (til industriel brug)	28	282	2825											
+615	4	C	28	28.2	28.25	28.25.00		Fremstilling af køle- og ventilationsanlæg (til industriel brug)	28	282	2825	282500										
+616	3	C	28	28.2	28.29			Fremstilling af andre maskiner til generelle formål i.a.n.	28	282	2829											
+617	4	C	28	28.2	28.29	28.29.00		Fremstilling af andre maskiner til generelle formål i.a.n.	28	282	2829	282900										
+618	2	C	28	28.3				Fremstilling af landbrugs- og skovbrugsmaskiner	28	283												
+619	3	C	28	28.3	28.30			Fremstilling af landbrugs- og skovbrugsmaskiner	28	283	2830											
+620	4	C	28	28.3	28.30	28.30.00		Fremstilling af landbrugs- og skovbrugsmaskiner	28	283	2830	283000										
+621	2	C	28	28.4				Fremstilling af metalforarbejdningsmaskiner og værktøjsmaskiner	28	284												
+622	3	C	28	28.4	28.41			Fremstilling af metalforarbejdende værktøjsmaskiner	28	284	2841											
+623	4	C	28	28.4	28.41	28.41.00		Fremstilling af metalforarbejdende værktøjsmaskiner	28	284	2841	284100										
+624	3	C	28	28.4	28.49			Fremstilling af andre værktøjsmaskiner	28	284	2849											
+625	4	C	28	28.4	28.49	28.49.00		Fremstilling af andre værktøjsmaskiner	28	284	2849	284900										
+626	2	C	28	28.9				Fremstilling af øvrige maskiner til specielle formål	28	289												
+627	3	C	28	28.9	28.91			Fremstilling af maskiner til metallurgi	28	289	2891											
+628	4	C	28	28.9	28.91	28.91.00		Fremstilling af maskiner til metallurgi	28	289	2891	289100										
+629	3	C	28	28.9	28.92			Fremstilling af maskiner til råstofindvindingsindustrien samt bygge og anlæg	28	289	2892											
+630	4	C	28	28.9	28.92	28.92.00		Fremstilling af maskiner til råstofindvindingsindustrien samt bygge og anlæg	28	289	2892	289200										
+631	3	C	28	28.9	28.93			Fremstilling af maskiner til føde-, drikke- og tobaksvareindustrien	28	289	2893											
+632	4	C	28	28.9	28.93	28.93.00		Fremstilling af maskiner til føde-, drikke- og tobaksvareindustrien	28	289	2893	289300										
+633	3	C	28	28.9	28.94			Fremstilling af maskiner til produktion af tekstiler, beklædningsartikler og læder	28	289	2894											
+634	4	C	28	28.9	28.94	28.94.00		Fremstilling af maskiner til produktion af tekstiler, beklædningsartikler og læder	28	289	2894	289400										
+635	3	C	28	28.9	28.95			Fremstilling af maskiner til produktion af papir og pap	28	289	2895											
+636	4	C	28	28.9	28.95	28.95.00		Fremstilling af maskiner til produktion af papir og pap	28	289	2895	289500										
+637	3	C	28	28.9	28.96			Fremstilling af maskiner til produktion af plast og gummi	28	289	2896											
+638	4	C	28	28.9	28.96	28.96.00		Fremstilling af maskiner til produktion af plast og gummi	28	289	2896	289600										
+639	3	C	28	28.9	28.99			Fremstilling af øvrige maskiner til specielle formål i.a.n.	28	289	2899											
+640	4	C	28	28.9	28.99	28.99.00		Fremstilling af øvrige maskiner til specielle formål i.a.n.	28	289	2899	289900										
+641	1	C	29					Fremstilling af motorkøretøjer, påhængsvogne og sættevogne	29													
+642	2	C	29	29.1				Fremstilling af motorkøretøjer	29	291												
+643	3	C	29	29.1	29.10			Fremstilling af motorkøretøjer	29	291	2910											
+644	4	C	29	29.1	29.10	29.10.00		Fremstilling af motorkøretøjer	29	291	2910	291000										
+645	2	C	29	29.2				"Fremstilling af karosserier til motorkøretøjer; fremstilling af påhængsvogne og sættevogne"	29	292												
+646	3	C	29	29.2	29.20			"Fremstilling af karosserier til motorkøretøjer; fremstilling af påhængsvogne og sættevogne"	29	292	2920											
+647	4	C	29	29.2	29.20	29.20.00		"Fremstilling af karosserier til motorkøretøjer; fremstilling af påhængsvogne og sættevogne"	29	292	2920	292000										
+648	2	C	29	29.3				Fremstilling af dele og tilbehør til motorkøretøjer	29	293												
+649	3	C	29	29.3	29.31			Fremstilling af elektrisk og elektronisk udstyr til motorkøretøjer	29	293	2931											
+650	4	C	29	29.3	29.31	29.31.00		Fremstilling af elektrisk og elektronisk udstyr til motorkøretøjer	29	293	2931	293100										
+651	3	C	29	29.3	29.32			Fremstilling af andre dele og tilbehør til motorkøretøjer	29	293	2932											
+652	4	C	29	29.3	29.32	29.32.00		Fremstilling af andre dele og tilbehør til motorkøretøjer	29	293	2932	293200										
+653	1	C	30					Fremstilling af andre transportmidler	30													
+654	2	C	30	30.1				Bygning af skibe og både	30	301												
+655	3	C	30	30.1	30.11			Bygning af skibe og flydende materiel	30	301	3011											
+656	4	C	30	30.1	30.11	30.11.00		Bygning af skibe og flydende materiel	30	301	3011	301100										
+657	3	C	30	30.1	30.12			Bygning af både til fritid og sport	30	301	3012											
+658	4	C	30	30.1	30.12	30.12.00		Bygning af både til fritid og sport	30	301	3012	301200										
+659	2	C	30	30.2				Fremstilling af lokomotiver og andet rullende materiel til jernbaner og sporveje	30	302												
+660	3	C	30	30.2	30.20			Fremstilling af lokomotiver og andet rullende materiel til jernbaner og sporveje	30	302	3020											
+661	4	C	30	30.2	30.20	30.20.00		Fremstilling af lokomotiver og andet rullende materiel til jernbaner og sporveje	30	302	3020	302000										
+662	2	C	30	30.3				Fremstilling af luft- og rumfartøjer o.l.	30	303												
+663	3	C	30	30.3	30.30			Fremstilling af luft- og rumfartøjer o.l.	30	303	3030											
+664	4	C	30	30.3	30.30	30.30.00		Fremstilling af luft- og rumfartøjer o.l.	30	303	3030	303000										
+665	2	C	30	30.4				Fremstilling af militære kampkøretøjer	30	304												
+666	3	C	30	30.4	30.40			Fremstilling af militære kampkøretøjer	30	304	3040											
+667	4	C	30	30.4	30.40	30.40.00		Fremstilling af militære kampkøretøjer	30	304	3040	304000										
+668	2	C	30	30.9				Fremstilling af transportmidler i.a.n.	30	309												
+669	3	C	30	30.9	30.91			Fremstilling af motorcykler	30	309	3091											
+670	4	C	30	30.9	30.91	30.91.00		Fremstilling af motorcykler	30	309	3091	309100										
+671	3	C	30	30.9	30.92			Fremstilling af cykler og invalidekøretøjer	30	309	3092											
+672	4	C	30	30.9	30.92	30.92.00		Fremstilling af cykler og invalidekøretøjer	30	309	3092	309200										
+673	3	C	30	30.9	30.99			Fremstilling af andre transportmidler i.a.n.	30	309	3099											
+674	4	C	30	30.9	30.99	30.99.00		Fremstilling af andre transportmidler i.a.n.	30	309	3099	309900										
+675	1	C	31					Fremstilling af møbler	31													
+676	2	C	31	31.0				Fremstilling af møbler	31	310												
+677	3	C	31	31.0	31.01			Fremstilling af kontor- og butiksmøbler	31	310	3101											
+678	4	C	31	31.0	31.01	31.01.00		Fremstilling af kontor- og butiksmøbler	31	310	3101	310100										
+679	3	C	31	31.0	31.02			Fremstilling af køkkenmøbler	31	310	3102											
+680	4	C	31	31.0	31.02	31.02.00		Fremstilling af køkkenmøbler	31	310	3102	310200										
+681	3	C	31	31.0	31.03			Fremstilling af madrasser	31	310	3103											
+682	4	C	31	31.0	31.03	31.03.00		Fremstilling af madrasser	31	310	3103	310300										
+683	3	C	31	31.0	31.09			Fremstilling af andre møbler	31	310	3109											
+684	4	C	31	31.0	31.09	31.09.00		Fremstilling af andre møbler	31	310	3109	310900										
+685	1	C	32					Anden fremstillingsvirksomhed	32													
+686	2	C	32	32.1				Fremstilling af smykker, bijouteri, mønter og lignende varer	32	321												
+687	3	C	32	32.1	32.11			Prægning af mønter	32	321	3211											
+688	4	C	32	32.1	32.11	32.11.00		Prægning af mønter	32	321	3211	321100										
+689	3	C	32	32.1	32.12			Fremstilling af smykker i ædle metaller og relaterede produkter	32	321	3212											
+690	4	C	32	32.1	32.12	32.12.00		Fremstilling af smykker i ædle metaller og relaterede produkter	32	321	3212	321200										
+691	3	C	32	32.1	32.13			Fremstilling af bijouteri og lignende varer	32	321	3213											
+692	4	C	32	32.1	32.13	32.13.00		Fremstilling af bijouteri og lignende varer	32	321	3213	321300										
+693	2	C	32	32.2				Fremstilling af musikinstrumenter	32	322												
+694	3	C	32	32.2	32.20			Fremstilling af musikinstrumenter	32	322	3220											
+695	4	C	32	32.2	32.20	32.20.00		Fremstilling af musikinstrumenter	32	322	3220	322000										
+696	2	C	32	32.3				Fremstilling af sportsudstyr	32	323												
+697	3	C	32	32.3	32.30			Fremstilling af sportsudstyr	32	323	3230											
+698	4	C	32	32.3	32.30	32.30.00		Fremstilling af sportsudstyr	32	323	3230	323000										
+699	2	C	32	32.4				Fremstilling af spil og legetøj	32	324												
+700	3	C	32	32.4	32.40			Fremstilling af spil og legetøj	32	324	3240											
+701	4	C	32	32.4	32.40	32.40.00		Fremstilling af spil og legetøj	32	324	3240	324000										
+702	2	C	32	32.5				Fremstilling af medicinske og dentale instrumenter samt udstyr hertil	32	325												
+703	3	C	32	32.5	32.50			Fremstilling af medicinske og dentale instrumenter samt udstyr hertil	32	325	3250											
+704	4	C	32	32.5	32.50	32.50.00		Fremstilling af medicinske og dentale instrumenter samt udstyr hertil	32	325	3250	325000										
+705	2	C	32	32.9				Fremstillingsvirksomhed i.a.n.	32	329												
+706	3	C	32	32.9	32.91			Fremstilling af koste og børster	32	329	3291											
+707	4	C	32	32.9	32.91	32.91.00		Fremstilling af koste og børster	32	329	3291	329100										
+708	3	C	32	32.9	32.99			Anden fremstillingsvirksomhed i.a.n.	32	329	3299											
+709	4	C	32	32.9	32.99	32.99.00		Anden fremstillingsvirksomhed i.a.n.	32	329	3299	329900										
+710	1	C	33					Reparation og installation af maskiner og udstyr	33													
+711	2	C	33	33.1				Reparation af jern- og metalvarer, maskiner og udstyr	33	331												
+712	3	C	33	33.1	33.11			Reparation af jern- og metalvarer	33	331	3311											
+713	4	C	33	33.1	33.11	33.11.00		Reparation af jern- og metalvarer	33	331	3311	331100										
+714	3	C	33	33.1	33.12			Reparation af maskiner	33	331	3312											
+715	4	C	33	33.1	33.12	33.12.00		Reparation af maskiner	33	331	3312	331200										
+716	3	C	33	33.1	33.13			Reparation af elektronisk og optisk udstyr	33	331	3313											
+717	4	C	33	33.1	33.13	33.13.00		Reparation af elektronisk og optisk udstyr	33	331	3313	331300										
+718	3	C	33	33.1	33.14			Reparation af elektrisk udstyr	33	331	3314											
+719	4	C	33	33.1	33.14	33.14.00		Reparation af elektrisk udstyr	33	331	3314	331400										
+720	3	C	33	33.1	33.15			Reparation og vedligeholdelse af skibe og både	33	331	3315											
+721	4	C	33	33.1	33.15	33.15.00		Reparation og vedligeholdelse af skibe og både	33	331	3315	331500										
+722	3	C	33	33.1	33.16			Reparation og vedligeholdelse af luft- og rumfartøjer	33	331	3316											
+723	4	C	33	33.1	33.16	33.16.00		Reparation og vedligeholdelse af luft- og rumfartøjer	33	331	3316	331600										
+724	3	C	33	33.1	33.17			Reparation og vedligeholdelse af andre transportmidler	33	331	3317											
+725	4	C	33	33.1	33.17	33.17.00		Reparation og vedligeholdelse af andre transportmidler	33	331	3317	331700										
+726	3	C	33	33.1	33.19			Reparation af andet udstyr	33	331	3319											
+727	4	C	33	33.1	33.19	33.19.00		Reparation af andet udstyr	33	331	3319	331900										
+728	2	C	33	33.2				Installation af industrimaskiner og -udstyr	33	332												
+729	3	C	33	33.2	33.20			Installation af industrimaskiner og -udstyr	33	332	3320											
+730	4	C	33	33.2	33.20	33.20.00		Installation af industrimaskiner og -udstyr	33	332	3320	332000										
+731	0	D						El-, gas- og fjernvarmeforsyning														
+732	1	D	35					El-, gas- og fjernvarmeforsyning	35													
+733	2	D	35	35.1				Elforsyning	35	351												
+734	3	D	35	35.1	35.11			Produktion af elektricitet	35	351	3511											
+735	4	D	35	35.1	35.11	35.11.00		Produktion af elektricitet	35	351	3511	351100										
+736	3	D	35	35.1	35.12			Transmission af elektricitet	35	351	3512											
+737	4	D	35	35.1	35.12	35.12.00		Transmission af elektricitet	35	351	3512	351200										
+738	3	D	35	35.1	35.13			Distribution af elektricitet	35	351	3513											
+739	4	D	35	35.1	35.13	35.13.00		Distribution af elektricitet	35	351	3513	351300										
+740	3	D	35	35.1	35.14			Handel med elektricitet	35	351	3514											
+741	4	D	35	35.1	35.14	35.14.00		Handel med elektricitet	35	351	3514	351400										
+742	2	D	35	35.2				Gasforsyning	35	352												
+743	3	D	35	35.2	35.21			Fremstilling af gas	35	352	3521											
+744	4	D	35	35.2	35.21	35.21.00		Fremstilling af gas	35	352	3521	352100										
+745	3	D	35	35.2	35.22			Distribution af gas	35	352	3522											
+746	4	D	35	35.2	35.22	35.22.00		Distribution af gas	35	352	3522	352200										
+747	3	D	35	35.2	35.23			Handel med gas gennem rørledninger	35	352	3523											
+748	4	D	35	35.2	35.23	35.23.00		Handel med gas gennem rørledninger	35	352	3523	352300										
+749	2	D	35	35.3				Varmeforsyning	35	353												
+750	3	D	35	35.3	35.30			Varmeforsyning	35	353	3530											
+751	4	D	35	35.3	35.30	35.30.00		Varmeforsyning	35	353	3530	353000										
+752	0	E						"Vandforsyning; kloakvæsen, affaldshåndtering og rensning af jord og grundvand"														
+753	1	E	36					Vandforsyning	36													
+754	2	E	36	36.0				Vandforsyning	36	360												
+755	3	E	36	36.0	36.00			Vandforsyning	36	360	3600											
+756	4	E	36	36.0	36.00	36.00.00		Vandforsyning	36	360	3600	360000										
+757	1	E	37					Opsamling og behandling af spildevand	37													
+758	2	E	37	37.0				Opsamling og behandling af spildevand	37	370												
+759	3	E	37	37.0	37.00			Opsamling og behandling af spildevand	37	370	3700											
+760	4	E	37	37.0	37.00	37.00.00		Opsamling og behandling af spildevand	37	370	3700	370000										
+761	1	E	38					"Indsamling, behandling og bortskaffelse af affald; genbrug"	38													
+762	2	E	38	38.1				Indsamling af affald	38	381												
+763	3	E	38	38.1	38.11			Indsamling af ikke-farligt affald	38	381	3811											
+764	4	E	38	38.1	38.11	38.11.00		Indsamling af ikke-farligt affald	38	381	3811	381100										
+765	3	E	38	38.1	38.12			Indsamling af farligt affald	38	381	3812											
+766	4	E	38	38.1	38.12	38.12.00		Indsamling af farligt affald	38	381	3812	381200										
+767	2	E	38	38.2				Behandling og bortskaffelse af affald	38	382												
+768	3	E	38	38.2	38.21			Behandling og bortskaffelse af ikke-farligt affald	38	382	3821											
+769	4	E	38	38.2	38.21	38.21.10		Behandling og bortskaffelse af ikke-farligt affald	38	382	3821	382110										
+770	4	E	38	38.2	38.21	38.21.20		Bortskaffelse af affald med energiproduktion	38	382	3821	382120										
+771	3	E	38	38.2	38.22			Behandling og bortskaffelse af farligt affald	38	382	3822											
+772	4	E	38	38.2	38.22	38.22.00		Behandling og bortskaffelse af farligt affald	38	382	3822	382200										
+773	2	E	38	38.3				Genbrug	38	383												
+774	3	E	38	38.3	38.31			Demontering af udtjente køretøjer, skibe, maskiner mv.	38	383	3831											
+775	4	E	38	38.3	38.31	38.31.00		Demontering af udtjente køretøjer, skibe, maskiner mv.	38	383	3831	383100										
+776	3	E	38	38.3	38.32			Genbrug af sorterede materialer	38	383	3832											
+777	4	E	38	38.3	38.32	38.32.00		Genbrug af sorterede materialer	38	383	3832	383200										
+778	1	E	39					Rensning af jord og grundvand og anden form for forureningsbekæmpelse	39													
+779	2	E	39	39.0				Rensning af jord og grundvand og anden form for forureningsbekæmpelse	39	390												
+780	3	E	39	39.0	39.00			Rensning af jord og grundvand og anden form for forureningsbekæmpelse	39	390	3900											
+781	4	E	39	39.0	39.00	39.00.00		Rensning af jord og grundvand og anden form for forureningsbekæmpelse	39	390	3900	390000										
+782	0	F						Bygge- og anlægsvirksomhed														
+783	1	F	41					Opførelse af bygninger	41													
+784	2	F	41	41.1				Gennemførelse af byggeprojekter	41	411												
+785	3	F	41	41.1	41.10			Gennemførelse af byggeprojekter	41	411	4110											
+786	4	F	41	41.1	41.10	41.10.00		Gennemførelse af byggeprojekter	41	411	4110	411000										
+787	2	F	41	41.2				Opførelse af bygninger	41	412												
+788	3	F	41	41.2	41.20			Opførelse af bygninger	41	412	4120											
+789	4	F	41	41.2	41.20	41.20.00		Opførelse af bygninger	41	412	4120	412000										
+790	1	F	42					Anlægsarbejder	42													
+791	2	F	42	42.1				Anlæg af veje, jernbaner, broer og tunneller	42	421												
+792	3	F	42	42.1	42.10		gælder 2008-2012	Anlæg af veje og jernbaner	42	421	4210											
+793	4	F	42	42.1	42.10	42.10.00	gælder 2008-2012	Anlæg af veje og jernbaner	42	421	4210	421000										
+794	3	F	42	42.1	42.11		gælder 2013-	Anlæg af veje og motorveje	42	421	4211											
+795	4	F	42	42.1	42.11	42.11.00	gælder 2013-	Anlæg af veje og motorveje	42	421	4211	421100										
+796	3	F	42	42.1	42.12		gælder 2013-	Anlæg af jernbaner og undergrundsbaner	42	421	4212											
+797	4	F	42	42.1	42.12	42.12.00	gælder 2013-	Anlæg af jernbaner og undergrundsbaner	42	421	4212	421200										
+798	3	F	42	42.1	42.13		gælder 2013-	Anlæg af broer og tunneller	42	421	4213											
+799	4	F	42	42.1	42.13	42.13.00	gælder 2013-	Anlæg af broer og tunneller	42	421	4213	421300										
+800	2	F	42	42.2				Anlæg af ledningsnet	42	422												
+801	3	F	42	42.2	42.20		gælder 2008-2012	Anlæg af ledningsnet	42	422	4220											
+802	4	F	42	42.2	42.20	42.20.00	gælder 2008-2012	Anlæg af ledningsnet	42	422	4220	422000										
+803	3	F	42	42.2	42.21		gælder 2013-	Anlæg af ledningsnet til væsker	42	422	4221											
+804	4	F	42	42.2	42.21	42.21.00	gælder 2013-	Anlæg af ledningsnet til væsker	42	422	4221	422100										
+805	3	F	42	42.2	42.22		gælder 2013-	Anlæg af ledningsnet til elektricitet og kommunikation	42	422	4222											
+806	4	F	42	42.2	42.22	42.22.00	gælder 2013-	Anlæg af ledningsnet til elektricitet og kommunikation	42	422	4222	422200										
+807	2	F	42	42.9				Anden anlægsvirksomhed	42	429												
+808	3	F	42	42.9	42.90		gælder 2008-2012	Anden anlægsvirksomhed	42	429	4290											
+809	4	F	42	42.9	42.90	42.90.00	gælder 2008-2012	Anden anlægsvirksomhed	42	429	4290	429000										
+810	3	F	42	42.9	42.91		gælder 2013-	Anlæg af vandveje, havne, diger og dæmninger	42	429	4291											
+811	4	F	42	42.9	42.91	42.91.00	gælder 2013-	Anlæg af vandveje, havne, diger og dæmninger	42	429	4291	429100										
+812	3	F	42	42.9	42.99		gælder 2013-	Anden anlægsvirksomhed i.a.n.	42	429	4299											
+813	4	F	42	42.9	42.99	42.99.00	gælder 2013-	Anden anlægsvirksomhed i.a.n.	42	429	4299	429900										
+814	1	F	43					Bygge- og anlægsvirksomhed, som kræver specialisering	43													
+815	2	F	43	43.1				Nedrivning og forberedende byggepladsarbejder	43	431												
+816	3	F	43	43.1	43.11			Nedrivning	43	431	4311											
+817	4	F	43	43.1	43.11	43.11.00		Nedrivning	43	431	4311	431100										
+818	3	F	43	43.1	43.12			Forberedende byggepladsarbejder	43	431	4312											
+819	4	F	43	43.1	43.12	43.12.00		Forberedende byggepladsarbejder	43	431	4312	431200										
+820	3	F	43	43.1	43.13			Funderingsundersøgelser	43	431	4313											
+821	4	F	43	43.1	43.13	43.13.00		Funderingsundersøgelser	43	431	4313	431300										
+822	2	F	43	43.2				El-installation, VVS- og blikkenslagerforretninger samt anden bygningsinstallationsvirksomhed	43	432												
+823	3	F	43	43.2	43.21			El-installation	43	432	4321											
+824	4	F	43	43.2	43.21	43.21.00		El-installation	43	432	4321	432100										
+825	3	F	43	43.2	43.22			VVS- og blikkenslagerforretninger	43	432	4322											
+826	4	F	43	43.2	43.22	43.22.00		VVS- og blikkenslagerforretninger	43	432	4322	432200										
+827	3	F	43	43.2	43.29			Anden bygningsinstallationsvirksomhed	43	432	4329											
+828	4	F	43	43.2	43.29	43.29.00		Anden bygningsinstallationsvirksomhed	43	432	4329	432900										
+829	2	F	43	43.3				Bygningsfærdiggørelse	43	433												
+830	3	F	43	43.3	43.31			Stukkatørvirksomhed	43	433	4331											
+831	4	F	43	43.3	43.31	43.31.00		Stukkatørvirksomhed	43	433	4331	433100										
+832	3	F	43	43.3	43.32			Tømrer- og bygningssnedkervirksomhed	43	433	4332											
+833	4	F	43	43.3	43.32	43.32.00		Tømrer- og bygningssnedkervirksomhed	43	433	4332	433200										
+834	3	F	43	43.3	43.33			Udførelse af gulvbelægninger og vægbeklædning	43	433	4333											
+835	4	F	43	43.3	43.33	43.33.00		Udførelse af gulvbelægninger og vægbeklædning	43	433	4333	433300										
+836	3	F	43	43.3	43.34			Maler- og glarmestervirksomhed	43	433	4334											
+837	4	F	43	43.3	43.34	43.34.10		Malerforretninger	43	433	4334	433410										
+838	4	F	43	43.3	43.34	43.34.20		Glarmestervirksomhed	43	433	4334	433420										
+839	3	F	43	43.3	43.39			Anden bygningsfærdiggørelse	43	433	4339											
+840	4	F	43	43.3	43.39	43.39.00		Anden bygningsfærdiggørelse	43	433	4339	433900										
+841	2	F	43	43.9				Anden bygge- og anlægsvirksomhed, som kræver specialisering	43	439												
+842	3	F	43	43.9	43.91			Tagdækningsvirksomhed	43	439	4391											
+843	4	F	43	43.9	43.91	43.91.00		Tagdækningsvirksomhed	43	439	4391	439100										
+844	3	F	43	43.9	43.99			Anden bygge- og anlægsvirksomhed, som kræver specialisering, i.a.n.	43	439	4399											
+845	4	F	43	43.9	43.99	43.99.10		Murere	43	439	4399	439910										
+846	4	F	43	43.9	43.99	43.99.90		Anden bygge- og anlægsvirksomhed, som kræver specialisering	43	439	4399	439990										
+847	0	G						"Engroshandel og detailhandel; reparation af motorkøretøjer og motorcykler"														
+848	1	G	45					Handel med biler og motorcykler, og reparation heraf	45													
+849	2	G	45	45.1				Salg af motorkøretøjer	45	451												
+850	3	G	45	45.1	45.11			Salg af biler og lette motorkøretøjer	45	451	4511											
+851	4	G	45	45.1	45.11	45.11.10		Engroshandel med personbiler, varebiler og minibusser	45	451	4511	451110										
+852	4	G	45	45.1	45.11	45.11.20		Detailhandel med personbiler, varebiler og minibusser	45	451	4511	451120										
+853	3	G	45	45.1	45.19			Salg af andre motorkøretøjer	45	451	4519											
+854	4	G	45	45.1	45.19	45.19.10		Engros- og detailhandel med campingkøretøjer, små trailere mv.	45	451	4519	451910										
+855	4	G	45	45.1	45.19	45.19.20		Engros- og detailhandel med lastbiler og påhængsvogne mv.	45	451	4519	451920										
+856	2	G	45	45.2				Vedligeholdelse og reparation af motorkøretøjer	45	452												
+857	3	G	45	45.2	45.20			Vedligeholdelse og reparation af motorkøretøjer	45	452	4520											
+858	4	G	45	45.2	45.20	45.20.10		Autoreparationsværksteder mv.	45	452	4520	452010										
+859	4	G	45	45.2	45.20	45.20.20		Karosseriværksteder og autolakererier	45	452	4520	452020										
+860	4	G	45	45.2	45.20	45.20.30		Undervognsbehandling	45	452	4520	452030										
+861	4	G	45	45.2	45.20	45.20.40		Dækservice	45	452	4520	452040										
+862	2	G	45	45.3				Salg af reservedele og tilbehør til motorkøretøjer	45	453												
+863	3	G	45	45.3	45.31			Engroshandel med reservedele og tilbehør til motorkøretøjer	45	453	4531											
+864	4	G	45	45.3	45.31	45.31.00		Engroshandel med reservedele og tilbehør til motorkøretøjer	45	453	4531	453100										
+865	3	G	45	45.3	45.32			Detailhandel med reservedele og tilbehør til motorkøretøjer	45	453	4532											
+866	4	G	45	45.3	45.32	45.32.00		Detailhandel med reservedele og tilbehør til motorkøretøjer	45	453	4532	453200										
+867	2	G	45	45.4				Salg, vedligeholdelse og reparation af motorcykler og reservedele og tilbehør hertil	45	454												
+868	3	G	45	45.4	45.40			Salg, vedligeholdelse og reparation af motorcykler og reservedele og tilbehør hertil	45	454	4540											
+869	4	G	45	45.4	45.40	45.40.00		Salg, vedligeholdelse og reparation af motorcykler og reservedele og tilbehør hertil	45	454	4540	454000										
+870	1	G	46					Engroshandel undtagen med motorkøretøjer og motorcykler	46													
+871	2	G	46	46.1				Agenturhandel (engroshandel på honorar- eller kontraktbasis)	46	461												
+872	3	G	46	46.1	46.11			Agenturhandel med landbrugsråvarer, levende dyr, tekstilmaterialer og halvfabrikata	46	461	4611											
+873	4	G	46	46.1	46.11	46.11.00		Agenturhandel med landbrugsråvarer, levende dyr, tekstilmaterialer og halvfabrikata	46	461	4611	461100										
+874	3	G	46	46.1	46.12			Agenturhandel med brændstoffer, malme, metaller og kemiske produkter til industrien	46	461	4612											
+875	4	G	46	46.1	46.12	46.12.00		Agenturhandel med brændstoffer, malme, metaller og kemiske produkter til industrien	46	461	4612	461200										
+876	3	G	46	46.1	46.13			Agenturhandel med tømmer og andre byggematerialer	46	461	4613											
+877	4	G	46	46.1	46.13	46.13.00		Agenturhandel med tømmer og andre byggematerialer	46	461	4613	461300										
+878	3	G	46	46.1	46.14			Agenturhandel med maskiner, teknisk udstyr, skibe og flyvemaskiner	46	461	4614											
+879	4	G	46	46.1	46.14	46.14.00		Agenturhandel med maskiner, teknisk udstyr, skibe og flyvemaskiner	46	461	4614	461400										
+880	3	G	46	46.1	46.15			Agenturhandel med møbler, husholdningsartikler og isenkram	46	461	4615											
+881	4	G	46	46.1	46.15	46.15.00		Agenturhandel med møbler, husholdningsartikler og isenkram	46	461	4615	461500										
+882	3	G	46	46.1	46.16			Agenturhandel med tekstiler, beklædning, pelsværk, fodtøj og lædervarer	46	461	4616											
+883	4	G	46	46.1	46.16	46.16.00		Agenturhandel med tekstiler, beklædning, pelsværk, fodtøj og lædervarer	46	461	4616	461600										
+884	3	G	46	46.1	46.17			Agenturhandel med føde-, drikke- og tobaksvarer	46	461	4617											
+885	4	G	46	46.1	46.17	46.17.10		Fiskeauktioner	46	461	4617	461710										
+886	4	G	46	46.1	46.17	46.17.90		Anden agenturhandel med føde-, drikke- og tobaksvarer	46	461	4617	461790										
+887	3	G	46	46.1	46.18			Agenturhandel med specialiseret varesortiment i.a.n.	46	461	4618											
+888	4	G	46	46.1	46.18	46.18.00		Agenturhandel med specialiseret varesortiment i.a.n.	46	461	4618	461800										
+889	3	G	46	46.1	46.19			Agenturhandel med blandet sortiment	46	461	4619											
+890	4	G	46	46.1	46.19	46.19.00		Agenturhandel med blandet sortiment	46	461	4619	461900										
+891	2	G	46	46.2				Engroshandel med landbrugsråvarer og levende dyr	46	462												
+892	3	G	46	46.2	46.21			Engroshandel med korn, uforarbejdet tobak, såsæd og foderstoffer	46	462	4621											
+893	4	G	46	46.2	46.21	46.21.00		Engroshandel med korn, uforarbejdet tobak, såsæd og foderstoffer	46	462	4621	462100										
+894	3	G	46	46.2	46.22			Engroshandel med blomster og planter	46	462	4622											
+895	4	G	46	46.2	46.22	46.22.00		Engroshandel med blomster og planter	46	462	4622	462200										
+896	3	G	46	46.2	46.23			Engroshandel med levende dyr	46	462	4623											
+897	4	G	46	46.2	46.23	46.23.00		Engroshandel med levende dyr	46	462	4623	462300										
+898	3	G	46	46.2	46.24			Engroshandel med huder, skind og læder	46	462	4624											
+899	4	G	46	46.2	46.24	46.24.00		Engroshandel med huder, skind og læder	46	462	4624	462400										
+900	2	G	46	46.3				Engroshandel med føde-, drikke- og tobaksvarer	46	463												
+901	3	G	46	46.3	46.31			Engroshandel med frugt og grøntsager	46	463	4631											
+902	4	G	46	46.3	46.31	46.31.00		Engroshandel med frugt og grøntsager	46	463	4631	463100										
+903	3	G	46	46.3	46.32			Engroshandel med kød og kødprodukter	46	463	4632											
+904	4	G	46	46.3	46.32	46.32.00		Engroshandel med kød og kødprodukter	46	463	4632	463200										
+905	3	G	46	46.3	46.33			Engroshandel med mejeriprodukter, æg samt spiselige olier og fedtstoffer	46	463	4633											
+906	4	G	46	46.3	46.33	46.33.00		Engroshandel med mejeriprodukter, æg samt spiselige olier og fedtstoffer	46	463	4633	463300										
+907	3	G	46	46.3	46.34			Engroshandel med drikkevarer	46	463	4634											
+908	4	G	46	46.3	46.34	46.34.10		Engroshandel med øl, mineralvand, frugt- og grøntsagssaft	46	463	4634	463410										
+909	4	G	46	46.3	46.34	46.34.20		Engroshandel med vin og spiritus	46	463	4634	463420										
+910	3	G	46	46.3	46.35			Engroshandel med tobaksvarer	46	463	4635											
+911	4	G	46	46.3	46.35	46.35.00		Engroshandel med tobaksvarer	46	463	4635	463500										
+912	3	G	46	46.3	46.36			Engroshandel med sukker, chokolade og sukkervarer	46	463	4636											
+913	4	G	46	46.3	46.36	46.36.00		Engroshandel med sukker, chokolade og sukkervarer	46	463	4636	463600										
+914	3	G	46	46.3	46.37			Engroshandel med kaffe, te, kakao og krydderier	46	463	4637											
+915	4	G	46	46.3	46.37	46.37.00		Engroshandel med kaffe, te, kakao og krydderier	46	463	4637	463700										
+916	3	G	46	46.3	46.38			Engroshandel med andre fødevarer herunder fisk, krebsdyr og bløddyr	46	463	4638											
+917	4	G	46	46.3	46.38	46.38.10		Engroshandel med fisk og fiskeprodukter	46	463	4638	463810										
+918	4	G	46	46.3	46.38	46.38.90		Specialiseret engroshandel med fødevarer i.a.n.	46	463	4638	463890										
+919	3	G	46	46.3	46.39			Ikke-specialiseret engroshandel med føde-, drikke- og tobaksvarer	46	463	4639											
+920	4	G	46	46.3	46.39	46.39.00		Ikke-specialiseret engroshandel med føde-, drikke- og tobaksvarer	46	463	4639	463900										
+921	2	G	46	46.4				Engroshandel med husholdningsartikler	46	464												
+922	3	G	46	46.4	46.41			Engroshandel med tekstiler	46	464	4641											
+923	4	G	46	46.4	46.41	46.41.00		Engroshandel med tekstiler	46	464	4641	464100										
+924	3	G	46	46.4	46.42			Engroshandel med beklædning og fodtøj	46	464	4642											
+925	4	G	46	46.4	46.42	46.42.10		Engroshandel med beklædning	46	464	4642	464210										
+926	4	G	46	46.4	46.42	46.42.20		Engroshandel med fodtøj	46	464	4642	464220										
+927	3	G	46	46.4	46.43			Engroshandel med elektriske husholdningsartikler	46	464	4643											
+928	4	G	46	46.4	46.43	46.43.10		Engroshandel med hårde hvidevarer	46	464	4643	464310										
+929	4	G	46	46.4	46.43	46.43.20		Engroshandel med radio og tv mv.	46	464	4643	464320										
+930	4	G	46	46.4	46.43	46.43.30		Engroshandel med indspillede videoer, cd'er, dvd'er mv.	46	464	4643	464330										
+931	4	G	46	46.4	46.43	46.43.40		Engroshandel med fotografiske og optiske artikler	46	464	4643	464340										
+932	4	G	46	46.4	46.43	46.43.50		Engroshandel med elektriske husholdningsartikler	46	464	4643	464350										
+933	3	G	46	46.4	46.44			Engroshandel med porcelæns- og glasvarer og rengøringsmidler	46	464	4644											
+934	4	G	46	46.4	46.44	46.44.10		Engroshandel med porcelæns- og glasvarer	46	464	4644	464410										
+935	4	G	46	46.4	46.44	46.44.20		Engroshandel med rengøringsmidler	46	464	4644	464420										
+936	3	G	46	46.4	46.45			Engroshandel med parfumerivarer og kosmetik	46	464	4645											
+937	4	G	46	46.4	46.45	46.45.00		Engroshandel med parfumerivarer og kosmetik	46	464	4645	464500										
+938	3	G	46	46.4	46.46			Engroshandel med medicinalvarer	46	464	4646											
+939	4	G	46	46.4	46.46	46.46.10		Engroshandel med medicinalvarer og sygeplejeartikler	46	464	4646	464610										
+940	4	G	46	46.4	46.46	46.46.20		Engroshandel med læge- og hospitalsartikler	46	464	4646	464620										
+941	3	G	46	46.4	46.47			Engroshandel med møbler, tæpper og belysningsartikler	46	464	4647											
+942	4	G	46	46.4	46.47	46.47.00		Engroshandel med møbler, tæpper og belysningsartikler	46	464	4647	464700										
+943	3	G	46	46.4	46.48			Engroshandel med ure, smykker og guld- og sølvvarer	46	464	4648											
+944	4	G	46	46.4	46.48	46.48.00		Engroshandel med ure, smykker og guld- og sølvvarer	46	464	4648	464800										
+945	3	G	46	46.4	46.49			Engroshandel med andre husholdningsartikler	46	464	4649											
+946	4	G	46	46.4	46.49	46.49.10		Engroshandel med cykler, sportsartikler og lystbåde	46	464	4649	464910										
+947	4	G	46	46.4	46.49	46.49.20		Engroshandel med bøger, papir og papirvarer	46	464	4649	464920										
+948	4	G	46	46.4	46.49	46.49.30		Engroshandel med kufferter og lædervarer	46	464	4649	464930										
+949	4	G	46	46.4	46.49	46.49.90		Engroshandel med andre husholdningsartikler	46	464	4649	464990										
+950	2	G	46	46.5				Engroshandel med informations- og kommunikationsudstyr	46	465												
+951	3	G	46	46.5	46.51			Engroshandel med computere, ydre enheder og software	46	465	4651											
+952	4	G	46	46.5	46.51	46.51.00		Engroshandel med computere, ydre enheder og software	46	465	4651	465100										
+953	3	G	46	46.5	46.52			Engroshandel med elektronisk udstyr og telekommunikationsudstyr og dele hertil	46	465	4652											
+954	4	G	46	46.5	46.52	46.52.10		Engroshandel med elektronisk udstyr	46	465	4652	465210										
+955	4	G	46	46.5	46.52	46.52.20		Engroshandel med telekommunikationsudstyr	46	465	4652	465220										
+956	2	G	46	46.6				Engroshandel med andre maskiner, andet udstyr og tilbehør	46	466												
+957	3	G	46	46.6	46.61			Engroshandel med landbrugsmaskiner, -udstyr og tilbehør hertil	46	466	4661											
+958	4	G	46	46.6	46.61	46.61.00		Engroshandel med landbrugsmaskiner, -udstyr og tilbehør hertil	46	466	4661	466100										
+959	3	G	46	46.6	46.62			Engroshandel med værktøjsmaskiner	46	466	4662											
+960	4	G	46	46.6	46.62	46.62.00		Engroshandel med værktøjsmaskiner	46	466	4662	466200										
+961	3	G	46	46.6	46.63			Engroshandel med maskiner til minedrift og bygge- og anlægsvirksomhed	46	466	4663											
+962	4	G	46	46.6	46.63	46.63.00		Engroshandel med maskiner til minedrift og bygge- og anlægsvirksomhed	46	466	4663	466300										
+963	3	G	46	46.6	46.64			Engroshandel med maskiner, udstyr og tilbehør til tekstilindustrien	46	466	4664											
+964	4	G	46	46.6	46.64	46.64.00		Engroshandel med maskiner, udstyr og tilbehør til tekstilindustrien	46	466	4664	466400										
+965	3	G	46	46.6	46.65			Engroshandel med kontormøbler	46	466	4665											
+966	4	G	46	46.6	46.65	46.65.00		Engroshandel med kontormøbler	46	466	4665	466500										
+967	3	G	46	46.6	46.66			Engroshandel med andre kontormaskiner og andet kontorudstyr	46	466	4666											
+968	4	G	46	46.6	46.66	46.66.00		Engroshandel med andre kontormaskiner og andet kontorudstyr	46	466	4666	466600										
+969	3	G	46	46.6	46.69			Engroshandel med andre maskiner og andet udstyr	46	466	4669											
+970	4	G	46	46.6	46.69	46.69.00		Engroshandel med andre maskiner og andet udstyr	46	466	4669	466900										
+971	2	G	46	46.7				Anden specialiseret engroshandel	46	467												
+972	3	G	46	46.7	46.71			Engroshandel med fast, flydende og luftformigt brændstof og lignende varer	46	467	4671											
+973	4	G	46	46.7	46.71	46.71.00		Engroshandel med fast, flydende og luftformigt brændstof og lignende varer	46	467	4671	467100										
+974	3	G	46	46.7	46.72			Engroshandel med metaller og metalmalme	46	467	4672											
+975	4	G	46	46.7	46.72	46.72.00		Engroshandel med metaller og metalmalme	46	467	4672	467200										
+976	3	G	46	46.7	46.73			Engroshandel med træ og byggematerialer samt sanitetsartikler	46	467	4673											
+977	4	G	46	46.7	46.73	46.73.10		Engroshandel med træ, trælast og byggematerialer	46	467	4673	467310										
+978	4	G	46	46.7	46.73	46.73.20		Engroshandel med lak, maling, tapet, gulvbelægning mv.	46	467	4673	467320										
+979	3	G	46	46.7	46.74			Engroshandel med isenkram, varmeanlæg og tilbehør	46	467	4674											
+980	4	G	46	46.7	46.74	46.74.00		Engroshandel med isenkram, varmeanlæg og tilbehør	46	467	4674	467400										
+981	3	G	46	46.7	46.75			Engroshandel med kemiske produkter	46	467	4675											
+982	4	G	46	46.7	46.75	46.75.00		Engroshandel med kemiske produkter	46	467	4675	467500										
+983	3	G	46	46.7	46.76			Engroshandel med andre råvarer og halvfabrikata	46	467	4676											
+984	4	G	46	46.7	46.76	46.76.00		Engroshandel med andre råvarer og halvfabrikata	46	467	4676	467600										
+985	3	G	46	46.7	46.77			Engroshandel med affaldsprodukter	46	467	4677											
+986	4	G	46	46.7	46.77	46.77.00		Engroshandel med affaldsprodukter	46	467	4677	467700										
+987	2	G	46	46.9				Ikke-specialiseret engroshandel	46	469												
+988	3	G	46	46.9	46.90			Ikke-specialiseret engroshandel	46	469	4690											
+989	4	G	46	46.9	46.90	46.90.00		Ikke-specialiseret engroshandel	46	469	4690	469000										
+990	1	G	47					Detailhandel undtagen med motorkøretøjer og motorcykler	47													
+991	2	G	47	47.1				Detailhandel fra ikke-specialiserede forretninger	47	471												
+992	3	G	47	47.1	47.11			Detailhandel fra ikke-specialiserede forretninger med hovedvægten på føde-, drikke- og tobaksvarer	47	471	4711											
+993	4	G	47	47.1	47.11	47.11.10		Købmænd og døgnkiosker	47	471	4711	471110										
+994	4	G	47	47.1	47.11	47.11.20		Supermarkeder	47	471	4711	471120										
+995	4	G	47	47.1	47.11	47.11.30		Discountforretninger	47	471	4711	471130										
+996	3	G	47	47.1	47.19			Anden detailhandel fra ikke-specialiserede forretninger	47	471	4719											
+997	4	G	47	47.1	47.19	47.19.00		Anden detailhandel fra ikke-specialiserede forretninger	47	471	4719	471900										
+998	2	G	47	47.2				Detailhandel med føde-, drikke- og tobaksvarer i specialforretninger	47	472												
+999	3	G	47	47.2	47.21			Frugt- og grøntforretninger	47	472	4721											
+1000	4	G	47	47.2	47.21	47.21.00		Frugt- og grøntforretninger	47	472	4721	472100										
+1001	3	G	47	47.2	47.22			Slagter- og viktualieforretninger	47	472	4722											
+1002	4	G	47	47.2	47.22	47.22.00		Slagter- og viktualieforretninger	47	472	4722	472200										
+1003	3	G	47	47.2	47.23			Fiskeforretninger	47	472	4723											
+1004	4	G	47	47.2	47.23	47.23.00		Fiskeforretninger	47	472	4723	472300										
+1005	3	G	47	47.2	47.24			Detailhandel med brød, konditori- og sukkervarer	47	472	4724											
+1006	4	G	47	47.2	47.24	47.24.00		Detailhandel med brød, konditori- og sukkervarer	47	472	4724	472400										
+1007	3	G	47	47.2	47.25			Detailhandel med drikkevarer	47	472	4725											
+1008	4	G	47	47.2	47.25	47.25.00		Detailhandel med drikkevarer	47	472	4725	472500										
+1009	3	G	47	47.2	47.26			Tobaksforretninger	47	472	4726											
+1010	4	G	47	47.2	47.26	47.26.00		Tobaksforretninger	47	472	4726	472600										
+1011	3	G	47	47.2	47.29			Anden detailhandel med fødevarer i specialforretninger	47	472	4729											
+1012	4	G	47	47.2	47.29	47.29.00		Anden detailhandel med fødevarer i specialforretninger	47	472	4729	472900										
+1013	2	G	47	47.3				Servicestationer	47	473												
+1014	3	G	47	47.3	47.30			Servicestationer	47	473	4730											
+1015	4	G	47	47.3	47.30	47.30.00		Servicestationer	47	473	4730	473000										
+1016	2	G	47	47.4				Detailhandel med informations- og telekommunikationsudstyr i specialforretninger	47	474												
+1017	3	G	47	47.4	47.41			Detailhandel med computere, ydre enheder og software	47	474	4741											
+1018	4	G	47	47.4	47.41	47.41.00		Detailhandel med computere, ydre enheder og software	47	474	4741	474100										
+1019	3	G	47	47.4	47.42			Detailhandel med telekommunikationsudstyr	47	474	4742											
+1020	4	G	47	47.4	47.42	47.42.00		Detailhandel med telekommunikationsudstyr	47	474	4742	474200										
+1021	3	G	47	47.4	47.43			Radio- og tv-forretninger	47	474	4743											
+1022	4	G	47	47.4	47.43	47.43.00		Radio- og tv-forretninger	47	474	4743	474300										
+1023	2	G	47	47.5				Detailhandel med husholdningsudstyr i specialforreninger	47	475												
+1024	3	G	47	47.5	47.51			Detailhandel med kjolestoffer, garn, broderier mv.	47	475	4751											
+1025	4	G	47	47.5	47.51	47.51.00		Detailhandel med kjolestoffer, garn, broderier mv.	47	475	4751	475100										
+1026	3	G	47	47.5	47.52			Detailhandel med isenkram, maling og glas	47	475	4752											
+1027	4	G	47	47.5	47.52	47.52.10		Farve- og tapetforretninger	47	475	4752	475210										
+1028	4	G	47	47.5	47.52	47.52.20		Byggemarkeder og værktøjsmagasiner	47	475	4752	475220										
+1029	3	G	47	47.5	47.53			Detailhandel med tæpper, vægbeklædning og gulvbelægning	47	475	4753											
+1030	4	G	47	47.5	47.53	47.53.00		Detailhandel med tæpper, vægbeklædning og gulvbelægning	47	475	4753	475300										
+1031	3	G	47	47.5	47.54			Detailhandel med elektriske husholdningsapparater	47	475	4754											
+1032	4	G	47	47.5	47.54	47.54.00		Detailhandel med elektriske husholdningsapparater	47	475	4754	475400										
+1033	3	G	47	47.5	47.59			Detailhandel med møbler og belysningsartikler samt  andre husholdningsartikler	47	475	4759											
+1034	4	G	47	47.5	47.59	47.59.10		Møbelforretninger	47	475	4759	475910										
+1035	4	G	47	47.5	47.59	47.59.20		Boligtekstilforretninger	47	475	4759	475920										
+1036	4	G	47	47.5	47.59	47.59.30		Detailhandel med køkkenudstyr, glas, porcelæn, bestik, vaser, lysestager mv.	47	475	4759	475930										
+1037	4	G	47	47.5	47.59	47.59.40		Forhandlere af musikinstrumenter	47	475	4759	475940										
+1038	4	G	47	47.5	47.59	47.59.90		Detailhandel med belysningsartikler samt husholdningsartikler i.a.n.	47	475	4759	475990										
+1039	2	G	47	47.6				Detailhandel med varer til kulturelle formål og til fritid	47	476												
+1040	3	G	47	47.6	47.61			Detailhandel med bøger	47	476	4761											
+1041	4	G	47	47.6	47.61	47.61.00		Detailhandel med bøger	47	476	4761	476100										
+1042	3	G	47	47.6	47.62			Detailhandel med aviser og papirvarer	47	476	4762											
+1043	4	G	47	47.6	47.62	47.62.00		Detailhandel med aviser og papirvarer	47	476	4762	476200										
+1044	3	G	47	47.6	47.63			Detailhandel med musik- og videooptagelser	47	476	4763											
+1045	4	G	47	47.6	47.63	47.63.00		Detailhandel med musik- og videooptagelser	47	476	4763	476300										
+1046	3	G	47	47.6	47.64			Detailhandel med sportsudstyr	47	476	4764											
+1047	4	G	47	47.6	47.64	47.64.10		Forhandlere af sports- og campingudstyr	47	476	4764	476410										
+1048	4	G	47	47.6	47.64	47.64.20		Cykel- og knallertforretninger	47	476	4764	476420										
+1049	4	G	47	47.6	47.64	47.64.30		Forhandlere af lystbåde og udstyr hertil	47	476	4764	476430										
+1050	3	G	47	47.6	47.65			Detailhandel med spil og legetøj	47	476	4765											
+1051	4	G	47	47.6	47.65	47.65.00		Detailhandel med spil og legetøj	47	476	4765	476500										
+1052	2	G	47	47.7				Detailhandel med andre varer i specialforretninger	47	477												
+1053	3	G	47	47.7	47.71			Detailhandel med beklædningsartikler	47	477	4771											
+1054	4	G	47	47.7	47.71	47.71.10		Tøjforretninger	47	477	4771	477110										
+1055	4	G	47	47.7	47.71	47.71.20		Babyudstyrs- og børnetøjsforretninger	47	477	4771	477120										
+1056	3	G	47	47.7	47.72			Detailhandel med skotøj og lædervarer	47	477	4772											
+1057	4	G	47	47.7	47.72	47.72.10		Skotøjsforretninger	47	477	4772	477210										
+1058	4	G	47	47.7	47.72	47.72.20		Lædervareforretninger	47	477	4772	477220										
+1059	3	G	47	47.7	47.73			Apoteker	47	477	4773											
+1060	4	G	47	47.7	47.73	47.73.00		Apoteker	47	477	4773	477300										
+1061	3	G	47	47.7	47.74			Detailhandel med medicinske og ortopædiske artikler	47	477	4774											
+1062	4	G	47	47.7	47.74	47.74.00		Detailhandel med medicinske og ortopædiske artikler	47	477	4774	477400										
+1063	3	G	47	47.7	47.75			Detailhandel med kosmetikvarer og produkter til personlig pleje	47	477	4775											
+1064	4	G	47	47.7	47.75	47.75.00		Detailhandel med kosmetikvarer og produkter til personlig pleje	47	477	4775	477500										
+1065	3	G	47	47.7	47.76			Detailhandel med blomster, planter, frø, gødningsstoffer, kæledyr samt foder til kæledyr	47	477	4776											
+1066	4	G	47	47.7	47.76	47.76.10		Blomsterforretninger	47	477	4776	477610										
+1067	4	G	47	47.7	47.76	47.76.20		Planteforhandlere og havecentre	47	477	4776	477620										
+1068	4	G	47	47.7	47.76	47.76.30		Dyrehandel	47	477	4776	477630										
+1069	3	G	47	47.7	47.77			Detailhandel med ure, smykker og guld- og sølvvarer	47	477	4777											
+1070	4	G	47	47.7	47.77	47.77.00		Detailhandel med ure, smykker og guld- og sølvvarer	47	477	4777	477700										
+1071	3	G	47	47.7	47.78			Anden detailhandel fra specialforretninger	47	477	4778											
+1072	4	G	47	47.7	47.78	47.78.10		Optikere	47	477	4778	477810										
+1073	4	G	47	47.7	47.78	47.78.20		Fotoforretninger	47	477	4778	477820										
+1074	4	G	47	47.7	47.78	47.78.30		Forhandlere af gaveartikler og brugskunst	47	477	4778	477830										
+1075	4	G	47	47.7	47.78	47.78.40		Kunsthandel og gallerivirksomhed	47	477	4778	477840										
+1076	4	G	47	47.7	47.78	47.78.90		Detailhandel med andre varer i.a.n.	47	477	4778	477890										
+1077	3	G	47	47.7	47.79			Detailhandel med brugte varer i forretninger	47	477	4779											
+1078	4	G	47	47.7	47.79	47.79.00		Detailhandel med brugte varer i forretninger	47	477	4779	477900										
+1079	2	G	47	47.8				Detailhandel fra stadepladser og markeder	47	478												
+1080	3	G	47	47.8	47.81			Detailhandel med føde-, drikke- og tobaksvarer fra stadepladser og markeder	47	478	4781											
+1081	4	G	47	47.8	47.81	47.81.00		Detailhandel med føde-, drikke- og tobaksvarer fra stadepladser og markeder	47	478	4781	478100										
+1082	3	G	47	47.8	47.82			Detailhandel med tekstiler, beklædningsartikler og fodtøj fra stadepladser og markeder	47	478	4782											
+1083	4	G	47	47.8	47.82	47.82.00		Detailhandel med tekstiler, beklædningsartikler og fodtøj fra stadepladser og markeder	47	478	4782	478200										
+1084	3	G	47	47.8	47.89			Detailhandel med andre varer fra stadepladser og markeder	47	478	4789											
+1085	4	G	47	47.8	47.89	47.89.00		Detailhandel med andre varer fra stadepladser og markeder	47	478	4789	478900										
+1086	2	G	47	47.9				Detailhandel undtagen fra forretninger, stadepladser og markeder	47	479												
+1087	3	G	47	47.9	47.91			Detailhandel fra postordre- eller Internetforretninger	47	479	4791											
+1088	4	G	47	47.9	47.91	47.91.10	valid 2008-2013	Detailhandel fra postordreforretninger	47	479	4791	479110										
+1089	4	G	47	47.9	47.91	47.91.11	valid from  2014	Detailhandel med dagligvarer via internet	47	479	4791	479111										
+1090	4	G	47	47.9	47.91	47.91.12	valid from  2014	Detailhandel med elektroniske eller elektriske apparater samt fotoudstyr via internet	47	479	4791	479112										
+1091	4	G	47	47.9	47.91	47.91.13	valid from  2014	Detailhandel med husholdnings- eller boligudstyr, bortset fra elektriske apparater, via internet	47	479	4791	479113										
+1092	4	G	47	47.9	47.91	47.91.14	valid from  2014	Detailhandel med bøger, kontorartikler, musik eller film via internet	47	479	4791	479114										
+1093	4	G	47	47.9	47.91	47.91.15	valid from  2014	Detailhandel med hobbyartikler, musikinstrumenter, sportsudstyr, legetøj, cykler via internet	47	479	4791	479115										
+1094	4	G	47	47.9	47.91	47.91.16	valid from  2014	Detailhandel med tøj, sko, lædervarer, ure eller babyudstyr  via internet	47	479	4791	479116										
+1095	4	G	47	47.9	47.91	47.91.17	valid from  2014	Detailhandel med medicin og produkter til personlig pleje via internet	47	479	4791	479117										
+1096	4	G	47	47.9	47.91	47.91.19	valid from  2014	Detailhandel med andre varer i.a.n. via internet	47	479	4791	479119										
+1097	4	G	47	47.9	47.91	47.91.20		Detailhandel via Internettet med digitale produkter	47	479	4791	479120										
+1098	3	G	47	47.9	47.99			Anden detailhandel undtagen fra forretninger, stadepladser og markeder	47	479	4799											
+1099	4	G	47	47.9	47.99	47.99.00		Anden detailhandel undtagen fra forretninger, stadepladser og markeder	47	479	4799	479900										
+1100	0	H						Transport og godshåndtering														
+1101	1	H	49					"Landtransport; rørtransport"	49													
+1102	2	H	49	49.1				Passagertransport med regional- eller fjerntog	49	491												
+1103	3	H	49	49.1	49.10			Passagertransport med regional- eller fjerntog	49	491	4910											
+1104	4	H	49	49.1	49.10	49.10.00		Passagertransport med regional- eller fjerntog	49	491	4910	491000										
+1105	2	H	49	49.2				Godstransport med tog	49	492												
+1106	3	H	49	49.2	49.20			Godstransport med tog	49	492	4920											
+1107	4	H	49	49.2	49.20	49.20.00		Godstransport med tog	49	492	4920	492000										
+1108	2	H	49	49.3				Anden landpassagertransport	49	493												
+1109	3	H	49	49.3	49.31			Landpassagertransport i by- og forstadsområder	49	493	4931											
+1110	4	H	49	49.3	49.31	49.31.10		Rutebuskørsel, by- og nærtrafik	49	493	4931	493110										
+1111	4	H	49	49.3	49.31	49.31.20		S-togstrafik, metro og andre nærbaner	49	493	4931	493120										
+1112	3	H	49	49.3	49.32			Taxikørsel	49	493	4932											
+1113	4	H	49	49.3	49.32	49.32.00		Taxikørsel	49	493	4932	493200										
+1114	3	H	49	49.3	49.39			Anden landpassagertransport i.a.n.	49	493	4939											
+1115	4	H	49	49.3	49.39	49.39.10		Rutebuskørsel, fjerntrafik og skolebusser	49	493	4939	493910										
+1116	4	H	49	49.3	49.39	49.39.20		Turistkørsel og anden landpassagertransport	49	493	4939	493920										
+1117	2	H	49	49.4				Vejgodstransport og flytning	49	494												
+1118	3	H	49	49.4	49.41			Vejgodstransport	49	494	4941											
+1119	4	H	49	49.4	49.41	49.41.00		Vejgodstransport	49	494	4941	494100										
+1120	3	H	49	49.4	49.42			Flytteforretninger	49	494	4942											
+1121	4	H	49	49.4	49.42	49.42.00		Flytteforretninger	49	494	4942	494200										
+1122	2	H	49	49.5				Rørtransport	49	495												
+1123	3	H	49	49.5	49.50			Rørtransport	49	495	4950											
+1124	4	H	49	49.5	49.50	49.50.00		Rørtransport	49	495	4950	495000										
+1125	1	H	50					Skibsfart	50													
+1126	2	H	50	50.1				Sø- og kysttransport af passagerer	50	501												
+1127	3	H	50	50.1	50.10			Sø- og kysttransport af passagerer	50	501	5010											
+1128	4	H	50	50.1	50.10	50.10.00		Sø- og kysttransport af passagerer	50	501	5010	501000										
+1129	2	H	50	50.2				Sø- og kysttransport af gods	50	502												
+1130	3	H	50	50.2	50.20			Sø- og kysttransport af gods	50	502	5020											
+1131	4	H	50	50.2	50.20	50.20.00		Sø- og kysttransport af gods	50	502	5020	502000										
+1132	2	H	50	50.3				Transport af passagerer ad indre vandveje	50	503												
+1133	3	H	50	50.3	50.30			Transport af passagerer ad indre vandveje	50	503	5030											
+1134	4	H	50	50.3	50.30	50.30.00		Transport af passagerer ad indre vandveje	50	503	5030	503000										
+1135	2	H	50	50.4				Transport af gods ad indre vandveje	50	504												
+1136	3	H	50	50.4	50.40			Transport af gods ad indre vandveje	50	504	5040											
+1137	4	H	50	50.4	50.40	50.40.00		Transport af gods ad indre vandveje	50	504	5040	504000										
+1138	1	H	51					Luftfart	51													
+1139	2	H	51	51.1				Lufttransport af passagerer	51	511												
+1140	3	H	51	51.1	51.10			Lufttransport af passagerer	51	511	5110											
+1141	4	H	51	51.1	51.10	51.10.10		Ruteflyvning	51	511	5110	511010										
+1142	4	H	51	51.1	51.10	51.10.20		Charter- og taxiflyvning	51	511	5110	511020										
+1143	2	H	51	51.2				Lufttransport af gods og rumfart	51	512												
+1144	3	H	51	51.2	51.21			Lufttransport af gods	51	512	5121											
+1145	4	H	51	51.2	51.21	51.21.00		Lufttransport af gods	51	512	5121	512100										
+1146	3	H	51	51.2	51.22			Rumfart	51	512	5122											
+1147	4	H	51	51.2	51.22	51.22.00		Rumfart	51	512	5122	512200										
+1148	1	H	52					Hjælpevirksomhed i forbindelse med transport	52													
+1149	2	H	52	52.1				Oplagrings- og pakhusvirksomhed	52	521												
+1150	3	H	52	52.1	52.10			Oplagrings- og pakhusvirksomhed	52	521	5210											
+1151	4	H	52	52.1	52.10	52.10.00		Oplagrings- og pakhusvirksomhed	52	521	5210	521000										
+1152	2	H	52	52.2				Anden hjælpevirksomhed i forbindelse med transport	52	522												
+1153	3	H	52	52.2	52.21			Serviceydelser i forbindelse med landtransport	52	522	5221											
+1154	4	H	52	52.2	52.21	52.21.10		Stationer, godsterminaler mv.	52	522	5221	522110										
+1155	4	H	52	52.2	52.21	52.21.20		Parkering og vejhjælp mv.	52	522	5221	522120										
+1156	4	H	52	52.2	52.21	52.21.30		Drift af betalingsveje, -broer og -tunneler	52	522	5221	522130										
+1157	3	H	52	52.2	52.22			Serviceydelser i forbindelse med skibsfart	52	522	5222											
+1158	4	H	52	52.2	52.22	52.22.10		Erhvervshavne	52	522	5222	522210										
+1159	4	H	52	52.2	52.22	52.22.20		Bugserings-, bjærgnings- og redningsvæsen mv.	52	522	5222	522220										
+1160	3	H	52	52.2	52.23			Serviceydelser i forbindelse med luftfart	52	522	5223											
+1161	4	H	52	52.2	52.23	52.23.00		Serviceydelser i forbindelse med luftfart	52	522	5223	522300										
+1162	3	H	52	52.2	52.24			Godshåndtering	52	522	5224											
+1163	4	H	52	52.2	52.24	52.24.00		Godshåndtering	52	522	5224	522400										
+1164	3	H	52	52.2	52.29			Anden hjælpevirksomhed i forbindelse med transport	52	522	5229											
+1165	4	H	52	52.2	52.29	52.29.10		Skibsmæglere	52	522	5229	522910										
+1166	4	H	52	52.2	52.29	52.29.20		Speditører	52	522	5229	522920										
+1167	4	H	52	52.2	52.29	52.29.90		Andre tjenesteydelser i forbindelse med transport	52	522	5229	522990										
+1168	1	H	53					Post- og kurertjenester	53													
+1169	2	H	53	53.1				Posttjenester omfattet af forsyningspligten	53	531												
+1170	3	H	53	53.1	53.10			Posttjenester omfattet af forsyningspligten	53	531	5310											
+1171	4	H	53	53.1	53.10	53.10.00		Posttjenester omfattet af forsyningspligten	53	531	5310	531000										
+1172	2	H	53	53.2				Andre post- og kurertjenester	53	532												
+1173	3	H	53	53.2	53.20			Andre post- og kurertjenester	53	532	5320											
+1174	4	H	53	53.2	53.20	53.20.00		Andre post- og kurertjenester	53	532	5320	532000										
+1175	0	I						Overnatningsfaciliteter og restaurationsvirksomhed														
+1176	1	I	55					Overnatningsfaciliteter	55													
+1177	2	I	55	55.1				Hoteller og lignende overnatningsfaciliteter	55	551												
+1178	3	I	55	55.1	55.10			Hoteller og lignende overnatningsfaciliteter	55	551	5510											
+1179	4	I	55	55.1	55.10	55.10.10		Hoteller	55	551	5510	551010										
+1180	4	I	55	55.1	55.10	55.10.20		Konferencecentre og kursusejendomme	55	551	5510	551020										
+1181	2	I	55	55.2				Ferieboliger og andre indlogeringsfaciliteter til kortvarige ophold	55	552												
+1182	3	I	55	55.2	55.20			Ferieboliger og andre indlogeringsfaciliteter til kortvarige ophold	55	552	5520											
+1183	4	I	55	55.2	55.20	55.20.00		Ferieboliger og andre indlogeringsfaciliteter til kortvarige ophold	55	552	5520	552000										
+1184	2	I	55	55.3				Campingpladser	55	553												
+1185	3	I	55	55.3	55.30			Campingpladser	55	553	5530											
+1186	4	I	55	55.3	55.30	55.30.00		Campingpladser	55	553	5530	553000										
+1187	2	I	55	55.9				Andre overnatningsfaciliteter	55	559												
+1188	3	I	55	55.9	55.90			Andre overnatningsfaciliteter	55	559	5590											
+1189	4	I	55	55.9	55.90	55.90.00		Andre overnatningsfaciliteter	55	559	5590	559000										
+1190	1	I	56					Restaurationsvirksomhed	56													
+1191	2	I	56	56.1				Restauranter og levering af mad ud af huset	56	561												
+1192	3	I	56	56.1	56.10			Restauranter og levering af mad ud af huset	56	561	5610											
+1193	4	I	56	56.1	56.10	56.10.10		Restauranter	56	561	5610	561010										
+1194	4	I	56	56.1	56.10	56.10.20		Pizzeriaer, grillbarer, isbarer mv.	56	561	5610	561020										
+1195	2	I	56	56.2				Event catering og anden restaurationsvirksomhed	56	562												
+1196	3	I	56	56.2	56.21			Event catering	56	562	5621											
+1197	4	I	56	56.2	56.21	56.21.00		Event catering	56	562	5621	562100										
+1198	3	I	56	56.2	56.29			Anden restaurationsvirksomhed	56	562	5629											
+1199	4	I	56	56.2	56.29	56.29.00		Anden restaurationsvirksomhed	56	562	5629	562900										
+1200	2	I	56	56.3				Cafeér, værtshuse, diskoteker mv.	56	563												
+1201	3	I	56	56.3	56.30			Cafeér, værtshuse, diskoteker mv.	56	563	5630											
+1202	4	I	56	56.3	56.30	56.30.00		Cafeér, værtshuse, diskoteker mv.	56	563	5630	563000										
+1203	0	J						Information og kommunikation														
+1204	1	J	58					Udgivervirksomhed	58													
+1205	2	J	58	58.1				Udgivelse af bøger, tidsskrifter og anden udgivervirksomhed	58	581												
+1206	3	J	58	58.1	58.11			Udgivelse af bøger	58	581	5811											
+1207	4	J	58	58.1	58.11	58.11.00		Udgivelse af bøger	58	581	5811	581100										
+1208	3	J	58	58.1	58.12			Udgivelse af telefonbøger og adresselister	58	581	5812											
+1209	4	J	58	58.1	58.12	58.12.00		Udgivelse af telefonbøger og adresselister	58	581	5812	581200										
+1210	3	J	58	58.1	58.13			Udgivelse af aviser og dagblade	58	581	5813											
+1211	4	J	58	58.1	58.13	58.13.00		Udgivelse af aviser og dagblade	58	581	5813	581300										
+1212	3	J	58	58.1	58.14			Udgivelse af ugeblade og magasiner	58	581	5814											
+1213	4	J	58	58.1	58.14	58.14.10		Udgivelse af ugeblade og magasiner	58	581	5814	581410										
+1214	4	J	58	58.1	58.14	58.14.20		Udgivelse af distrikts- og annonceblade	58	581	5814	581420										
+1215	3	J	58	58.1	58.19			Anden udgivervirksomhed	58	581	5819											
+1216	4	J	58	58.1	58.19	58.19.00		Anden udgivervirksomhed	58	581	5819	581900										
+1217	2	J	58	58.2				Udgivelse af software	58	582												
+1218	3	J	58	58.2	58.21			Udgivelse af computerspil	58	582	5821											
+1219	4	J	58	58.2	58.21	58.21.00		Udgivelse af computerspil	58	582	5821	582100										
+1220	3	J	58	58.2	58.29			Anden udgivelse af software	58	582	5829											
+1221	4	J	58	58.2	58.29	58.29.00		Anden udgivelse af software	58	582	5829	582900										
+1222	1	J	59					Produktion af film, video- og tv-programmer, lydoptagelser og musikudgivelser	59													
+1223	2	J	59	59.1				Produktion af film, video- og tv-programmer	59	591												
+1224	3	J	59	59.1	59.11			Produktion af film, video- og tv-programmer	59	591	5911											
+1225	4	J	59	59.1	59.11	59.11.10		Produktion af film og videofilm	59	591	5911	591110										
+1226	4	J	59	59.1	59.11	59.11.20		Produktion af tv-programmer	59	591	5911	591120										
+1227	3	J	59	59.1	59.12			Aktiviteter, der udøves efter produktion af film, video- og tv-programmer	59	591	5912											
+1228	4	J	59	59.1	59.12	59.12.00		Aktiviteter, der udøves efter produktion af film, video- og tv-programmer	59	591	5912	591200										
+1229	3	J	59	59.1	59.13			Distribution af film, video- og tv-programmer	59	591	5913											
+1230	4	J	59	59.1	59.13	59.13.00		Distribution af film, video- og tv-programmer	59	591	5913	591300										
+1231	3	J	59	59.1	59.14			Biografer	59	591	5914											
+1232	4	J	59	59.1	59.14	59.14.00		Biografer	59	591	5914	591400										
+1233	2	J	59	59.2				Indspilning af lydoptagelser og udgivelse af musik	59	592												
+1234	3	J	59	59.2	59.20			Indspilning af lydoptagelser og udgivelse af musik	59	592	5920											
+1235	4	J	59	59.2	59.20	59.20.00		Indspilning af lydoptagelser og udgivelse af musik	59	592	5920	592000										
+1236	1	J	60					Radio- og tv-virksomhed	60													
+1237	2	J	60	60.1				Radiovirksomhed	60	601												
+1238	3	J	60	60.1	60.10			Radiovirksomhed	60	601	6010											
+1239	4	J	60	60.1	60.10	60.10.00		Radiovirksomhed	60	601	6010	601000										
+1240	2	J	60	60.2				Tv-virksomhed	60	602												
+1241	3	J	60	60.2	60.20			Tv-virksomhed	60	602	6020											
+1242	4	J	60	60.2	60.20	60.20.00		Tv-virksomhed	60	602	6020	602000										
+1243	1	J	61					Telekommunikation	61													
+1244	2	J	61	61.1				Fastnetbaseret telekommunikation	61	611												
+1245	3	J	61	61.1	61.10			Fastnetbaseret telekommunikation	61	611	6110											
+1246	4	J	61	61.1	61.10	61.10.00		Fastnetbaseret telekommunikation	61	611	6110	611000										
+1247	2	J	61	61.2				Trådløs telekommunikation	61	612												
+1248	3	J	61	61.2	61.20			Trådløs telekommunikation	61	612	6120											
+1249	4	J	61	61.2	61.20	61.20.00		Trådløs telekommunikation	61	612	6120	612000										
+1250	2	J	61	61.3				Satellitbaseret telekommunikation	61	613												
+1251	3	J	61	61.3	61.30			Satellitbaseret telekommunikation	61	613	6130											
+1252	4	J	61	61.3	61.30	61.30.00		Satellitbaseret telekommunikation	61	613	6130	613000										
+1253	2	J	61	61.9				Anden telekommunikation	61	619												
+1254	3	J	61	61.9	61.90			Anden telekommunikation	61	619	6190											
+1255	4	J	61	61.9	61.90	61.90.00		Anden telekommunikation	61	619	6190	619000										
+1256	1	J	62					Computerprogrammering, konsulentbistand vedrørende informationsteknologi og lignende aktiviteter	62													
+1257	2	J	62	62.0				Computerprogrammering, konsulentbistand vedrørende informationsteknologi og lignende aktiviteter	62	620												
+1258	3	J	62	62.0	62.01			Computerprogrammering	62	620	6201											
+1259	4	J	62	62.0	62.01	62.01.00		Computerprogrammering	62	620	6201	620100										
+1260	3	J	62	62.0	62.02			Konsulentbistand vedrørende informationsteknologi	62	620	6202											
+1261	4	J	62	62.0	62.02	62.02.00		Konsulentbistand vedrørende informationsteknologi	62	620	6202	620200										
+1262	3	J	62	62.0	62.03			Computer facility management	62	620	6203											
+1263	4	J	62	62.0	62.03	62.03.00		Computer facility management	62	620	6203	620300										
+1264	3	J	62	62.0	62.09			Anden it-servicevirksomhed	62	620	6209											
+1265	4	J	62	62.0	62.09	62.09.00		Anden it-servicevirksomhed	62	620	6209	620900										
+1266	1	J	63					Informationstjenester	63													
+1267	2	J	63	63.1				"Databehandling, webhosting og lignende serviceydelser; webportaler"	63	631												
+1268	3	J	63	63.1	63.11			Databehandling, webhosting og lignende serviceydelser	63	631	6311											
+1269	4	J	63	63.1	63.11	63.11.00		Databehandling, webhosting og lignende serviceydelser	63	631	6311	631100										
+1270	3	J	63	63.1	63.12			Webportaler	63	631	6312											
+1271	4	J	63	63.1	63.12	63.12.00		Webportaler	63	631	6312	631200										
+1272	2	J	63	63.9				Andre informationstjenester	63	639												
+1273	3	J	63	63.9	63.91			Pressebureauer	63	639	6391											
+1274	4	J	63	63.9	63.91	63.91.00		Pressebureauer	63	639	6391	639100										
+1275	3	J	63	63.9	63.99			Andre informationstjenester i.a.n.	63	639	6399											
+1276	4	J	63	63.9	63.99	63.99.00		Andre informationstjenester i.a.n.	63	639	6399	639900										
+1277	0	K						Pengeinstitut- og finansvirksomhed, forsikring														
+1278	1	K	64					Pengeinstitut- og finansieringsvirksomhed undtagen forsikring og 	64													
+1279	2	K	64	64.1				Pengeinstitutvirksomhed	64	641												
+1280	3	K	64	64.1	64.11			Centralbanker	64	641	6411											
+1281	4	K	64	64.1	64.11	64.11.00		Centralbanker	64	641	6411	641100										
+1282	3	K	64	64.1	64.19			Anden pengeinstitutvirksomhed	64	641	6419											
+1283	4	K	64	64.1	64.19	64.19.00		Banker, sparekasser og andelskasser	64	641	6419	641900										
+1284	2	K	64	64.2				Holdingselskabers virksomhed	64	642												
+1285	3	K	64	64.2	64.20			Holdingselskabers virksomhed	64	642	6420											
+1286	4	K	64	64.2	64.20	64.20.10		Finansielle holdingselskaber	64	642	6420	642010										
+1287	4	K	64	64.2	64.20	64.20.20		Ikke-finansielle holdingselskaber	64	642	6420	642020										
+1288	4	K	64	64.2	64.20	64.20.30		Gennemløbsholdingselskaber	64	642	6420	642030										
+1289	2	K	64	64.3				Investeringsforeninger, investeringsselskaber o.l.	64	643												
+1290	3	K	64	64.3	64.30			Investeringsforeninger, investeringsselskaber o.l.	64	643	6430											
+1291	4	K	64	64.3	64.30	64.30.10		Investeringsforeninger	64	643	6430	643010										
+1292	4	K	64	64.3	64.30	64.30.20		Pengemarkedsforeninger	64	643	6430	643020										
+1293	4	K	64	64.3	64.30	64.30.30		Investeringsselskaber	64	643	6430	643030										
+1294	4	K	64	64.3	64.30	64.30.40		Ventureselskaber og kapitalfonde	64	643	6430	643040										
+1295	2	K	64	64.9				Anden finansiel formidling, undtagen forsikring og pensionsforsikring	64	649												
+1296	3	K	64	64.9	64.91			Finansiel leasing	64	649	6491											
+1297	4	K	64	64.9	64.91	64.91.00		Finansiel leasing	64	649	6491	649100										
+1298	3	K	64	64.9	64.92			Anden kreditformidling	64	649	6492											
+1299	4	K	64	64.9	64.92	64.92.10		Realkreditinstitutter	64	649	6492	649210										
+1300	4	K	64	64.9	64.92	64.92.20		Andre kreditinstitutter	64	649	6492	649220										
+1301	4	K	64	64.9	64.92	64.92.30		Andre kreditselskaber	64	649	6492	649230										
+1302	4	K	64	64.9	64.92	64.92.40		FVC-selskaber	64	649	6492	649240										
+1303	3	K	64	64.9	64.99			Anden finansiel formidling undtagen forsikring og pensionsforsikring, i.a.n.	64	649	6499											
+1304	4	K	64	64.9	64.99	64.99.00		Anden finansiel formidling undtagen forsikring og pensionsforsikring, i.a.n.	64	649	6499	649900										
+1305	1	K	65					Forsikring, genforsikring og pensionsforsikring undtagen lovpligtig socialforsikring	65													
+1306	2	K	65	65.1				Forsikring	65	651												
+1307	3	K	65	65.1	65.11			Livsforsikring	65	651	6511											
+1308	4	K	65	65.1	65.11	65.11.00		Livsforsikring	65	651	6511	651100										
+1309	3	K	65	65.1	65.12			Anden forsikring	65	651	6512											
+1310	4	K	65	65.1	65.12	65.12.00		Anden forsikring	65	651	6512	651200										
+1311	2	K	65	65.2				Genforsikring	65	652												
+1312	3	K	65	65.2	65.20			Genforsikring	65	652	6520											
+1313	4	K	65	65.2	65.20	65.20.00		Genforsikring	65	652	6520	652000										
+1314	2	K	65	65.3				Pensionsforsikring	65	653												
+1315	3	K	65	65.3	65.30			Pensionsforsikring	65	653	6530											
+1316	4	K	65	65.3	65.30	65.30.10		Pensionskasser	65	653	6530	653010										
+1317	4	K	65	65.3	65.30	65.30.20		Anden pensionsforsikring	65	653	6530	653020										
+1318	1	K	66					Hjælpetjenester i forbindelse med finansieringsvirksomhed og forsikring	66													
+1319	2	K	66	66.1				Hjælpetjenester i forbindelse med finansieringsvirksomhed undtagen forsikring og pensionsforsikring	66	661												
+1320	3	K	66	66.1	66.11			Forvaltning af kapitalmarkeder	66	661	6611											
+1321	4	K	66	66.1	66.11	66.11.00		Forvaltning af kapitalmarkeder	66	661	6611	661100										
+1322	3	K	66	66.1	66.12			Værdipapir- og varemægling	66	661	6612											
+1323	4	K	66	66.1	66.12	66.12.00		Værdipapir- og varemægling	66	661	6612	661200										
+1324	3	K	66	66.1	66.19			Andre hjælpetjenester i forbindelse med finansiel formidling	66	661	6619											
+1325	4	K	66	66.1	66.19	66.19.00		Andre hjælpetjenester i forbindelse med finansiel formidling	66	661	6619	661900										
+1326	2	K	66	66.2				Hjælpetjenester i forbindelse med forsikring og pensionsforsikring	66	662												
+1327	3	K	66	66.2	66.21			Risiko- og skadesvurdering	66	662	6621											
+1328	4	K	66	66.2	66.21	66.21.00		Risiko- og skadesvurdering	66	662	6621	662100										
+1329	3	K	66	66.2	66.22			Forsikringsagenters og forsikringsmægleres virksomhed	66	662	6622											
+1330	4	K	66	66.2	66.22	66.22.00		Forsikringsagenters og forsikringsmægleres virksomhed	66	662	6622	662200										
+1331	3	K	66	66.2	66.29			Andre hjælpetjenester i forbindelse med forsikring og pensionsforsikring	66	662	6629											
+1332	4	K	66	66.2	66.29	66.29.00		Andre hjælpetjenester i forbindelse med forsikring og pensionsforsikring	66	662	6629	662900										
+1333	2	K	66	66.3				Formueforvaltning	66	663												
+1334	3	K	66	66.3	66.30			Formueforvaltning	66	663	6630											
+1335	4	K	66	66.3	66.30	66.30.00		Formueforvaltning	66	663	6630	663000										
+1336	0	L						Fast ejendom														
+1337	1	L	68					Fast ejendom	68													
+1338	2	L	68	68.1				Køb og salg af egen fast ejendom	68	681												
+1339	3	L	68	68.1	68.10			Køb og salg af egen fast ejendom	68	681	6810											
+1340	4	L	68	68.1	68.10	68.10.00		Køb og salg af egen fast ejendom	68	681	6810	681000										
+1341	2	L	68	68.2				Udlejning af og virksomhed i forbindelse med egen eller leaset fast ejendom	68	682												
+1342	3	L	68	68.2	68.20			Udlejning af og virksomhed i forbindelse med egen eller leaset fast ejendom	68	682	6820											
+1343	4	L	68	68.2	68.20	68.20.10		Almennyttige boligselskaber	68	682	6820	682010										
+1344	4	L	68	68.2	68.20	68.20.20		Private andelsboligforeninger	68	682	6820	682020										
+1345	4	L	68	68.2	68.20	68.20.30		Anden udlejning af boliger	68	682	6820	682030										
+1346	4	L	68	68.2	68.20	68.20.40		Udlejning af erhvervsejendomme	68	682	6820	682040										
+1347	2	L	68	68.3				Virksomhed i forbindelse med fast ejendom på honorar- eller kontraktbasis	68	683												
+1348	3	L	68	68.3	68.31			Ejendomsmæglere	68	683	6831											
+1349	4	L	68	68.3	68.31	68.31.10		Ejendomsmæglere mv.	68	683	6831	683110										
+1350	4	L	68	68.3	68.31	68.31.20		Boliganvisning, ferieboligudlejning mv.	68	683	6831	683120										
+1351	3	L	68	68.3	68.32			Administration af fast ejendom på honorar- eller kontraktbasis	68	683	6832											
+1352	4	L	68	68.3	68.32	68.32.10		Administration af fast ejendom på kontraktbasis	68	683	6832	683210										
+1353	4	L	68	68.3	68.32	68.32.20		Ejerforeninger	68	683	6832	683220										
+1354	0	M						Liberale, videnskabelige og tekniske tjenesteydelser														
+1355	1	M	69					Juridisk bistand, bogføring og revision	69													
+1356	2	M	69	69.1				Juridisk bistand	69	691												
+1357	3	M	69	69.1	69.10			Juridisk bistand	69	691	6910											
+1358	4	M	69	69.1	69.10	69.10.00		Juridisk bistand	69	691	6910	691000										
+1359	2	M	69	69.2				"Bogføring og revision; skatterådgivning"	69	692												
+1360	3	M	69	69.2	69.20			"Bogføring og revision; skatterådgivning"	69	692	6920											
+1361	4	M	69	69.2	69.20	69.20.00		"Bogføring og revision; skatterådgivning"	69	692	6920	692000										
+1362	1	M	70					"Hovedsæders virksomhed; virksomhedsrådgivning"	70													
+1363	2	M	70	70.1				Hovedsæders virksomhed	70	701												
+1364	3	M	70	70.1	70.10			Hovedsæders virksomhed	70	701	7010											
+1365	4	M	70	70.1	70.10	70.10.10		Ikke-finansielle hovedsæders virksomhed	70	701	7010	701010										
+1366	4	M	70	70.1	70.10	70.10.20		Finansielle hovedsæders virksomhed	70	701	7010	701020										
+1367	2	M	70	70.2				Virksomhedsrådgivning	70	702												
+1368	3	M	70	70.2	70.21			Public relations og kommunikation	70	702	7021											
+1369	4	M	70	70.2	70.21	70.21.00		Public relations og kommunikation	70	702	7021	702100										
+1370	3	M	70	70.2	70.22			Virksomhedsrådgivning og anden rådgivning om driftsledelse	70	702	7022											
+1371	4	M	70	70.2	70.22	70.22.00		Virksomhedsrådgivning og anden rådgivning om driftsledelse	70	702	7022	702200										
+1372	1	M	71					"Arkitekt- og ingeniørvirksomhed; teknisk afprøvning og analyse"	71													
+1373	2	M	71	71.1				Arkitekt- og ingeniørvirksomhed og lignende teknisk rådgivning	71	711												
+1374	3	M	71	71.1	71.11			Arkitektvirksomhed	71	711	7111											
+1375	4	M	71	71.1	71.11	71.11.00		Arkitektvirksomhed	71	711	7111	711100										
+1376	3	M	71	71.1	71.12			Ingeniørvirksomhed og lignende teknisk rådgivning	71	711	7112											
+1377	4	M	71	71.1	71.12	71.12.10		Rådgivende ingeniørvirksomhed inden for byggeri og anlægsarbejder	71	711	7112	711210										
+1378	4	M	71	71.1	71.12	71.12.20		Rådgivende ingeniørvirksomhed inden for produktions- og maskinteknik	71	711	7112	711220										
+1379	4	M	71	71.1	71.12	71.12.30		Opstilling og levering af færdige fabriksanlæg	71	711	7112	711230										
+1380	4	M	71	71.1	71.12	71.12.40		Geologiske undersøgelser og prospektering, landinspektører mv.	71	711	7112	711240										
+1381	4	M	71	71.1	71.12	71.12.90		Anden teknisk rådgivning	71	711	7112	711290										
+1382	2	M	71	71.2				Teknisk afprøvning og analyse	71	712												
+1383	3	M	71	71.2	71.20			Teknisk afprøvning og analyse	71	712	7120											
+1384	4	M	71	71.2	71.20	71.20.10		Kontrol af levnedsmidler	71	712	7120	712010										
+1385	4	M	71	71.2	71.20	71.20.20		Teknisk afprøvning og kontrol	71	712	7120	712020										
+1386	4	M	71	71.2	71.20	71.20.90		Anden måling og teknisk analyse	71	712	7120	712090										
+1387	1	M	72					Videnskabelig forskning og udvikling	72													
+1388	2	M	72	72.1				Forskning og eksperimentel udvikling indenfor naturvidenskab og teknik	72	721												
+1389	3	M	72	72.1	72.11			Forskning og eksperimentel udvikling indenfor bioteknologi	72	721	7211											
+1390	4	M	72	72.1	72.11	72.11.00		Forskning og eksperimentel udvikling indenfor bioteknologi	72	721	7211	721100										
+1391	3	M	72	72.1	72.19			Anden forskning og eksperimentel udvikling inden for naturvidenskab og teknik	72	721	7219											
+1392	4	M	72	72.1	72.19	72.19.00		Anden forskning og eksperimentel udvikling inden for naturvidenskab og teknik	72	721	7219	721900										
+1393	2	M	72	72.2				Forskning og eksperimentel udvikling inden for samfundsvidenskab og humanistiske videnskaber	72	722												
+1394	3	M	72	72.2	72.20			Forskning og eksperimentel udvikling inden for samfundsvidenskab og humanistiske videnskaber	72	722	7220											
+1395	4	M	72	72.2	72.20	72.20.00		Forskning og eksperimentel udvikling inden for samfundsvidenskab og humanistiske videnskaber	72	722	7220	722000										
+1396	1	M	73					Reklame og markedsanalyse	73													
+1397	2	M	73	73.1				Reklame	73	731												
+1398	3	M	73	73.1	73.11			Reklamebureauer	73	731	7311											
+1399	4	M	73	73.1	73.11	73.11.10		Reklamebureauer	73	731	7311	731110										
+1400	4	M	73	73.1	73.11	73.11.90		Anden reklamevirksomhed	73	731	7311	731190										
+1401	3	M	73	73.1	73.12			Reklameplads i medier	73	731	7312											
+1402	4	M	73	73.1	73.12	73.12.00		Reklameplads i medier	73	731	7312	731200										
+1403	2	M	73	73.2				Markedsanalyse og offentlig meningsmåling	73	732												
+1404	3	M	73	73.2	73.20			Markedsanalyse og offentlig meningsmåling	73	732	7320											
+1405	4	M	73	73.2	73.20	73.20.00		Markedsanalyse og offentlig meningsmåling	73	732	7320	732000										
+1406	1	M	74					Andre liberale, videnskabelige og tekniske tjenesteydelser	74													
+1407	2	M	74	74.1				Specialiseret designarbejde	74	741												
+1408	3	M	74	74.1	74.10			Specialiseret designarbejde	74	741	7410											
+1409	4	M	74	74.1	74.10	74.10.10		Industriel design og produktdesign	74	741	7410	741010										
+1410	4	M	74	74.1	74.10	74.10.20		Kommunikationsdesign og grafisk design	74	741	7410	741020										
+1411	4	M	74	74.1	74.10	74.10.30		Indretningsarkitekter og rumdesign	74	741	7410	741030										
+1412	2	M	74	74.2				Fotografisk virksomhed	74	742												
+1413	3	M	74	74.2	74.20			Fotografisk virksomhed	74	742	7420											
+1414	4	M	74	74.2	74.20	74.20.00		Fotografisk virksomhed	74	742	7420	742000										
+1415	2	M	74	74.3				Oversættelse og tolkning	74	743												
+1416	3	M	74	74.3	74.30			Oversættelse og tolkning	74	743	7430											
+1417	4	M	74	74.3	74.30	74.30.00		Oversættelse og tolkning	74	743	7430	743000										
+1418	2	M	74	74.9				Andre liberale, videnskabelige og tekniske tjenesteydelser i.a.n.	74	749												
+1419	3	M	74	74.9	74.90			Andre liberale, videnskabelige og tekniske tjenesteydelser i.a.n.	74	749	7490											
+1420	4	M	74	74.9	74.90	74.90.10		Landbrugskonsulenter	74	749	7490	749010										
+1421	4	M	74	74.9	74.90	74.90.90		Andre liberale, videnskabelige og tekniske tjenesteydelser i.a.n.	74	749	7490	749090										
+1422	1	M	75					Dyrlæger	75													
+1423	2	M	75	75.0				Dyrlæger	75	750												
+1424	3	M	75	75.0	75.00			Dyrlæger	75	750	7500											
+1425	4	M	75	75.0	75.00	75.00.00		Dyrlæger	75	750	7500	750000										
+1426	0	N						Administrative tjenesteydelser og hjælpetjenester														
+1427	1	N	77					Udlejning og leasing	77													
+1428	2	N	77	77.1				Udlejning og leasing af motorkøretøjer	77	771												
+1429	3	N	77	77.1	77.11			Udlejning og leasing af biler og lette motorkøretøjer	77	771	7711											
+1430	4	N	77	77.1	77.11	77.11.00		Udlejning og leasing af biler og lette motorkøretøjer	77	771	7711	771100										
+1431	3	N	77	77.1	77.12			Udlejning og leasing af lastbiler	77	771	7712											
+1432	4	N	77	77.1	77.12	77.12.00		Udlejning og leasing af lastbiler	77	771	7712	771200										
+1433	2	N	77	77.2				Udlejning og leasing af varer til personligt brug og husholdningsbrug	77	772												
+1434	3	N	77	77.2	77.21			Udlejning og leasing af varer til fritid og sport	77	772	7721											
+1435	4	N	77	77.2	77.21	77.21.00		Udlejning og leasing af varer til fritid og sport	77	772	7721	772100										
+1436	3	N	77	77.2	77.22			Udlejning af videobånd og videodisks	77	772	7722											
+1437	4	N	77	77.2	77.22	77.22.00		Udlejning af videobånd og videodisks	77	772	7722	772200										
+1438	3	N	77	77.2	77.29			Udlejning og leasing af andre varer til personlig brug og husholdningsbrug i.a.n.	77	772	7729											
+1439	4	N	77	77.2	77.29	77.29.00		Udlejning og leasing af andre varer til personlig brug og husholdningsbrug i.a.n.	77	772	7729	772900										
+1440	2	N	77	77.3				Udlejning og leasing af andet materiel, udstyr og andre materielle aktiver	77	773												
+1441	3	N	77	77.3	77.31			Udlejning og leasing af landbrugsmaskiner og -udstyr	77	773	7731											
+1442	4	N	77	77.3	77.31	77.31.00		Udlejning og leasing af landbrugsmaskiner og -udstyr	77	773	7731	773100										
+1443	3	N	77	77.3	77.32			Udlejning og leasing af entreprenørmateriel	77	773	7732											
+1444	4	N	77	77.3	77.32	77.32.00		Udlejning og leasing af entreprenørmateriel	77	773	7732	773200										
+1445	3	N	77	77.3	77.33			Udlejning af kontormaskiner og -udstyr, computere og it-udstyr	77	773	7733											
+1446	4	N	77	77.3	77.33	77.33.00		Udlejning af kontormaskiner og -udstyr, computere og it-udstyr	77	773	7733	773300										
+1447	3	N	77	77.3	77.34			Udlejning og leasing af skibe og både	77	773	7734											
+1448	4	N	77	77.3	77.34	77.34.00		Udlejning og leasing af skibe og både	77	773	7734	773400										
+1449	3	N	77	77.3	77.35			Udlejning og leasing af luftfartøjer	77	773	7735											
+1450	4	N	77	77.3	77.35	77.35.00		Udlejning og leasing af luftfartøjer	77	773	7735	773500										
+1451	3	N	77	77.3	77.39			Udlejning og leasing af andet materiel, udstyr og andre materielle aktiver i.a.n.	77	773	7739											
+1452	4	N	77	77.3	77.39	77.39.00		Udlejning og leasing af andet materiel, udstyr og andre materielle aktiver i.a.n.	77	773	7739	773900										
+1453	2	N	77	77.4				Leasing af intellektuelle ejendomsrettigheder og lignende, dog ikke ophavsretsbeskyttede værker	77	774												
+1454	3	N	77	77.4	77.40			Leasing af intellektuelle ejendomsrettigheder og lignende, dog ikke ophavsretsbeskyttede værker	77	774	7740											
+1455	4	N	77	77.4	77.40	77.40.00		Leasing af intellektuelle ejendomsrettigheder og lignende, dog ikke ophavsretsbeskyttede værker	77	774	7740	774000										
+1456	1	N	78					Arbejdsformidling	78													
+1457	2	N	78	78.1				Arbejdsformidlingskontorer	78	781												
+1458	3	N	78	78.1	78.10			Arbejdsformidlingskontorer	78	781	7810											
+1459	4	N	78	78.1	78.10	78.10.00		Arbejdsformidlingskontorer	78	781	7810	781000										
+1460	2	N	78	78.2				Vikarbureauer	78	782												
+1461	3	N	78	78.2	78.20			Vikarbureauer	78	782	7820											
+1462	4	N	78	78.2	78.20	78.20.00		Vikarbureauer	78	782	7820	782000										
+1463	2	N	78	78.3				Anden personaleformidling	78	783												
+1464	3	N	78	78.3	78.30			Anden personaleformidling	78	783	7830											
+1465	4	N	78	78.3	78.30	78.30.00		Anden personaleformidling	78	783	7830	783000										
+1466	1	N	79					Rejsebureauers og rejsearrangørers virksomhed, reservationstjenesteydelser og tjenesteydelser i forbindelse hermed	79													
+1467	2	N	79	79.1				Rejsebureauer og rejsearrangører	79	791												
+1468	3	N	79	79.1	79.11			Rejsebureauer	79	791	7911											
+1469	4	N	79	79.1	79.11	79.11.00		Rejsebureauer	79	791	7911	791100										
+1470	3	N	79	79.1	79.12			Rejsearrangører	79	791	7912											
+1471	4	N	79	79.1	79.12	79.12.00		Rejsearrangører	79	791	7912	791200										
+1472	2	N	79	79.9				Andre reservationstjenesteydelser og tjenesteydelser i forbindelse hermed	79	799												
+1473	3	N	79	79.9	79.90			Andre reservationstjenesteydelser og tjenesteydelser i forbindelse hermed	79	799	7990											
+1474	4	N	79	79.9	79.90	79.90.00		Andre reservationstjenesteydelser og tjenesteydelser i forbindelse hermed	79	799	7990	799000										
+1475	1	N	80					Vagt- og sikkerhedstjenester og overvågning	80													
+1476	2	N	80	80.1				Private vagt- og sikkerhedstjenester	80	801												
+1477	3	N	80	80.1	80.10			Private vagt- og sikkerhedstjenester	80	801	8010											
+1478	4	N	80	80.1	80.10	80.10.00		Private vagt- og sikkerhedstjenester	80	801	8010	801000										
+1479	2	N	80	80.2				Serviceydelser i forbindelse med sikkerhedssystemer	80	802												
+1480	3	N	80	80.2	80.20			Serviceydelser i forbindelse med sikkerhedssystemer	80	802	8020											
+1481	4	N	80	80.2	80.20	80.20.00		Serviceydelser i forbindelse med sikkerhedssystemer	80	802	8020	802000										
+1482	2	N	80	80.3				Overvågning	80	803												
+1483	3	N	80	80.3	80.30			Overvågning	80	803	8030											
+1484	4	N	80	80.3	80.30	80.30.00		Overvågning	80	803	8030	803000										
+1485	1	N	81					Serviceydelser i forbindelse med ejendomme samt landskabspleje	81													
+1486	2	N	81	81.1				Kombinerede serviceydelser	81	811												
+1487	3	N	81	81.1	81.10			Kombinerede serviceydelser	81	811	8110											
+1488	4	N	81	81.1	81.10	81.10.00		Kombinerede serviceydelser	81	811	8110	811000										
+1489	2	N	81	81.2				Renhold	81	812												
+1490	3	N	81	81.2	81.21			Almindelig rengøring i bygninger	81	812	8121											
+1491	4	N	81	81.2	81.21	81.21.00		Almindelig rengøring i bygninger	81	812	8121	812100										
+1492	3	N	81	81.2	81.22			Anden rengøring af bygninger og rengøring af erhvervslokaler	81	812	8122											
+1493	4	N	81	81.2	81.22	81.22.10		Vinduespolering	81	812	8122	812210										
+1494	4	N	81	81.2	81.22	81.22.20		Skorstensfejning	81	812	8122	812220										
+1495	4	N	81	81.2	81.22	81.22.90		Anden rengøring af bygninger og rengøring af erhvervslokaler	81	812	8122	812290										
+1496	3	N	81	81.2	81.29			Andre rengøringsydelser	81	812	8129											
+1497	4	N	81	81.2	81.29	81.29.00		Andre rengøringsydelser	81	812	8129	812900										
+1498	2	N	81	81.3				Landskabspleje	81	813												
+1499	3	N	81	81.3	81.30			Landskabspleje	81	813	8130											
+1500	4	N	81	81.3	81.30	81.30.00		Landskabspleje	81	813	8130	813000										
+1501	1	N	82					Administrationsservice, kontorservice og anden forretningsservice	82													
+1502	2	N	82	82.1				Administrationsservice og kontorservice	82	821												
+1503	3	N	82	82.1	82.11			Kombinerede administrationsserviceydelser	82	821	8211											
+1504	4	N	82	82.1	82.11	82.11.00		Kombinerede administrationsserviceydelser	82	821	8211	821100										
+1505	3	N	82	82.1	82.19			Fotokopiering, dokumentbehandling og anden specialiseret kontorservice	82	821	8219											
+1506	4	N	82	82.1	82.19	82.19.00		Fotokopiering, dokumentbehandling og anden specialiseret kontorservice	82	821	8219	821900										
+1507	2	N	82	82.2				Call centres virksomhed	82	822												
+1508	3	N	82	82.2	82.20			Call centres virksomhed	82	822	8220											
+1509	4	N	82	82.2	82.20	82.20.00		Call centres virksomhed	82	822	8220	822000										
+1510	2	N	82	82.3				Organisering af kongresser, messer og udstillinger	82	823												
+1511	3	N	82	82.3	82.30			Organisering af kongresser, messer og udstillinger	82	823	8230											
+1512	4	N	82	82.3	82.30	82.30.00		Organisering af kongresser, messer og udstillinger	82	823	8230	823000										
+1513	2	N	82	82.9				Anden forretningsservice i.a.n.	82	829												
+1514	3	N	82	82.9	82.91			Inkassovirksomhed og kreditoplysning	82	829	8291											
+1515	4	N	82	82.9	82.91	82.91.00		Inkassovirksomhed og kreditoplysning	82	829	8291	829100										
+1516	3	N	82	82.9	82.92			Pakkerier	82	829	8292											
+1517	4	N	82	82.9	82.92	82.92.00		Pakkerier	82	829	8292	829200										
+1518	3	N	82	82.9	82.99			Anden forretningsservice i.a.n.	82	829	8299											
+1519	4	N	82	82.9	82.99	82.99.00		Anden forretningsservice i.a.n.	82	829	8299	829900										
+1520	0	O						"Offentlig forvaltning og forsvar; socialsikring"														
+1521	1	O	84					Offentlig forvaltning, forsvar og socialsikring	84													
+1522	2	O	84	84.1				Forvaltning af staten og den økonomiske og sociale politik	84	841												
+1523	3	O	84	84.1	84.11			Generelle offentlige tjenester	84	841	8411											
+1524	4	O	84	84.1	84.11	84.11.00		Generelle offentlige tjenester	84	841	8411	841100										
+1525	3	O	84	84.1	84.12			Administration af sundhedsvæsen, undervisning, kultur og sociale forhold undtagen social sikring	84	841	8412											
+1526	4	O	84	84.1	84.12	84.12.00		Administration af sundhedsvæsen, undervisning, kultur og sociale forhold undtagen social sikring	84	841	8412	841200										
+1527	3	O	84	84.1	84.13			Administration af og bidrag til erhvervsfremme	84	841	8413											
+1528	4	O	84	84.1	84.13	84.13.00		Administration af og bidrag til erhvervsfremme	84	841	8413	841300										
+1529	2	O	84	84.2				Tjenesteydelser til samfundet som helhed	84	842												
+1530	3	O	84	84.2	84.21			Udenrigsanliggender	84	842	8421											
+1531	4	O	84	84.2	84.21	84.21.00		Udenrigsanliggender	84	842	8421	842100										
+1532	3	O	84	84.2	84.22			Forsvar	84	842	8422											
+1533	4	O	84	84.2	84.22	84.22.00		Forsvar	84	842	8422	842200										
+1534	3	O	84	84.2	84.23			Domstole og fængselsvæsen	84	842	8423											
+1535	4	O	84	84.2	84.23	84.23.00		Domstole og fængselsvæsen	84	842	8423	842300										
+1536	3	O	84	84.2	84.24			Politi	84	842	8424											
+1537	4	O	84	84.2	84.24	84.24.00		Politi	84	842	8424	842400										
+1538	3	O	84	84.2	84.25			Brandvæsen	84	842	8425											
+1539	4	O	84	84.2	84.25	84.25.00		Brandvæsen	84	842	8425	842500										
+1540	2	O	84	84.3				Lovpligtig socialsikring mv.	84	843												
+1541	3	O	84	84.3	84.30			Lovpligtig socialsikring mv.	84	843	8430											
+1542	4	O	84	84.3	84.30	84.30.00		Lovpligtig socialsikring mv.	84	843	8430	843000										
+1543	0	P						Undervisning														
+1544	1	P	85					Undervisning	85													
+1545	2	P	85	85.1				Førskoleundervisning	85	851												
+1546	3	P	85	85.1	85.10			Førskoleundervisning	85	851	8510											
+1547	4	P	85	85.1	85.10	85.10.00		Førskoleundervisning	85	851	8510	851000										
+1548	2	P	85	85.2				Folke- og specialskoler	85	852												
+1549	3	P	85	85.2	85.20			Folke- og specialskoler	85	852	8520											
+1550	4	P	85	85.2	85.20	85.20.10		Folkeskoler o.lign.	85	852	8520	852010										
+1551	4	P	85	85.2	85.20	85.20.20		Specialskoler for handicappede	85	852	8520	852020										
+1552	2	P	85	85.3				Gymnasier og erhvervsfaglige skoler	85	853												
+1553	3	P	85	85.3	85.31			Gymnasier, studenterskoler o.l.	85	853	8531											
+1554	4	P	85	85.3	85.31	85.31.10		Ungdoms- og efterskoler	85	853	8531	853110										
+1555	4	P	85	85.3	85.31	85.31.20		Gymnasier, studenter- og HF-kurser	85	853	8531	853120										
+1556	3	P	85	85.3	85.32			Tekniske skoler og fagskoler	85	853	8532											
+1557	4	P	85	85.3	85.32	85.32.00		Tekniske skoler og fagskoler	85	853	8532	853200										
+1558	2	P	85	85.4				Videregående uddannelsesinstitutioner	85	854												
+1559	3	P	85	85.4	85.41			Videregående uddannelser ikke på universitetsniveau	85	854	8541											
+1560	4	P	85	85.4	85.41	85.41.00		Videregående uddannelser ikke på universitetsniveau	85	854	8541	854100										
+1561	3	P	85	85.4	85.42			Videregående uddannelser på universitetsniveau	85	854	8542											
+1562	4	P	85	85.4	85.42	85.42.00		Videregående uddannelser på universitetsniveau	85	854	8542	854200										
+1563	2	P	85	85.5				Anden undervisning	85	855												
+1564	3	P	85	85.5	85.51			Undervisning inden for sport og fritid	85	855	8551											
+1565	4	P	85	85.5	85.51	85.51.00		Undervisning inden for sport og fritid	85	855	8551	855100										
+1566	3	P	85	85.5	85.52			Undervisning i kulturelle discipliner	85	855	8552											
+1567	4	P	85	85.5	85.52	85.52.00		Undervisning i kulturelle discipliner	85	855	8552	855200										
+1568	3	P	85	85.5	85.53			Køreskoler	85	855	8553											
+1569	4	P	85	85.5	85.53	85.53.00		Køreskoler	85	855	8553	855300										
+1570	3	P	85	85.5	85.59			Anden undervisning i.a.n.	85	855	8559											
+1571	4	P	85	85.5	85.59	85.59.00		Anden undervisning i.a.n.	85	855	8559	855900										
+1572	2	P	85	85.6				Hjælpeydelser i forbindelse med undervisning	85	856												
+1573	3	P	85	85.6	85.60			Hjælpeydelser i forbindelse med undervisning	85	856	8560											
+1574	4	P	85	85.6	85.60	85.60.00		Hjælpeydelser i forbindelse med undervisning	85	856	8560	856000										
+1575	0	Q						Sundhedsvæsen og sociale foranstaltninger														
+1576	1	Q	86					Sundhedsvæsen	86													
+1577	2	Q	86	86.1				Hospitaler	86	861												
+1578	3	Q	86	86.1	86.10			Hospitaler	86	861	8610											
+1579	4	Q	86	86.1	86.10	86.10.00		Hospitaler	86	861	8610	861000										
+1580	2	Q	86	86.2				Praktiserende læger og tandlæger	86	862												
+1581	3	Q	86	86.2	86.21			Alment praktiserende læger	86	862	8621											
+1582	4	Q	86	86.2	86.21	86.21.00		Alment praktiserende læger	86	862	8621	862100										
+1583	3	Q	86	86.2	86.22			Praktiserende speciallæger	86	862	8622											
+1584	4	Q	86	86.2	86.22	86.22.00		Praktiserende speciallæger	86	862	8622	862200										
+1585	3	Q	86	86.2	86.23			Praktiserende tandlæger	86	862	8623											
+1586	4	Q	86	86.2	86.23	86.23.00		Praktiserende tandlæger	86	862	8623	862300										
+1587	2	Q	86	86.9				Sundhedsvæsen i øvrigt	86	869												
+1588	3	Q	86	86.9	86.90			Sundhedsvæsen i øvrigt	86	869	8690											
+1589	4	Q	86	86.9	86.90	86.90.10		Sundhedspleje, hjemmesygepleje og jordemødre mv.	86	869	8690	869010										
+1590	4	Q	86	86.9	86.90	86.90.20		Fysio- og ergoterapeuter	86	869	8690	869020										
+1591	4	Q	86	86.9	86.90	86.90.30		Psykologisk rådgivning	86	869	8690	869030										
+1592	4	Q	86	86.9	86.90	86.90.40		Kiropraktorer	86	869	8690	869040										
+1593	4	Q	86	86.9	86.90	86.90.90		Sundhedsvæsen i øvrigt i.a.n.	86	869	8690	869090										
+1594	1	Q	87					Institutionsophold	87													
+1595	2	Q	87	87.1				Institutionsophold med sygepleje	87	871												
+1596	3	Q	87	87.1	87.10			Institutionsophold med sygepleje	87	871	8710											
+1597	4	Q	87	87.1	87.10	87.10.10		Plejehjem	87	871	8710	871010										
+1598	4	Q	87	87.1	87.10	87.10.20		Institutionsophold med sygepleje i.a.n.	87	871	8710	871020										
+1599	2	Q	87	87.2				Institutionsophold for psykisk handicappede, psykisk syge og stofmisbrugere	87	872												
+1600	3	Q	87	87.2	87.20			Institutionsophold for psykisk handicappede, psykisk syge og stofmisbrugere	87	872	8720											
+1601	4	Q	87	87.2	87.20	87.20.10		Døgninstitutioner for personer med psykiske handicap	87	872	8720	872010										
+1602	4	Q	87	87.2	87.20	87.20.20		Behandlingshjem for stofmisbrugere og alkoholskadede	87	872	8720	872020										
+1603	2	Q	87	87.3				Institutionsophold for ældre og handicappede	87	873												
+1604	3	Q	87	87.3	87.30			Institutionsophold for ældre og handicappede	87	873	8730											
+1605	4	Q	87	87.3	87.30	87.30.10		Døgninstitutioner for personer med fysisk handicap	87	873	8730	873010										
+1606	4	Q	87	87.3	87.30	87.30.20		Beskyttede boliger o.l.	87	873	8730	873020										
+1607	2	Q	87	87.9				Andre former for institutionsophold	87	879												
+1608	3	Q	87	87.9	87.90			Andre former for institutionsophold	87	879	8790											
+1609	4	Q	87	87.9	87.90	87.90.10		Døgninstitutioner for børn og unge	87	879	8790	879010										
+1610	4	Q	87	87.9	87.90	87.90.20		Familiepleje	87	879	8790	879020										
+1611	4	Q	87	87.9	87.90	87.90.90		Andre former for institutionsophold	87	879	8790	879090										
+1612	1	Q	88					Sociale foranstaltninger uden institutionsophold	88													
+1613	2	Q	88	88.1				Sociale foranstaltninger for ældre og handicappede uden institutionsophold	88	881												
+1614	3	Q	88	88.1	88.10			Sociale foranstaltninger for ældre og handicappede uden institutionsophold	88	881	8810											
+1615	4	Q	88	88.1	88.10	88.10.10		Hjemmehjælp	88	881	8810	881010										
+1616	4	Q	88	88.1	88.10	88.10.20		Dagcentre mv.	88	881	8810	881020										
+1617	4	Q	88	88.1	88.10	88.10.30		Revalideringsinstitutioner	88	881	8810	881030										
+1618	2	Q	88	88.9				Andre sociale foranstaltninger uden institutionsophold	88	889												
+1619	3	Q	88	88.9	88.91			Børnedagpleje	88	889	8891											
+1620	4	Q	88	88.9	88.91	88.91.10		Dagplejemødre	88	889	8891	889110										
+1621	4	Q	88	88.9	88.91	88.91.20		Vuggestuer	88	889	8891	889120										
+1622	4	Q	88	88.9	88.91	88.91.30		Børnehaver	88	889	8891	889130										
+1623	4	Q	88	88.9	88.91	88.91.40		Skolefritidsordninger og fritidshjem	88	889	8891	889140										
+1624	4	Q	88	88.9	88.91	88.91.50		Aldersintegrerede institutioner	88	889	8891	889150										
+1625	4	Q	88	88.9	88.91	88.91.60		Fritids- og ungdomsklubber	88	889	8891	889160										
+1626	3	Q	88	88.9	88.99			Andre sociale foranstaltninger uden institutionsophold i.a.n.	88	889	8899											
+1627	4	Q	88	88.9	88.99	88.99.10		Foreninger, legater og fonde med sygdomsbekæmpende, sociale og velgørende formål	88	889	8899	889910										
+1628	4	Q	88	88.9	88.99	88.99.20		Flygtninge- og asylcentre	88	889	8899	889920										
+1629	4	Q	88	88.9	88.99	88.99.90		Andre sociale foranstaltninger uden institutionsophold i.a.n.	88	889	8899	889990										
+1630	0	R						Kultur, forlystelser og sport														
+1631	1	R	90					Kreative aktiviteter, kunst og forlystelser	90													
+1632	2	R	90	90.0				Kreative aktiviteter, kunst og forlystelser	90	900												
+1633	3	R	90	90.0	90.01			Scenekunst	90	900	9001											
+1634	4	R	90	90.0	90.01	90.01.10		Teater- og koncertvirksomhed	90	900	9001	900110										
+1635	4	R	90	90.0	90.01	90.01.20		Selvstændigt udøvende scenekunstnere	90	900	9001	900120										
+1636	3	R	90	90.0	90.02			Hjælpeaktiviteter i forbindelse med scenekunst	90	900	9002											
+1637	4	R	90	90.0	90.02	90.02.00		Hjælpeaktiviteter i forbindelse med scenekunst	90	900	9002	900200										
+1638	3	R	90	90.0	90.03			Kunstnerisk skaben	90	900	9003											
+1639	4	R	90	90.0	90.03	90.03.00		Kunstnerisk skaben	90	900	9003	900300										
+1640	3	R	90	90.0	90.04			Drift af teater- og koncertsale, kulturhuse mv.	90	900	9004											
+1641	4	R	90	90.0	90.04	90.04.00		Drift af teater- og koncertsale, kulturhuse mv.	90	900	9004	900400										
+1642	1	R	91					Biblioteker, arkiver, museer og anden kulturel virksomhed	91													
+1643	2	R	91	91.0				Biblioteker, arkiver, museer og anden kulturel virksomhed	91	910												
+1644	3	R	91	91.0	91.01			Biblioteker og arkiver	91	910	9101											
+1645	4	R	91	91.0	91.01	91.01.10		Biblioteker 	91	910	9101	910110										
+1646	4	R	91	91.0	91.01	91.01.20		Arkiver	91	910	9101	910120										
+1647	3	R	91	91.0	91.02			Museer	91	910	9102											
+1648	4	R	91	91.0	91.02	91.02.00		Museer	91	910	9102	910200										
+1649	3	R	91	91.0	91.03			Historiske monumenter og bygninger og lignende attraktioner	91	910	9103											
+1650	4	R	91	91.0	91.03	91.03.00		Historiske monumenter og bygninger og lignende attraktioner	91	910	9103	910300										
+1651	3	R	91	91.0	91.04			Botaniske og zoologiske haver samt naturreservater	91	910	9104											
+1652	4	R	91	91.0	91.04	91.04.00		Botaniske og zoologiske haver samt naturreservater	91	910	9104	910400										
+1653	1	R	92					Lotteri- og anden spillevirksomhed	92													
+1654	2	R	92	92.0				Lotteri- og anden spillevirksomhed	92	920												
+1655	3	R	92	92.0	92.00			Lotteri- og anden spillevirksomhed	92	920	9200											
+1656	4	R	92	92.0	92.00	92.00.00		Lotteri- og anden spillevirksomhed	92	920	9200	920000										
+1657	1	R	93					Sport, forlystelser og fritidsaktiviteter	93													
+1658	2	R	93	93.1				Sport	93	931												
+1659	3	R	93	93.1	93.11			Drift af sportsanlæg	93	931	9311											
+1660	4	R	93	93.1	93.11	93.11.00		Drift af sportsanlæg	93	931	9311	931100										
+1661	3	R	93	93.1	93.12			Sportsklubber	93	931	9312											
+1662	4	R	93	93.1	93.12	93.12.00		Sportsklubber	93	931	9312	931200										
+1663	3	R	93	93.1	93.13			Fitnesscentre	93	931	9313											
+1664	4	R	93	93.1	93.13	93.13.00		Fitnesscentre	93	931	9313	931300										
+1665	3	R	93	93.1	93.19			Andre sportsaktiviteter	93	931	9319											
+1666	4	R	93	93.1	93.19	93.19.00		Andre sportsaktiviteter	93	931	9319	931900										
+1667	2	R	93	93.2				Forlystelser og fritidsaktiviteter	93	932												
+1668	3	R	93	93.2	93.21			Forlystelsesparker o.l.	93	932	9321											
+1669	4	R	93	93.2	93.21	93.21.00		Forlystelsesparker o.l.	93	932	9321	932100										
+1670	3	R	93	93.2	93.29			Andre forlystelser og fritidsaktiviteter	93	932	9329											
+1671	4	R	93	93.2	93.29	93.29.10		Lystbådehavne	93	932	9329	932910										
+1672	4	R	93	93.2	93.29	93.29.90		Andre forlystelser og fritidsaktiviteter	93	932	9329	932990										
+1673	0	S						Andre serviceydelser														
+1674	1	S	94					Organisationer og foreninger	94													
+1675	2	S	94	94.1				Erhvervs- og arbejdsgiverorganisationer samt faglige sammenslutninger	94	941												
+1676	3	S	94	94.1	94.11			Erhvervs- og arbejdsgiverorganisationer	94	941	9411											
+1677	4	S	94	94.1	94.11	94.11.00		Erhvervs- og arbejdsgiverorganisationer	94	941	9411	941100										
+1678	3	S	94	94.1	94.12			Faglige sammenslutninger	94	941	9412											
+1679	4	S	94	94.1	94.12	94.12.00		Faglige sammenslutninger	94	941	9412	941200										
+1680	2	S	94	94.2				Fagforeninger	94	942												
+1681	3	S	94	94.2	94.20			Fagforeninger	94	942	9420											
+1682	4	S	94	94.2	94.20	94.20.00		Fagforeninger	94	942	9420	942000										
+1683	2	S	94	94.9				Andre organisationer og foreninger	94	949												
+1684	3	S	94	94.9	94.91			Religiøse institutioner og foreninger	94	949	9491											
+1685	4	S	94	94.9	94.91	94.91.00		Religiøse institutioner og foreninger	94	949	9491	949100										
+1686	3	S	94	94.9	94.92			Politiske partier	94	949	9492											
+1687	4	S	94	94.9	94.92	94.92.00		Politiske partier	94	949	9492	949200										
+1688	3	S	94	94.9	94.99			Andre organisationer og foreninger i.a.n.	94	949	9499											
+1689	4	S	94	94.9	94.99	94.99.00		Andre organisationer og foreninger i.a.n.	94	949	9499	949900										
+1690	1	S	95					Reparation af computere og varer til personligt brug og husholdningsbrug	95													
+1691	2	S	95	95.1				Reparation af computere og kommunikationsudstyr	95	951												
+1692	3	S	95	95.1	95.11			Reparation af computere og ydre enheder	95	951	9511											
+1693	4	S	95	95.1	95.11	95.11.00		Reparation af computere og ydre enheder	95	951	9511	951100										
+1694	3	S	95	95.1	95.12			Reparation af kommunikationsudstyr	95	951	9512											
+1695	4	S	95	95.1	95.12	95.12.00		Reparation af kommunikationsudstyr	95	951	9512	951200										
+1696	2	S	95	95.2				Reparation af varer til personligt brug og husholdningsbrug	95	952												
+1697	3	S	95	95.2	95.21			Reparation af forbrugerelektronik	95	952	9521											
+1698	4	S	95	95.2	95.21	95.21.00		Reparation af forbrugerelektronik	95	952	9521	952100										
+1699	3	S	95	95.2	95.22			Reparation af husholdningsapparater og redskaber til hus og have	95	952	9522											
+1700	4	S	95	95.2	95.22	95.22.00		Reparation af husholdningsapparater og redskaber til hus og have	95	952	9522	952200										
+1701	3	S	95	95.2	95.23			Reparation af skotøj og lædervarer	95	952	9523											
+1702	4	S	95	95.2	95.23	95.23.00		Reparation af skotøj og lædervarer	95	952	9523	952300										
+1703	3	S	95	95.2	95.24			Reparation af møbler og boligudstyr	95	952	9524											
+1704	4	S	95	95.2	95.24	95.24.00		Reparation af møbler og boligudstyr	95	952	9524	952400										
+1705	3	S	95	95.2	95.25			Reparation af ure, smykker og guld- og sølvvarer	95	952	9525											
+1706	4	S	95	95.2	95.25	95.25.00		Reparation af ure, smykker og guld- og sølvvarer	95	952	9525	952500										
+1707	3	S	95	95.2	95.29			Reparation af andre varer til personligt brug og husholdningsbrug	95	952	9529											
+1708	4	S	95	95.2	95.29	95.29.00		Reparation af andre varer til personligt brug og husholdningsbrug	95	952	9529	952900										
+1709	1	S	96					Andre personlige serviceydelser	96													
+1710	2	S	96	96.0				Andre personlige serviceydelser	96	960												
+1711	3	S	96	96.0	96.01			Vaskerier og renserier	96	960	9601											
+1712	4	S	96	96.0	96.01	96.01.10		Erhvervs- og institutionsvaskerier	96	960	9601	960110										
+1713	4	S	96	96.0	96.01	96.01.20		Renserier, selvbetjeningsvaskerier mv.	96	960	9601	960120										
+1714	3	S	96	96.0	96.02			Frisør- og skønhedssaloner	96	960	9602											
+1715	4	S	96	96.0	96.02	96.02.10		Frisørsaloner	96	960	9602	960210										
+1716	4	S	96	96.0	96.02	96.02.20		Skønheds- og hudpleje	96	960	9602	960220										
+1717	3	S	96	96.0	96.03			Bedemænd og begravelsesvæsen	96	960	9603											
+1718	4	S	96	96.0	96.03	96.03.00		Bedemænd og begravelsesvæsen	96	960	9603	960300										
+1719	3	S	96	96.0	96.04			Aktiviteter vedrørende fysisk velvære	96	960	9604											
+1720	4	S	96	96.0	96.04	96.04.00		Aktiviteter vedrørende fysisk velvære	96	960	9604	960400										
+1721	3	S	96	96.0	96.09			Andre personlige serviceydelser i.a.n.	96	960	9609											
+1722	4	S	96	96.0	96.09	96.09.00		Andre personlige serviceydelser i.a.n.	96	960	9609	960900										
+1723	0	T						"Private husholdninger med ansat medhjælp; husholdningers produktion af varer og tjenesteydelser til eget brug, i.a.n."														
+1724	1	T	97					Husholdninger med ansat medhjælp	97													
+1725	2	T	97	97.0				Husholdninger med ansat medhjælp	97	970												
+1726	3	T	97	97.0	97.00			Husholdninger med ansat medhjælp	97	970	9700											
+1727	4	T	97	97.0	97.00	97.00.00		Husholdninger med ansat medhjælp	97	970	9700	970000										
+1728	1	T	98					Private husholdningers produktion af varer og tjenesteydelser til eget brug, i.a.n.	98													
+1729	2	T	98	98.1				Private husholdningers produktion af varer til eget brug, i.a.n.	98	981												
+1730	3	T	98	98.1	98.10			Private husholdningers produktion af varer til eget brug, i.a.n.	98	981	9810											
+1731	4	T	98	98.1	98.10	98.10.00		Private husholdningers produktion af varer til eget brug, i.a.n.	98	981	9810	981000										
+1732	2	T	98	98.2				Private husholdningers produktion af tjenesteydelser til eget brug, i.a.n.	98	982												
+1733	3	T	98	98.2	98.20			Private husholdningers produktion af tjenesteydelser til eget brug, i.a.n.	98	982	9820											
+1734	4	T	98	98.2	98.20	98.20.00		Private husholdningers produktion af tjenesteydelser til eget brug, i.a.n.	98	982	9820	982000										
+1735	0	U						Ekstraterritoriale organisationer og organer														
+1736	1	U	99					Ekstraterritoriale organisationer og organer	99													
+1737	2	U	99	99.0				Ekstraterritoriale organisationer og organer	99	990												
+1738	3	U	99	99.0	99.00			Ekstraterritoriale organisationer og organer	99	990	9900											
+1739	4	U	99	99.0	99.00	99.00.00		Ekstraterritoriale organisationer og organer	99	990	9900	990000										
+1740	4	X 				99.99.99		Uoplyst				999999										
