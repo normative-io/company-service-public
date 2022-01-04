@@ -82,9 +82,7 @@ export class DenmarkScraper implements IScraper {
   async toCompanies(request: FetchByCompanyIdDto, response: VirkResponse): Promise<FoundCompany[]> {
     const companies: FoundCompany[] = [];
     for (const hit of response.hits.hits) {
-      const names = hit._source.Vrvirksomhed.navne.filter(this.validPeriod).map((name) => {
-        return name.navn;
-      });
+      const names = hit._source.Vrvirksomhed.navne.filter(this.validPeriod).map((name) => name.navn);
       this.logger.debug(`Found names: ${names}`);
       if (names.length == 0) {
         // Companies without names are probably invalid and will not be returned
