@@ -2,7 +2,9 @@ import { ConfigService } from '@nestjs/config';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { FetchByCompanyIdDto } from '../dto/fetch.dto';
 import { FoundCompany, IScraper } from '../dto/scraper.interface';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const fg = require('fast-glob');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path');
 
 export const SCRAPER_REGISTRY = 'SCRAPER_REGISTRY';
@@ -12,10 +14,11 @@ export const SCRAPER_REGISTRY = 'SCRAPER_REGISTRY';
 // filepaths relative from the root application directory.
 const SCRAPER_GLOBS = 'SCRAPER_GLOBS';
 // If SCRAPER_GLOBS is not set, use this value.
-const DEFAULT_SCRAPER_GLOBS = 'src/scraper/examples/**/*.ts';
+const DEFAULT_SCRAPER_GLOBS = 'src/scraper/examples/*/index.ts';
 
 @Injectable()
 export class ScraperRegistry {
+  logger = new Logger(ScraperRegistry.name);
   scrapers: IScraper[];
 
   constructor(private configService: ConfigService) {
@@ -34,6 +37,7 @@ export class ScraperRegistry {
       // Local files are marked with a `./` prefix.
       const relPath = './' + path.relative(__dirname, scraperPath);
       console.log(`Loading scraper from file: ${relPath}`);
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const scraperSource = require(relPath);
       const scraper = new scraperSource.Scraper();
 
