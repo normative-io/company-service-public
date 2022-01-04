@@ -9,7 +9,7 @@ export class ScraperController {
   constructor(
     @Inject(SCRAPER_REGISTRY)
     private readonly scraperRegistry: ScraperRegistry,
-  ) { }
+  ) {}
 
   @Post('fetch/byCompanyId')
   @ApiOperation({ summary: 'Request on-demand lookup by company id.' })
