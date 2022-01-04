@@ -15,9 +15,7 @@ export class DenmarkScraper implements IScraper {
 
   fetch(req: FetchByCompanyIdDto): FetchResult {
     return {
-      foundCompanies: [
-        { confidence: 1.0, name: `danish-company-${req.companyId}` },
-      ],
+      foundCompanies: [{ confidence: 1.0, name: `danish-company-${req.companyId}` }],
     };
   }
 }
