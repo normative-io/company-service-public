@@ -1,18 +1,17 @@
 import { Body, Controller, Delete, Get, Inject, Param, Patch, Post } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { COMPANY_SERVICE, ICompanyService } from './company-service.interface';
-import { CreateCompanyDto } from "./dto/create-company.dto";
+import { CreateCompanyDto } from './dto/create-company.dto';
 import { FindCompanyDto } from './dto/find-company.dto';
-import { UpdateCompanyDto } from "./dto/update-company.dto";
+import { UpdateCompanyDto } from './dto/update-company.dto';
 
 @ApiTags('company')
 @Controller('company')
 export class CompanyController {
-
   constructor(
     @Inject(COMPANY_SERVICE)
-    private readonly companyService: ICompanyService
-  ) { }
+    private readonly companyService: ICompanyService,
+  ) {}
 
   @Get('v1')
   @ApiOperation({ summary: 'Look up metadata for a company.' })
@@ -61,9 +60,11 @@ export class CompanyController {
   @Post('v1/find')
   @ApiOperation({ summary: 'Find companies by metadata.' })
   @ApiResponse({ description: 'The matching companies.' })
-  @ApiBody({ type: FindCompanyDto, description: 'The fields to look for; companies matching any field will be returned.' })
+  @ApiBody({
+    type: FindCompanyDto,
+    description: 'The fields to look for; companies matching any field will be returned.',
+  })
   async find(@Body() findCompanyDto: FindCompanyDto) {
-    return [...await this.companyService.find(findCompanyDto)];
+    return [...(await this.companyService.find(findCompanyDto))];
   }
-
 }

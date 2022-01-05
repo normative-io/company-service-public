@@ -1,17 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import {
-  FastifyAdapter,
-  NestFastifyApplication,
-} from '@nestjs/platform-fastify';
+import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { AppModule } from './app.module';
 import * as swStats from 'swagger-stats';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestFastifyApplication>(
-    AppModule,
-    new FastifyAdapter(),
-  );
+  const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
 
   app.use(swStats.getMiddleware({}));
 
@@ -22,7 +16,7 @@ async function bootstrap() {
     .addTag('company')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  const apiSubpath = 'api'
+  const apiSubpath = 'api';
   SwaggerModule.setup(apiSubpath, app, document);
 
   await app.listen(3000, '0.0.0.0');
