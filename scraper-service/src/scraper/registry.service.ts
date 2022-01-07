@@ -1,6 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { FetchByCompanyIdDto } from '../dto/fetch.dto';
+import { LookupRequest } from '../dto/lookup.dto';
 import { FoundCompany, IScraper } from '../dto/scraper.interface';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const fg = require('fast-glob');
@@ -60,7 +60,7 @@ export class ScraperRegistry {
   }
 
   // TODO: change return data type to include metadata about which scrapers were used.
-  async fetch(req: FetchByCompanyIdDto): Promise<FoundCompany[]> {
+  async fetch(req: LookupRequest): Promise<FoundCompany[]> {
     this.logger.debug(`fetch request: ${JSON.stringify(req, undefined, 2)}`);
 
     // Fetch from each applicable scraper until a value is found.
@@ -84,7 +84,7 @@ export class ScraperRegistry {
   }
 
   // Determine the set of scrapers to use.
-  applicableScrapers(req: FetchByCompanyIdDto): IScraper[] {
+  applicableScrapers(req: LookupRequest): IScraper[] {
     return this.scrapers
       .filter((scraper) => scraper.check(req).isApplicable)
       .sort((a, b) => a.check(req).priority - b.check(req).priority);

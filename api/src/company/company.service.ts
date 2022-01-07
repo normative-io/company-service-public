@@ -46,7 +46,7 @@ export class CompanyService implements ICompanyService {
     public findScraperErrorTotal: Counter<string>,
   ) {
     const scraperAddress = this.configService.get<string>('SCRAPER_ADDRESS');
-    this.scraperServiceAddress = `http://${scraperAddress}/scraper/fetch/byCompanyId`;
+    this.scraperServiceAddress = `http://${scraperAddress}/scraper/lookup`;
     this.logger.log(`Will use Scraper Service on address: ${this.scraperServiceAddress}`);
   }
 
@@ -141,7 +141,7 @@ export class CompanyService implements ICompanyService {
       const response = await firstValueFrom(
         this.httpService.post(this.scraperServiceAddress, findCompanyDto, CompanyService.requestConfig),
       );
-      this.logger.verbose(`fetch/byCompanyId got response: ${JSON.stringify(response.data, undefined, 2)}`);
+      this.logger.verbose(`scraper lookup got response: ${JSON.stringify(response.data, undefined, 2)}`);
 
       response.data.forEach((dto) => {
         const company = this.add(dto);

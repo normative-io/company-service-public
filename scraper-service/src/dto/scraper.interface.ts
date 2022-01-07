@@ -1,13 +1,15 @@
+import { LookupRequest } from './lookup.dto';
+
 // Defines the interface that all scrapers must implement in order to be registered with the scraper-service.
 export interface IScraper {
   // A human-readable name of this scraper.
   name(): string;
 
   // Check determines if this scraper should be considered for the given request.
-  check(FetchByCompanyIdDto): CheckResult;
+  check(req: LookupRequest): CheckResult;
 
-  // Fetch performs the scraping business logic for the given request.
-  lookup(FetchByCompanyIdDto): Promise<FetchResult>;
+  // Lookup performs the scraping business logic for the given request.
+  lookup(req: LookupRequest): Promise<FetchResult>;
 }
 
 export class CheckResult {

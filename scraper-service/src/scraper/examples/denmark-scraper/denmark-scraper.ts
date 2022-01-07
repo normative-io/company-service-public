@@ -1,5 +1,5 @@
 import { Logger } from '@nestjs/common';
-import { FetchByCompanyIdDto } from '../../../dto/fetch.dto';
+import { LookupRequest } from '../../../dto/lookup.dto';
 import { CheckResult, FetchResult, FoundCompany, IScraper } from '../../../dto/scraper.interface';
 import NrRequest from './cvrnr-request.json';
 import { DKSicMapping } from './repository/dksicmapping.model';
@@ -21,14 +21,14 @@ export class DenmarkScraper implements IScraper {
     return 'denmark-scraper';
   }
 
-  check(req: FetchByCompanyIdDto): CheckResult {
+  check(req: LookupRequest): CheckResult {
     if (req.country === 'DK') {
       return { isApplicable: true, priority: 10 };
     }
     return { isApplicable: false };
   }
 
-  async lookup(req: FetchByCompanyIdDto): Promise<FetchResult> {
+  async lookup(req: LookupRequest): Promise<FetchResult> {
     return {
       foundCompanies: await this.fetchRequest(req),
     };
@@ -48,7 +48,7 @@ export class DenmarkScraper implements IScraper {
   /*
    Fetch the company data from Virk.
    */
-  private async fetchRequest(request: FetchByCompanyIdDto): Promise<FoundCompany[]> {
+  private async fetchRequest(request: LookupRequest): Promise<FoundCompany[]> {
     const auth = Buffer.from(`${this.username}:${this.password}`).toString('base64');
     const requestBody = this.requestWithCVRNr(request.companyId);
     this.logger.verbose(`Request body: ${requestBody}`);
@@ -79,7 +79,7 @@ export class DenmarkScraper implements IScraper {
    VirkResponse contains a list of hits, each of which is a company which in turn contains data,
    most of which is in time series.
    */
-  async toCompanies(request: FetchByCompanyIdDto, response: VirkResponse): Promise<FoundCompany[]> {
+  async toCompanies(request: LookupRequest, response: VirkResponse): Promise<FoundCompany[]> {
     const companies: FoundCompany[] = [];
     for (const hit of response.hits.hits) {
       const names = hit._source.Vrvirksomhed.navne.filter(this.validPeriod).map((name) => name.navn);
