@@ -1,6 +1,6 @@
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { FetchByCompanyIdDto } from 'src/dto/fetch.dto';
+import { LookupRequest } from 'src/dto/lookup.dto';
 import { DenmarkScraper } from '.';
 import * as response from './denmark-scraper.spec.response.json';
 
@@ -18,7 +18,7 @@ describe('DenmarkScraper', () => {
   });
 
   it('should convert a VirkResponse to a FoundCompany', async () => {
-    const request: FetchByCompanyIdDto = {
+    const request: LookupRequest = {
       country: 'DK',
       companyId: '37018848',
     };
