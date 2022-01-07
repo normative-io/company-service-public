@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { FoundCompany } from './scraper.interface';
 
 export class LookupRequest {
   @ApiProperty({
@@ -18,4 +19,17 @@ export class LookupRequest {
     example: 'Amazon',
   })
   readonly companyName?: string;
+}
+
+export class LookupResponse {
+  @ApiProperty({
+    description: 'The name of the scraper that provided this data.',
+    example: 'denmark-scraper',
+  })
+  readonly scraperName: string;
+
+  @ApiProperty({
+    description: 'The company metadata that was scraped.',
+  })
+  readonly foundCompanies: FoundCompany[];
 }

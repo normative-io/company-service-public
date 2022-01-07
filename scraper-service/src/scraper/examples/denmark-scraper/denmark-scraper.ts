@@ -1,6 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { LookupRequest } from '../../../dto/lookup.dto';
-import { CheckResult, FetchResult, FoundCompany, IScraper } from '../../../dto/scraper.interface';
+import { CheckResult, LookupResponse, FoundCompany, IScraper } from '../../../dto/scraper.interface';
 import NrRequest from './cvrnr-request.json';
 import { DKSicMapping } from './repository/dksicmapping.model';
 import { NaceIsicMapping } from '../../common/naceisicmapping.model';
@@ -28,7 +28,7 @@ export class DenmarkScraper implements IScraper {
     return { isApplicable: false };
   }
 
-  async lookup(req: LookupRequest): Promise<FetchResult> {
+  async lookup(req: LookupRequest): Promise<LookupResponse> {
     return {
       foundCompanies: await this.fetchRequest(req),
     };

@@ -1,6 +1,6 @@
 import { ConfigService } from '@nestjs/config';
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { LookupRequest } from '../dto/lookup.dto';
+import { HttpException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { LookupRequest, LookupResponse } from '../dto/lookup.dto';
 import { FoundCompany, IScraper } from '../dto/scraper.interface';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const fg = require('fast-glob');
@@ -60,10 +60,13 @@ export class ScraperRegistry {
   }
 
   // TODO: change return data type to include metadata about which scrapers were used.
-  async fetch(req: LookupRequest): Promise<FoundCompany[]> {
-    this.logger.debug(`fetch request: ${JSON.stringify(req, undefined, 2)}`);
+  async lookup(req: LookupRequest): Promise<LookupResponse> {
+    this.logger.debug(`lookup request: ${JSON.stringify(req, undefined, 2)}`);
+    if (!req.companyId && !req.companyName) {
+      throw new HttpException('Request must contain a companyId or companyName', HttpStatus.BAD_REQUEST);
+    }
 
-    // Fetch from each applicable scraper until a value is found.
+    // Lookup from each applicable scraper until a value is found.
     // Note: in the future, we may want to execute every
     // applicable scraper and/or run them all in parallel.
     for (const scraper of this.applicableScrapers(req)) {
@@ -72,15 +75,10 @@ export class ScraperRegistry {
       );
       const res = await scraper.lookup(req);
       if (res.foundCompanies.length > 0) {
-        return res.foundCompanies.map(function (company) {
-          return {
-            scraperName: scraper.name(),
-            ...company,
-          };
-        });
+        return { scraperName: scraper.name(), foundCompanies: res.foundCompanies };
       }
     }
-    return [];
+    throw new HttpException('No suitable scrapers for the request..', HttpStatus.NOT_IMPLEMENTED);
   }
 
   // Determine the set of scrapers to use.

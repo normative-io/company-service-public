@@ -1,6 +1,6 @@
 import { Body, Controller, Post, Inject } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { LookupRequest } from '../dto/lookup.dto';
+import { LookupRequest, LookupResponse } from '../dto/lookup.dto';
 import { ScraperRegistry, SCRAPER_REGISTRY } from './registry.service';
 
 @ApiTags('scraper')
@@ -12,10 +12,10 @@ export class ScraperController {
   ) {}
 
   @Post('lookup')
-  @ApiOperation({ summary: 'Request on-demand lookup by company id.' })
-  @ApiResponse({ description: 'The metadata of the matching company.' })
-  @ApiBody({ type: LookupRequest, description: 'The new company' })
-  async lookup(@Body() req: LookupRequest) {
-    return await this.scraperRegistry.fetch(req);
+  @ApiOperation({ summary: 'Request on-demand lookup of a company.' })
+  @ApiResponse({ type: LookupResponse })
+  @ApiBody({ type: LookupRequest })
+  async lookup(@Body() req: LookupRequest): Promise<LookupResponse> {
+    return await this.scraperRegistry.lookup(req);
   }
 }

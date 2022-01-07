@@ -9,7 +9,7 @@ export interface IScraper {
   check(req: LookupRequest): CheckResult;
 
   // Lookup performs the scraping business logic for the given request.
-  lookup(req: LookupRequest): Promise<FetchResult>;
+  lookup(req: LookupRequest): Promise<LookupResponse>;
 }
 
 export class CheckResult {
@@ -24,7 +24,7 @@ export class CheckResult {
   readonly priority?: number;
 }
 
-export class FetchResult {
+export class LookupResponse {
   // The companies that the scraper determined matched the fetch request.
   readonly foundCompanies: FoundCompany[];
 }
