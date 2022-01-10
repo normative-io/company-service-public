@@ -7,12 +7,14 @@ import { UpdateCompanyDto } from './dto/update-company.dto';
 export const COMPANY_SERVICE = 'COMPANY_SERVICE';
 
 export interface ICompanyService {
-  add(createCompanyDto: CreateCompanyDto): Company;
+  add(createCompanyDto: CreateCompanyDto): Promise<Company>;
   // TODO: Reconsider the 'listAll' operation once we can connect to a real database or system.
   // Returning a million companies won't be useful or practical.
-  listAll(): Company[];
-  getById(id: string): Company;
-  update(id: string, updateCompanyDto: UpdateCompanyDto);
-  delete(id: string);
+  listAll(): Promise<Company[]>;
+  getById(id: string): Promise<Company | undefined>;
+  update(id: string, updateCompanyDto: UpdateCompanyDto): Promise<Company>;
+  // Delete a company identified by id
+  // Returns the number of remaining companies
+  delete(id: string): Promise<number>;
   find(findCompanyDto: FindCompanyDto): Promise<CompanyFoundInServiceDto[]>;
 }

@@ -50,30 +50,31 @@ export class CompanyService implements ICompanyService {
     this.logger.log(`Will use Scraper Service on address: ${this.scraperServiceAddress}`);
   }
 
-  listAll() {
+  async listAll(): Promise<Company[]> {
     const all = this.companyRepo.listAll();
     return [...all];
   }
 
-  add(createCompanyDto: CreateCompanyDto): Company {
+  async add(createCompanyDto: CreateCompanyDto): Promise<Company> {
     const company = new Company(createCompanyDto);
     this.companyRepo.save(company);
     return company;
   }
 
-  getById(id: string): Company {
+  async getById(id: string): Promise<Company | undefined> {
     return this.companyRepo.getById(id);
   }
 
-  update(id: string, updateCompanyDto: UpdateCompanyDto): Company {
+  async update(id: string, updateCompanyDto: UpdateCompanyDto): Promise<Company> {
     const company = this.companyRepo.getById(id);
     company.update(updateCompanyDto);
     this.companyRepo.save(company);
     return company;
   }
 
-  delete(id: string) {
-    this.companyRepo.delete(id);
+  // Returns the number of remaining companies
+  async delete(id: string): Promise<number> {
+    return this.companyRepo.delete(id);
   }
 
   async find(findCompanyDto: FindCompanyDto): Promise<CompanyFoundInServiceDto[]> {
@@ -143,14 +144,14 @@ export class CompanyService implements ICompanyService {
       );
       this.logger.verbose(`scraper lookup got response: ${JSON.stringify(response.data, undefined, 2)}`);
 
-      response.data.forEach((dto) => {
-        const company = this.add(dto);
+      for (const dto of response.data) {
+        const company = await this.add(dto);
         results.push({
           company: company,
           confidence: dto.confidence,
           foundBy: dto.scraperName ? `Scraper ${dto.scraperName}` : undefined,
         });
-      });
+      }
     } catch (e) {
       this.logger.error(`Could not get companies from ScraperService: ${e}`);
       this.findScraperErrorTotal.inc();

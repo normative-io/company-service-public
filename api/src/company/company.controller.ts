@@ -23,38 +23,38 @@ export class CompanyController {
   @Get('v1/companies')
   @ApiOperation({ summary: 'List all companies.' })
   @ApiResponse({ description: 'All the available companies.' })
-  companies() {
-    return { companies: this.companyService.listAll() };
+  async companies() {
+    return { companies: await this.companyService.listAll() };
   }
 
   @Post('v1/add')
   @ApiOperation({ summary: 'Add a company.' })
   @ApiResponse({ description: 'The new company, including any initialised fields.' })
   @ApiBody({ type: CreateCompanyDto, description: 'The new company' })
-  add(@Body() createCompanyDto: CreateCompanyDto) {
-    return { company: this.companyService.add(createCompanyDto) };
+  async add(@Body() createCompanyDto: CreateCompanyDto) {
+    return { company: await this.companyService.add(createCompanyDto) };
   }
 
   @Get('v1/:id')
   @ApiOperation({ summary: 'Retrieve a company given its id.' })
   @ApiResponse({ description: 'The matching company.' })
-  getById(@Param('id') id: string) {
-    return { company: this.companyService.getById(id) };
+  async getById(@Param('id') id: string) {
+    return { company: await this.companyService.getById(id) };
   }
 
   @Delete('v1/delete/:id')
   @ApiOperation({ summary: 'Delete a company given its id.' })
   @ApiResponse({ description: 'The number of remaining companies.' })
-  delete(@Param('id') id: string) {
-    return { nr_companies: this.companyService.delete(id) };
+  async delete(@Param('id') id: string) {
+    return { nr_companies: await this.companyService.delete(id) };
   }
 
   @Patch('v1/update/:id')
   @ApiOperation({ summary: 'Update a company.' })
   @ApiResponse({ description: 'The updated company.' })
   @ApiBody({ type: UpdateCompanyDto, description: 'The fields to update. Absent fields will be ignored.' })
-  update(@Param('id') id: string, @Body() updateCompanyDto: UpdateCompanyDto) {
-    return { company: this.companyService.update(id, updateCompanyDto) };
+  async update(@Param('id') id: string, @Body() updateCompanyDto: UpdateCompanyDto) {
+    return { company: await this.companyService.update(id, updateCompanyDto) };
   }
 
   @Post('v1/find')

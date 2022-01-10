@@ -36,8 +36,8 @@ describe('CompanyController', () => {
     expect(controller.v1()).toBeDefined();
   });
 
-  it('should create a company', () => {
-    expect(controller.add({ name: 'Fantastic Company' })).toEqual({
+  it('should create a company', async () => {
+    expect(await controller.add({ name: 'Fantastic Company' })).toEqual({
       company: {
         id: expect.any(String),
         name: 'Fantastic Company',
@@ -46,11 +46,11 @@ describe('CompanyController', () => {
     });
   });
 
-  it('should update a company', () => {
-    const company1 = controller.add({ name: 'Fantastic Company' }).company;
-    controller.add({ name: 'Most fantastic Company' });
+  it('should update a company', async () => {
+    const company1 = (await controller.add({ name: 'Fantastic Company' })).company;
+    await controller.add({ name: 'Most fantastic Company' });
 
-    expect(controller.update(company1.id, { name: 'Awesome Company' })).toEqual({
+    expect(await controller.update(company1.id, { name: 'Awesome Company' })).toEqual({
       company: {
         id: company1.id,
         name: 'Awesome Company',
@@ -59,19 +59,19 @@ describe('CompanyController', () => {
     });
   });
 
-  it('cannot update a non-existent company', () => {
-    expect(function () {
-      controller.update('non-existent-id', { name: 'Fantastic Company' });
-    }).toThrowError(NotFoundException);
+  it('cannot update a non-existent company', async () => {
+    expect(async () => {
+      await controller.update('non-existent-id', { name: 'Fantastic Company' });
+    }).rejects.toThrowError(NotFoundException);
   });
 
-  it('should list all companies', () => {
+  it('should list all companies', async () => {
     // We first need to create a few companies.
-    controller.add({ name: '1' });
-    controller.add({ name: '2' });
-    controller.add({ name: '3' });
+    await controller.add({ name: '1' });
+    await controller.add({ name: '2' });
+    await controller.add({ name: '3' });
 
-    expect(controller.companies()).toEqual({
+    expect(await controller.companies()).toEqual({
       companies: [
         { id: expect.any(String), name: '1', created: expect.any(Date) },
         { id: expect.any(String), name: '2', created: expect.any(Date) },
@@ -80,52 +80,52 @@ describe('CompanyController', () => {
     });
   });
 
-  it('should get a company by id', () => {
+  it('should get a company by id', async () => {
     // We first need to create a few companies.
-    controller.add({ name: '1' });
-    const company2 = controller.add({ name: '2' }).company;
-    controller.add({ name: '3' });
+    await controller.add({ name: '1' });
+    const company2 = (await controller.add({ name: '2' })).company;
+    await controller.add({ name: '3' });
 
-    expect(controller.getById(company2.id)).toEqual({
+    expect(await controller.getById(company2.id)).toEqual({
       company: { id: company2.id, name: '2', created: expect.any(Date) },
     });
   });
 
-  it('cannot get a non-existent company', () => {
-    expect(function () {
-      controller.getById('non-existent-id');
-    }).toThrowError(NotFoundException);
+  it('cannot get a non-existent company', async () => {
+    expect(async () => {
+      await controller.getById('non-existent-id');
+    }).rejects.toThrowError(NotFoundException);
   });
 
-  it('should delete a company by id', () => {
+  it('should delete a company by id', async () => {
     // We first need to create a few companies.
-    controller.add({ name: '1' });
-    const company2 = controller.add({ name: '2' }).company;
-    controller.add({ name: '3' });
+    await controller.add({ name: '1' });
+    const company2 = (await controller.add({ name: '2' })).company;
+    await controller.add({ name: '3' });
 
     // Verify that the company is there.
-    expect(controller.getById(company2.id)).toEqual({
+    expect(await controller.getById(company2.id)).toEqual({
       company: { id: company2.id, name: '2', created: expect.any(Date) },
     });
 
-    controller.delete(company2.id);
+    await controller.delete(company2.id);
 
-    expect(function () {
-      controller.getById(company2.id);
-    }).toThrowError(NotFoundException);
+    expect(async () => {
+      await controller.getById(company2.id);
+    }).rejects.toThrowError(NotFoundException);
   });
 
-  it('cannot delete a non-existent company', () => {
-    expect(function () {
-      controller.delete('non-existent-id');
-    }).toThrowError(NotFoundException);
+  it('cannot delete a non-existent company', async () => {
+    expect(async () => {
+      await controller.delete('non-existent-id');
+    }).rejects.toThrowError(NotFoundException);
   });
 
   it('should find a company', async () => {
     // We first need to create a few companies.
-    controller.add({ name: '1' });
-    controller.add({ name: '2' });
-    controller.add({ name: '2' });
+    await controller.add({ name: '1' });
+    await controller.add({ name: '2' });
+    await controller.add({ name: '2' });
 
     expect(await controller.find({ name: '2' })).toEqual([
       {
