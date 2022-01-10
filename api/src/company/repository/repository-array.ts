@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { Company } from '../company.model';
 import { ICompanyRepository } from './repository-interface';
 
@@ -9,6 +9,8 @@ import { ICompanyRepository } from './repository-interface';
  * */
 @Injectable()
 export class CompanyRepositoryArray implements ICompanyRepository {
+  logger = new Logger(CompanyRepositoryArray.name);
+
   companies: Company[] = [];
 
   exists(company: Company): boolean {
@@ -58,8 +60,8 @@ export class CompanyRepositoryArray implements ICompanyRepository {
     const company = this.companies[index];
     if (!company) {
       const msg = `Could not find company with id '${id}'`;
-      console.log(msg);
-      console.log(this.allCompaniesString());
+      this.logger.warn(msg);
+      this.logger.debug(this.allCompaniesString());
       throw new NotFoundException(msg);
     }
     return [index, company];
