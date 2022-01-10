@@ -61,7 +61,6 @@ describe('CompanyController', () => {
     expect(await controller.addMany(companyDtos)).toEqual({ companies });
   });
 
-
   it('should update a company', async () => {
     const company1 = (await controller.add({ name: 'Fantastic Company' })).company;
     await controller.add({ name: 'Most fantastic Company' });
