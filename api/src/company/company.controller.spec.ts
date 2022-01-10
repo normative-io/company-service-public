@@ -46,6 +46,22 @@ describe('CompanyController', () => {
     });
   });
 
+  it('should create many companies', async () => {
+    const companyDtos = [
+      { name: 'Fantastic Company', country: 'CH', companyId: '456' },
+      { name: 'Mediocre Company', country: 'PL', companyId: '789' },
+    ];
+    const companies = companyDtos.map((dto) => {
+      return {
+        ...dto,
+        id: expect.any(String),
+        created: expect.any(Date),
+      };
+    });
+    expect(await controller.addMany(companyDtos)).toEqual({ companies });
+  });
+
+
   it('should update a company', async () => {
     const company1 = (await controller.add({ name: 'Fantastic Company' })).company;
     await controller.add({ name: 'Most fantastic Company' });

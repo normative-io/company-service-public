@@ -35,6 +35,14 @@ export class CompanyController {
     return { company: await this.companyService.add(createCompanyDto) };
   }
 
+  @Post('v1/addMany')
+  @ApiOperation({ summary: 'Add many companies.' })
+  @ApiResponse({ description: 'The new companies, including any initialised fields.' })
+  @ApiBody({ type: [CreateCompanyDto], description: 'The new companies' })
+  async addMany(@Body() createCompanyDtos: CreateCompanyDto[]) {
+    return { companies: await this.companyService.addMany(createCompanyDtos) };
+  }
+
   @Get('v1/:id')
   @ApiOperation({ summary: 'Retrieve a company given its id.' })
   @ApiResponse({ description: 'The matching company.' })

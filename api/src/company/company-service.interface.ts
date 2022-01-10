@@ -8,6 +8,7 @@ export const COMPANY_SERVICE = 'COMPANY_SERVICE';
 
 export interface ICompanyService {
   add(createCompanyDto: CreateCompanyDto): Promise<Company>;
+  addMany(createCompanyDtos: CreateCompanyDto[]): Promise<Company[]>;
   // TODO: Reconsider the 'listAll' operation once we can connect to a real database or system.
   // Returning a million companies won't be useful or practical.
   listAll(): Promise<Company[]>;

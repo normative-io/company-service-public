@@ -61,6 +61,10 @@ export class CompanyService implements ICompanyService {
     return company;
   }
 
+  async addMany(createCompanyDtos: CreateCompanyDto[]): Promise<Company[]> {
+    return createCompanyDtos.map((dto) => new Company(dto)).map((company) => this.companyRepo.save(company));
+  }
+
   async getById(id: string): Promise<Company | undefined> {
     return this.companyRepo.getById(id);
   }
