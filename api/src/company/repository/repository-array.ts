@@ -34,13 +34,15 @@ export class CompanyRepositoryArray implements ICompanyRepository {
     return company;
   }
 
-  delete(id: string) {
+  // Delete a company identified by id
+  // Returns the number of remaining companies
+  delete(id: string): number {
     const [index, _] = this.findByIdOrThrow(id);
     this.companies.splice(index, 1);
     return this.companies.length;
   }
 
-  findById(id: string): Company {
+  findById(id: string): Company | undefined {
     return this.companies.find((company) => company.id === id);
   }
 
