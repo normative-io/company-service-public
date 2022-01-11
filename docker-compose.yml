@@ -13,8 +13,6 @@ services:
       - 9229:9229
     networks:
       - nestjs-network
-    volumes:
-      - ./api:/usr/src/app
     restart: unless-stopped
     links:
       - scraper_dev
@@ -30,8 +28,6 @@ services:
       - 9230:9230
     networks:
       - nestjs-network
-    volumes:
-      - ./scraper-service:/usr/src/app
     restart: unless-stopped
 
 # TODO: Add prod services.
