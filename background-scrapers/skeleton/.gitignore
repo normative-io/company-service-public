@@ -1,0 +1,5 @@
+# Python virtual environment created from "make venv"
+.python-version
+
+# Generated company service OpenAPI client
+src/company_service_client
