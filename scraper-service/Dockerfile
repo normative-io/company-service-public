@@ -1,5 +1,8 @@
 FROM node:16.13.1-stretch-slim AS development
 
+RUN DEBIAN_FRONTEND=noninteractive apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y sqlite3
+
 WORKDIR /usr/src/app
 
 COPY package*.json ./
