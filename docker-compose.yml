@@ -22,9 +22,8 @@ services:
     container_name: scraper_dev
     image: scraper-dev:1.0.0
     build:
-      context: .
+      context: scraper-service
       target: development
-      dockerfile: ./scraper-service/Dockerfile
     command: npm run start:debug
     ports:
       - 3001:3001
@@ -33,7 +32,6 @@ services:
       - nestjs-network
     volumes:
       - ./scraper-service:/usr/src/app
-      - /usr/src/app/node_modules
     restart: unless-stopped
 
 # TODO: Add prod services.

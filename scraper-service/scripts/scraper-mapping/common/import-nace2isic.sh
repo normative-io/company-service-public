@@ -4,11 +4,12 @@ set -e
 
 cd "$(dirname "$0")"
 
-outname="../../../../scraper-service/src/scraper/common/isicmapping.json"
+outname="../../../src/scraper/common/isicmapping.json"
+mkdir -p "$(dirname $outname)"
 
 rm -f isicmapping.db
 sqlite3 isicmapping.db < nace2isic-create.sql
 sqlite3 isicmapping.db < nace2isic-import.sql
 sqlite3 isicmapping.db < nace2isic-adapter.sql > $outname
 rm isicmapping.db
-npx prettier --config=../../../../.prettierrc -w $outname
+npx prettier --config=../../../.prettierrc -w $outname
