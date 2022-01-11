@@ -15,7 +15,6 @@ export interface ICompanyService {
   getById(id: string): Promise<Company | undefined>;
   update(id: string, updateCompanyDto: UpdateCompanyDto): Promise<Company>;
   // Delete a company identified by id
-  // Returns the number of remaining companies
-  delete(id: string): Promise<number>;
+  delete(id: string): Promise<void>;
   find(findCompanyDto: FindCompanyDto): Promise<CompanyFoundInServiceDto[]>;
 }

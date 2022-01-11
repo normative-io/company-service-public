@@ -76,9 +76,8 @@ export class CompanyService implements ICompanyService {
     return company;
   }
 
-  // Returns the number of remaining companies
-  async delete(id: string): Promise<number> {
-    return this.companyRepo.delete(id);
+  async delete(id: string): Promise<void> {
+    this.companyRepo.delete(id);
   }
 
   async find(findCompanyDto: FindCompanyDto): Promise<CompanyFoundInServiceDto[]> {

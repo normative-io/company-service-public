@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Inject, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Inject, Param, Patch, Post } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { COMPANY_SERVICE, ICompanyService } from './company-service.interface';
 import { CreateCompanyDto } from './dto/create-company.dto';
@@ -52,9 +52,9 @@ export class CompanyController {
 
   @Delete('v1/delete/:id')
   @ApiOperation({ summary: 'Delete a company given its id.' })
-  @ApiResponse({ description: 'The number of remaining companies.' })
+  @HttpCode(204)
   async delete(@Param('id') id: string) {
-    return { nr_companies: await this.companyService.delete(id) };
+    await this.companyService.delete(id);
   }
 
   @Patch('v1/update/:id')
