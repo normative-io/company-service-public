@@ -16,6 +16,8 @@ services:
     restart: unless-stopped
     links:
       - scraper_dev
+    env_file:
+      - ./api/config/docker_dev.env
   scraper_dev:
     container_name: scraper_dev
     image: scraper-dev:1.0.0
