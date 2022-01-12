@@ -1,7 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { LookupRequest } from '../../../dto/lookup.dto';
 import { CheckResult, LookupResponse, FoundCompany, IScraper } from '../../../dto/scraper.interface';
-import NrRequest from './cvrnr-request.json';
+import * as NrRequest from './cvrnr-request.json';
 import { DKSicMapping } from './repository/dksicmapping.model';
 import { NaceIsicMapping } from '../../common/naceisicmapping.model';
 import { VirkResponse } from './response';
