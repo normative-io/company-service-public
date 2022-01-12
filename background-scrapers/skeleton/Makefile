@@ -46,12 +46,14 @@ clean: clean-venv
 venv: $(VENV_DIR)
 
 run-services:
-	docker compose -f ../../docker-compose.yml up -d api_dev
-	# TODO: ensure that api_dev is healthy before continuing
+	docker compose -f ../../docker-compose.yml up -d api_ready
 
-company-service-client: run-services
-	openapi-python-client generate --url http://127.0.0.1:3000/api/json
-	rm -rf src/company_service_client
-	mv company-service-client/company_service_client src
-	cp company-service-client/README.md src/company_service_client
-	rm -rf company-service-client
+company-service-client:
+	( \
+		$(ACTIVATE) \
+		openapi-python-client generate --url http://127.0.0.1:3000/api/json; \
+		rm -rf src/company_service_client; \
+		mv company-service-client/company_service_client src; \
+		cp company-service-client/README.md src/company_service_client; \
+		rm -rf company-service-client \
+	)
