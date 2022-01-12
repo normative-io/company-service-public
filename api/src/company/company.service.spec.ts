@@ -65,7 +65,9 @@ describe('CompanyService', () => {
     const company1 = await service.add({ companyName: 'Fantastic Company' });
     service.add({ companyName: 'Most fantastic Company' });
 
-    expect(await service.update(company1.id, { companyName: 'Awesome Company', country: 'CH', companyId: '456' })).toEqual({
+    expect(
+      await service.update(company1.id, { companyName: 'Awesome Company', country: 'CH', companyId: '456' }),
+    ).toEqual({
       id: company1.id,
       companyName: 'Awesome Company',
       created: expect.any(Date),
@@ -282,7 +284,10 @@ describe('CompanyService', () => {
     describe('and multiple companies are found by the scraper service', () => {
       beforeEach(() => {
         const httpResponse: AxiosResponse = {
-          data: [{ companyName: 'company found' }, { companyName: 'another company found', country: 'CH', companyId: '456' }],
+          data: [
+            { companyName: 'company found' },
+            { companyName: 'another company found', country: 'CH', companyId: '456' },
+          ],
           status: 200,
           statusText: 'OK',
           headers: {},
