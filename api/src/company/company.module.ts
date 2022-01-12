@@ -21,21 +21,21 @@ import { ConfigModule } from '@nestjs/config';
       useClass: CompanyRepositoryArray,
     },
 
-    makeCounterProvider({ companyName: 'find_inbound_total', help: 'The number of find inbound requests' }),
+    makeCounterProvider({ name: 'find_inbound_total', help: 'The number of find inbound requests' }),
     makeCounterProvider({
-      companyName: 'find_outbound_found_in_repo_total',
+      name: 'find_outbound_found_in_repo_total',
       help: 'The number of find requests that are answered by the repo',
     }),
     makeCounterProvider({
-      companyName: 'find_outbound_found_in_scrapers_total',
+      name: 'find_outbound_found_in_scrapers_total',
       help: 'The number of find requests that are answered by the Scrapers Service',
     }),
     makeCounterProvider({
-      companyName: 'find_outbound_not_found_total',
+      name: 'find_outbound_not_found_total',
       help: 'The number of find requests for which no results are found',
     }),
     makeCounterProvider({
-      companyName: 'find_scrapers_error_total',
+      name: 'find_scrapers_error_total',
       help: 'The number of find requests for which the Scrapers Service throws an error',
     }),
   ],
