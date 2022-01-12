@@ -26,7 +26,7 @@ describe('DenmarkScraper', () => {
     expect(await scraper.toCompanies(request, response)).toEqual([
       {
         confidence: 1.0,
-        name: 'Meta Mind AB',
+        companyName: 'Meta Mind AB',
         isic: '6201',
         orgNr: '37018848',
       },

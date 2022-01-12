@@ -35,7 +35,7 @@ export class FoundCompany {
     // This allows clients to make heuristics if there are multiple candidates found.
     public readonly confidence: number,
     // Name of the company.
-    public readonly name: string,
+    public readonly companyName: string,
     // ISIC rev 4 of the company
     public readonly isic: string,
     // Organization number of the company (Tax ID when applicable)
