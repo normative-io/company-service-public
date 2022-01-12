@@ -3,3 +3,6 @@
 
 # Generated company service OpenAPI client
 src/company_service_client
+
+# pytest
+.pytest_cache
