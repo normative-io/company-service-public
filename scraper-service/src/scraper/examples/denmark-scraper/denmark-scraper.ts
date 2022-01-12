@@ -35,7 +35,7 @@ export class DenmarkScraper implements IScraper {
   }
 
   /*
-   Create a request body with a elastic search quewry to request a company by its CVR number
+   Create a request body with a elastic search query to request a company by its CVR number
    (which is the danish term for a tax id) used as a unique identifier. The CVR number is assumed
    to NOT be prefixed with the `DK` country code prefix.
    */
@@ -131,7 +131,7 @@ export class DenmarkScraper implements IScraper {
   /*
    Filter function for a time series list of properties and remove any property
    which has a end date set for its validity, assuming that the end date is
-   always either in the past of unset.
+   always either in the past or unset.
    */
   private validPeriod(hasPeriod: any): boolean {
     return hasPeriod.periode.gyldigTil === null;

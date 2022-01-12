@@ -63,13 +63,21 @@ export class ScraperRegistry {
   async lookup(req: LookupRequest): Promise<LookupResponse> {
     this.logger.debug(`lookup request: ${JSON.stringify(req, undefined, 2)}`);
     if (!req.companyId && !req.companyName) {
+      this.logger.warn('Bad request: request must contain a companyId or companyName');
       throw new HttpException('Request must contain a companyId or companyName', HttpStatus.BAD_REQUEST);
+    }
+
+    const scrapers = this.applicableScrapers(req);
+    this.logger.debug(`Found ${scrapers.length} applicable scrapers`);
+    if (scrapers.length === 0) {
+      this.logger.warn('No suitable scrapers for the request');
+      throw new HttpException('No suitable scrapers for the request', HttpStatus.NOT_IMPLEMENTED);
     }
 
     // Lookup from each applicable scraper until a value is found.
     // Note: in the future, we may want to execute every
     // applicable scraper and/or run them all in parallel.
-    for (const scraper of this.applicableScrapers(req)) {
+    for (const scraper of scrapers) {
       this.logger.debug(
         `attempting fetch for request ${JSON.stringify(req, undefined, 2)} using scraper: ${scraper.name()}`,
       );
@@ -78,7 +86,8 @@ export class ScraperRegistry {
         return { scraperName: scraper.name(), foundCompanies: res.foundCompanies };
       }
     }
-    throw new HttpException('No suitable scrapers for the request..', HttpStatus.NOT_IMPLEMENTED);
+    this.logger.warn('No match found in any of the scrapers');
+    throw new HttpException('No match found in any of the scrapers', HttpStatus.NOT_IMPLEMENTED);
   }
 
   // Determine the set of scrapers to use.
