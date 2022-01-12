@@ -47,7 +47,7 @@ export class CompanyRepositoryArray implements ICompanyRepository {
   }
 
   findByName(name: string): Company[] {
-    return this.companies.filter((company) => company.name === name);
+    return this.companies.filter((company) => company.companyName === name);
   }
 
   private findByIdOrThrow(id: string): [number, Company] {

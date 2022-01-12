@@ -16,7 +16,7 @@ export class Company {
     description: 'The name of the company',
     example: 'An awesome company',
   })
-  public name: string;
+  public companyName: string;
 
   @ApiProperty({
     description: 'The country code that this company is registered in.',
@@ -38,7 +38,7 @@ export class Company {
 
   constructor(createCompanyDto: CreateCompanyDto) {
     this.id = uuid();
-    this.name = createCompanyDto.companyName;
+    this.companyName = createCompanyDto.companyName;
     this.country = createCompanyDto.country;
     this.companyId = createCompanyDto.companyId;
     const now = new Date();
@@ -47,7 +47,7 @@ export class Company {
 
   update(updateCompanyDto: UpdateCompanyDto) {
     if (updateCompanyDto.companyName) {
-      this.name = updateCompanyDto.companyName;
+      this.companyName = updateCompanyDto.companyName;
     }
     if (updateCompanyDto.country) {
       this.country = updateCompanyDto.country;
