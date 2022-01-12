@@ -39,7 +39,7 @@ describe('CompanyService', () => {
   it('should create a company', async () => {
     expect(await service.add({ companyName: 'Fantastic Company', country: 'CH', companyId: '456' })).toEqual({
       id: expect.any(String),
-      name: 'Fantastic Company',
+      companyName: 'Fantastic Company',
       created: expect.any(Date),
       country: 'CH',
       companyId: '456',
@@ -48,8 +48,8 @@ describe('CompanyService', () => {
 
   it('should create many companies', async () => {
     const companyDtos = [
-      { name: 'Fantastic Company', country: 'CH', companyId: '456' },
-      { name: 'Mediocre Company', country: 'PL', companyId: '789' },
+      { companyName: 'Fantastic Company', country: 'CH', companyId: '456' },
+      { companyName: 'Mediocre Company', country: 'PL', companyId: '789' },
     ];
     const companies = companyDtos.map((dto) => {
       return {
@@ -67,7 +67,7 @@ describe('CompanyService', () => {
 
     expect(await service.update(company1.id, { companyName: 'Awesome Company', country: 'CH', companyId: '456' })).toEqual({
       id: company1.id,
-      name: 'Awesome Company',
+      companyName: 'Awesome Company',
       created: expect.any(Date),
       country: 'CH',
       companyId: '456',
@@ -87,9 +87,9 @@ describe('CompanyService', () => {
     await service.add({ companyName: '3' });
 
     expect(await service.listAll()).toEqual([
-      { id: expect.any(String), name: '1', created: expect.any(Date) },
-      { id: expect.any(String), name: '2', created: expect.any(Date) },
-      { id: expect.any(String), name: '3', created: expect.any(Date) },
+      { id: expect.any(String), companyName: '1', created: expect.any(Date) },
+      { id: expect.any(String), companyName: '2', created: expect.any(Date) },
+      { id: expect.any(String), companyName: '3', created: expect.any(Date) },
     ]);
   });
 
@@ -101,7 +101,7 @@ describe('CompanyService', () => {
 
     expect(await service.getById(company2.id)).toEqual({
       id: company2.id,
-      name: '2',
+      companyName: '2',
       created: expect.any(Date),
     });
   });
@@ -126,17 +126,17 @@ describe('CompanyService', () => {
 
     // Verify that the company is there.
     expect(await service.listAll()).toEqual([
-      { id: expect.any(String), name: '1', created: expect.any(Date) },
-      { id: expect.any(String), name: '2', created: expect.any(Date) },
-      { id: expect.any(String), name: '3', created: expect.any(Date) },
+      { id: expect.any(String), companyName: '1', created: expect.any(Date) },
+      { id: expect.any(String), companyName: '2', created: expect.any(Date) },
+      { id: expect.any(String), companyName: '3', created: expect.any(Date) },
     ]);
 
     await service.delete(company2.id);
 
     // Verify that the company is deleted.
     expect(await service.listAll()).toEqual([
-      { id: expect.any(String), name: '1', created: expect.any(Date) },
-      { id: expect.any(String), name: '3', created: expect.any(Date) },
+      { id: expect.any(String), companyName: '1', created: expect.any(Date) },
+      { id: expect.any(String), companyName: '3', created: expect.any(Date) },
     ]);
   });
 
@@ -157,7 +157,7 @@ describe('CompanyService', () => {
 
     expect(await service.find({ id: company.id })).toEqual([
       {
-        company: { id: company.id, name: '1', created: expect.any(Date) },
+        company: { id: company.id, companyName: '1', created: expect.any(Date) },
         confidence: expect.any(Number),
         foundBy: expect.any(String),
       },
@@ -170,12 +170,12 @@ describe('CompanyService', () => {
 
     expect(await service.find({ companyName: '1' })).toEqual([
       {
-        company: { id: expect.any(String), name: '1', created: expect.any(Date) },
+        company: { id: expect.any(String), companyName: '1', created: expect.any(Date) },
         confidence: expect.any(Number),
         foundBy: expect.any(String),
       },
       {
-        company: { id: expect.any(String), name: '1', created: expect.any(Date) },
+        company: { id: expect.any(String), companyName: '1', created: expect.any(Date) },
         confidence: expect.any(Number),
         foundBy: expect.any(String),
       },
@@ -187,7 +187,7 @@ describe('CompanyService', () => {
 
     expect(await service.find({ id: 'non-existent-id', companyName: '1' })).toEqual([
       {
-        company: { id: expect.any(String), name: '1', created: expect.any(Date) },
+        company: { id: expect.any(String), companyName: '1', created: expect.any(Date) },
         confidence: expect.any(Number),
         foundBy: expect.any(String),
       },
@@ -201,7 +201,7 @@ describe('CompanyService', () => {
 
     expect(await service.find({ id: 'non-existent-id', companyName: '1' })).toEqual([
       {
-        company: { id: expect.any(String), name: '1', created: expect.any(Date) },
+        company: { id: expect.any(String), companyName: '1', created: expect.any(Date) },
         confidence: expect.any(Number),
         foundBy: expect.any(String),
       },
@@ -217,12 +217,12 @@ describe('CompanyService', () => {
     expect(await service.find({ id: company1.id, companyName: '2' })).toEqual([
       // A match by id has higher confidence than the match by name.
       {
-        company: { id: company1.id, name: '1', created: expect.any(Date) },
+        company: { id: company1.id, companyName: '1', created: expect.any(Date) },
         confidence: expect.any(Number),
         foundBy: expect.any(String),
       },
       {
-        company: { id: expect.any(String), name: '2', created: expect.any(Date) },
+        company: { id: expect.any(String), companyName: '2', created: expect.any(Date) },
         confidence: expect.any(Number),
         foundBy: expect.any(String),
       },
@@ -234,7 +234,7 @@ describe('CompanyService', () => {
 
     expect(await service.find({ id: company.id, companyName: '1' })).toEqual([
       {
-        company: { id: expect.any(String), name: '1', created: expect.any(Date) },
+        company: { id: expect.any(String), companyName: '1', created: expect.any(Date) },
         confidence: expect.any(Number),
         foundBy: expect.any(String),
       },
@@ -245,7 +245,7 @@ describe('CompanyService', () => {
     describe('and the company is found by the scraper service', () => {
       beforeEach(() => {
         const httpResponse: AxiosResponse = {
-          data: [{ name: 'company found', country: 'CH', companyId: '456', confidence: 1, scraperName: 'CH' }],
+          data: [{ companyName: 'company found', country: 'CH', companyId: '456', confidence: 1, scraperName: 'CH' }],
           status: 200,
           statusText: 'OK',
           headers: {},
@@ -259,7 +259,7 @@ describe('CompanyService', () => {
           {
             company: {
               id: expect.any(String),
-              name: 'company found',
+              companyName: 'company found',
               created: expect.any(Date),
               country: 'CH',
               companyId: '456',
@@ -271,7 +271,7 @@ describe('CompanyService', () => {
 
         expect(await service.getById(found[0].company.id)).toEqual({
           id: expect.any(String),
-          name: 'company found',
+          companyName: 'company found',
           created: expect.any(Date),
           country: 'CH',
           companyId: '456',
@@ -282,7 +282,7 @@ describe('CompanyService', () => {
     describe('and multiple companies are found by the scraper service', () => {
       beforeEach(() => {
         const httpResponse: AxiosResponse = {
-          data: [{ name: 'company found' }, { name: 'another company found', country: 'CH', companyId: '456' }],
+          data: [{ companyName: 'company found' }, { companyName: 'another company found', country: 'CH', companyId: '456' }],
           status: 200,
           statusText: 'OK',
           headers: {},
@@ -293,11 +293,11 @@ describe('CompanyService', () => {
       it('should find and create all companies', async () => {
         const found = await service.find({ companyName: 'irrelevant' });
         expect(found).toEqual([
-          { company: { id: expect.any(String), name: 'company found', created: expect.any(Date) } },
+          { company: { id: expect.any(String), companyName: 'company found', created: expect.any(Date) } },
           {
             company: {
               id: expect.any(String),
-              name: 'another company found',
+              companyName: 'another company found',
               created: expect.any(Date),
               country: 'CH',
               companyId: '456',
@@ -306,12 +306,12 @@ describe('CompanyService', () => {
         ]);
         expect(await service.getById(found[0].company.id)).toEqual({
           id: expect.any(String),
-          name: 'company found',
+          companyName: 'company found',
           created: expect.any(Date),
         });
         expect(await service.getById(found[1].company.id)).toEqual({
           id: expect.any(String),
-          name: 'another company found',
+          companyName: 'another company found',
           created: expect.any(Date),
           country: 'CH',
           companyId: '456',
@@ -322,11 +322,11 @@ describe('CompanyService', () => {
         beforeEach(() => {
           const httpResponse: AxiosResponse = {
             data: [
-              { name: '1', confidence: 0.5 },
-              { name: '2', confidence: 0.7 },
-              { name: '3', confidence: 0.9 },
-              { name: '4', confidence: 0.6 },
-              { name: '5' },
+              { companyName: '1', confidence: 0.5 },
+              { companyName: '2', confidence: 0.7 },
+              { companyName: '3', confidence: 0.9 },
+              { companyName: '4', confidence: 0.6 },
+              { companyName: '5' },
             ],
             status: 200,
             statusText: 'OK',
@@ -338,12 +338,12 @@ describe('CompanyService', () => {
         it('results should be sorted by confidence in descending order', async () => {
           const found = await service.find({ companyName: 'irrelevant' });
           expect(found).toEqual([
-            { company: { name: '3', id: expect.any(String), created: expect.any(Date) }, confidence: 0.9 },
-            { company: { name: '2', id: expect.any(String), created: expect.any(Date) }, confidence: 0.7 },
-            { company: { name: '4', id: expect.any(String), created: expect.any(Date) }, confidence: 0.6 },
-            { company: { name: '1', id: expect.any(String), created: expect.any(Date) }, confidence: 0.5 },
+            { company: { companyName: '3', id: expect.any(String), created: expect.any(Date) }, confidence: 0.9 },
+            { company: { companyName: '2', id: expect.any(String), created: expect.any(Date) }, confidence: 0.7 },
+            { company: { companyName: '4', id: expect.any(String), created: expect.any(Date) }, confidence: 0.6 },
+            { company: { companyName: '1', id: expect.any(String), created: expect.any(Date) }, confidence: 0.5 },
             // Items without confidences come last.
-            { company: { name: '5', id: expect.any(String), created: expect.any(Date) } },
+            { company: { companyName: '5', id: expect.any(String), created: expect.any(Date) } },
           ]);
         });
       });
