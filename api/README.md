@@ -43,7 +43,7 @@ running, and this dependency is reflected in such file.
 ```bash
 # development. Note scraper_dev starts too.
 $ cp config/docker_dev.env .env
-$ (cd .. && docker-compose up api_dev)
+$ docker compose -f ../docker-compose.yml up api_dev
 
 # production mode: TODO
 ```
