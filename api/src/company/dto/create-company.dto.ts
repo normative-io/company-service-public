@@ -5,7 +5,7 @@ export class CreateCompanyDto {
     description: 'The name of the company',
     example: 'An awesome company',
   })
-  readonly name?: string;
+  readonly companyName?: string;
 
   @ApiProperty({
     description: 'The country code that this company is registered in.',

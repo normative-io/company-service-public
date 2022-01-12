@@ -37,7 +37,7 @@ describe('CompanyService', () => {
   });
 
   it('should create a company', async () => {
-    expect(await service.add({ name: 'Fantastic Company', country: 'CH', companyId: '456' })).toEqual({
+    expect(await service.add({ companyName: 'Fantastic Company', country: 'CH', companyId: '456' })).toEqual({
       id: expect.any(String),
       name: 'Fantastic Company',
       created: expect.any(Date),
@@ -62,10 +62,10 @@ describe('CompanyService', () => {
   });
 
   it('should update a company', async () => {
-    const company1 = await service.add({ name: 'Fantastic Company' });
-    service.add({ name: 'Most fantastic Company' });
+    const company1 = await service.add({ companyName: 'Fantastic Company' });
+    service.add({ companyName: 'Most fantastic Company' });
 
-    expect(await service.update(company1.id, { name: 'Awesome Company', country: 'CH', companyId: '456' })).toEqual({
+    expect(await service.update(company1.id, { companyName: 'Awesome Company', country: 'CH', companyId: '456' })).toEqual({
       id: company1.id,
       name: 'Awesome Company',
       created: expect.any(Date),
@@ -76,15 +76,15 @@ describe('CompanyService', () => {
 
   it('cannot update a non-existent company', async () => {
     expect(async () => {
-      await service.update('non-existent-id', { name: 'Fantastic Company' });
+      await service.update('non-existent-id', { companyName: 'Fantastic Company' });
     }).rejects.toThrowError(NotFoundException);
   });
 
   it('should list all companies', async () => {
     // We first need to create a few companies.
-    await service.add({ name: '1' });
-    await service.add({ name: '2' });
-    await service.add({ name: '3' });
+    await service.add({ companyName: '1' });
+    await service.add({ companyName: '2' });
+    await service.add({ companyName: '3' });
 
     expect(await service.listAll()).toEqual([
       { id: expect.any(String), name: '1', created: expect.any(Date) },
@@ -95,9 +95,9 @@ describe('CompanyService', () => {
 
   it('should get a company by id', async () => {
     // We first need to create a few companies.
-    await service.add({ name: '1' });
-    const company2 = await service.add({ name: '2' });
-    await service.add({ name: '3' });
+    await service.add({ companyName: '1' });
+    const company2 = await service.add({ companyName: '2' });
+    await service.add({ companyName: '3' });
 
     expect(await service.getById(company2.id)).toEqual({
       id: company2.id,
@@ -120,9 +120,9 @@ describe('CompanyService', () => {
 
   it('should delete a company by id', async () => {
     // We first need to create a few companies.
-    await service.add({ name: '1' });
-    const company2 = await service.add({ name: '2' });
-    await service.add({ name: '3' });
+    await service.add({ companyName: '1' });
+    const company2 = await service.add({ companyName: '2' });
+    await service.add({ companyName: '3' });
 
     // Verify that the company is there.
     expect(await service.listAll()).toEqual([
@@ -153,7 +153,7 @@ describe('CompanyService', () => {
   });
 
   it('should find a company by id', async () => {
-    const company = await service.add({ name: '1' });
+    const company = await service.add({ companyName: '1' });
 
     expect(await service.find({ id: company.id })).toEqual([
       {
@@ -165,10 +165,10 @@ describe('CompanyService', () => {
   });
 
   it('should find all companies that match a name', async () => {
-    await service.add({ name: '1' });
-    await service.add({ name: '1' });
+    await service.add({ companyName: '1' });
+    await service.add({ companyName: '1' });
 
-    expect(await service.find({ name: '1' })).toEqual([
+    expect(await service.find({ companyName: '1' })).toEqual([
       {
         company: { id: expect.any(String), name: '1', created: expect.any(Date) },
         confidence: expect.any(Number),
@@ -183,9 +183,9 @@ describe('CompanyService', () => {
   });
 
   it('should find a company if one individual field matches', async () => {
-    await service.add({ name: '1' });
+    await service.add({ companyName: '1' });
 
-    expect(await service.find({ id: 'non-existent-id', name: '1' })).toEqual([
+    expect(await service.find({ id: 'non-existent-id', companyName: '1' })).toEqual([
       {
         company: { id: expect.any(String), name: '1', created: expect.any(Date) },
         confidence: expect.any(Number),
@@ -197,9 +197,9 @@ describe('CompanyService', () => {
   it('should not contact the scaper service if there are matches in the repo', async () => {
     jest.clearAllMocks();
 
-    await service.add({ name: '1' });
+    await service.add({ companyName: '1' });
 
-    expect(await service.find({ id: 'non-existent-id', name: '1' })).toEqual([
+    expect(await service.find({ id: 'non-existent-id', companyName: '1' })).toEqual([
       {
         company: { id: expect.any(String), name: '1', created: expect.any(Date) },
         confidence: expect.any(Number),
@@ -211,10 +211,10 @@ describe('CompanyService', () => {
   });
 
   it('should find companies that match individual fields, ordered by confidence', async () => {
-    const company1 = await service.add({ name: '1' });
-    await service.add({ name: '2' });
+    const company1 = await service.add({ companyName: '1' });
+    await service.add({ companyName: '2' });
 
-    expect(await service.find({ id: company1.id, name: '2' })).toEqual([
+    expect(await service.find({ id: company1.id, companyName: '2' })).toEqual([
       // A match by id has higher confidence than the match by name.
       {
         company: { id: company1.id, name: '1', created: expect.any(Date) },
@@ -230,9 +230,9 @@ describe('CompanyService', () => {
   });
 
   it('should find and deduplicate companies that match multiple individual fields', async () => {
-    const company = await service.add({ name: '1' });
+    const company = await service.add({ companyName: '1' });
 
-    expect(await service.find({ id: company.id, name: '1' })).toEqual([
+    expect(await service.find({ id: company.id, companyName: '1' })).toEqual([
       {
         company: { id: expect.any(String), name: '1', created: expect.any(Date) },
         confidence: expect.any(Number),
@@ -254,7 +254,7 @@ describe('CompanyService', () => {
         jest.spyOn(httpService, 'post').mockImplementation(() => of(httpResponse));
       });
       it('should create and find a company', async () => {
-        const found = await service.find({ name: 'non-existent-name' });
+        const found = await service.find({ companyName: 'non-existent-name' });
         expect(found).toEqual([
           {
             company: {
@@ -291,7 +291,7 @@ describe('CompanyService', () => {
         jest.spyOn(httpService, 'post').mockImplementation(() => of(httpResponse));
       });
       it('should find and create all companies', async () => {
-        const found = await service.find({ name: 'irrelevant' });
+        const found = await service.find({ companyName: 'irrelevant' });
         expect(found).toEqual([
           { company: { id: expect.any(String), name: 'company found', created: expect.any(Date) } },
           {
@@ -336,7 +336,7 @@ describe('CompanyService', () => {
           jest.spyOn(httpService, 'post').mockImplementation(() => of(httpResponse));
         });
         it('results should be sorted by confidence in descending order', async () => {
-          const found = await service.find({ name: 'irrelevant' });
+          const found = await service.find({ companyName: 'irrelevant' });
           expect(found).toEqual([
             { company: { name: '3', id: expect.any(String), created: expect.any(Date) }, confidence: 0.9 },
             { company: { name: '2', id: expect.any(String), created: expect.any(Date) }, confidence: 0.7 },
@@ -361,15 +361,15 @@ describe('CompanyService', () => {
         jest.spyOn(httpService, 'post').mockImplementation(() => of(httpResponse));
       });
       it('should not find a company', async () => {
-        expect(await service.find({ name: 'non-existent-name' })).toEqual([]);
+        expect(await service.find({ companyName: 'non-existent-name' })).toEqual([]);
       });
     });
 
     it('should not contact the scraper service if we did not ask for any field', async () => {
       jest.clearAllMocks();
-      await service.add({ name: '1' });
-      await service.add({ name: '2' });
-      await service.add({ name: '3' });
+      await service.add({ companyName: '1' });
+      await service.add({ companyName: '2' });
+      await service.add({ companyName: '3' });
 
       expect(await service.find({})).toEqual([]);
       expect(httpService.post).not.toHaveBeenCalled();
