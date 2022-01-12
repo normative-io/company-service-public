@@ -32,7 +32,7 @@ Note that the `docker-compose` file is in the parent folder.
 
 ```bash
 # development
-$ (cd .. && docker-compose up scraper_dev)
+$ docker compose -f ../docker-compose.yml up scraper_dev
 
 # production mode: TODO
 ```
