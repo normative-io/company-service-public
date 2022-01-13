@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  api_dev:
+    healthcheck:
+      test: curl --fail http://localhost:3000/api/json || exit 1
+      interval: 5s
+      retries: 30
+      start_period: 5s
+      timeout: 5s
+  api_ready:
+    image: ubuntu
+    command: /bin/true
+    depends_on:
+      api_dev:
+        condition: service_healthy

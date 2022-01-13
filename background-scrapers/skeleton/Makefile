@@ -23,7 +23,7 @@ dep: venv requirements.txt
 		pip install -r requirements.txt \
 	)
 
-run:
+run: company-service-client
 	( \
 		$(ACTIVATE) \
 		python3 src/scrape.py;\
@@ -46,9 +46,16 @@ clean: clean-venv
 venv: $(VENV_DIR)
 
 run-services:
-	docker compose -f ../../docker-compose.yml up -d api_ready
+	docker compose -f ../../docker-compose.yml \
+		-f docker/docker-compose.generate-client.yml \
+		up \
+		--abort-on-container-exit \
+		--exit-code-from api_ready api_ready
 
-company-service-client:
+company-service-client: src/company_service_client/README.md
+
+src/company_service_client/README.md:
+	$(MAKE) run-services
 	( \
 		$(ACTIVATE) \
 		openapi-python-client generate --url http://127.0.0.1:3000/api/json; \

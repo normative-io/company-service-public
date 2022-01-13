@@ -5,12 +5,12 @@ the company-service database with companies.
 
 ## Prerequisites
 
-As a minimum, you should have gmake, git, and python3 installed.
+As a minimum, you should have make, git, and python3 installed.
 
 After checkout, install prerequisites:
 
 ```
-gmake prerequisites
+make prerequisites
 ```
 
 ## Install dependencies
@@ -18,7 +18,7 @@ gmake prerequisites
 To install dependencies run:
 
 ```
-gmake dep
+make dep
 ```
 
 ## Running
@@ -26,5 +26,5 @@ gmake dep
 To run the project, run:
 
 ```
-gmake run
+make run
 ```
