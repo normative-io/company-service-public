@@ -15,8 +15,8 @@ client = Client(
 # TODO: Insert scraping code here, and use the call outlined below to insert companies
 company_controller_add_many.sync_detailed(client=client, json_body=
   [
-    CreateCompanyDto('some company', 'DK', '121212'),
-    CreateCompanyDto('some other company', 'DK', '454545')
+    CreateCompanyDto(company_name='some company', country='DK', company_id='121212'),
+    CreateCompanyDto(company_name='some other company', country='DK', company_id='454545')
   ]
 )
 
