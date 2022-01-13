@@ -121,9 +121,9 @@ export class CompanyService implements ICompanyService {
         });
       }
     }
-    if (findCompanyDto.name) {
+    if (findCompanyDto.companyName) {
       results.push(
-        ...this.companyRepo.findByName(findCompanyDto.name).map(function (company) {
+        ...this.companyRepo.findByName(findCompanyDto.companyName).map(function (company) {
           return {
             confidence: CompanyService.confidenceByName,
             foundBy: 'Repository by name',
