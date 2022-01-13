@@ -8,6 +8,7 @@ This repo contains several loosely-coupled microservices. To develop on a partic
 
 - `api/` - the entrypoint for external clients.
 - `scraper-service/` - subsystem that provides on-demand scraping of company metadata.
+- `batch-scrapers/` - batch scrapers which will be run peridically to pre-fill company-service with company metadata.
 
 ## Building and running
 
