@@ -6,6 +6,7 @@ export class FindCompanyDto extends CreateCompanyDto {
     type: String,
     description: 'The identifier of the company',
     example: '123456',
+    required: false,
   })
   readonly id?: string;
 }

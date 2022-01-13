@@ -7,6 +7,7 @@ class CompanyFoundDto {
     type: String,
     description: 'Information about how this company was found, for debugging',
     example: 'Repository',
+    required: false,
   })
   readonly foundBy?: string;
 
@@ -14,6 +15,7 @@ class CompanyFoundDto {
     type: Number,
     description: 'A percentage value (as a value between 0.0 and 1.0) of how confident this data matches the request.',
     example: 0.5,
+    required: false,
   })
   readonly confidence?: number;
 }
@@ -28,6 +30,7 @@ export class CompanyFoundInScraperDto extends CompanyFoundDto {
   @ApiProperty({
     type: String,
     description: 'The name of the scraper that found the company',
+    required: false,
   })
   readonly scraperName?: string;
 }
