@@ -60,7 +60,7 @@ export class ScraperRegistry {
   }
 
   // TODO: change return data type to include metadata about which scrapers were used.
-  async lookup(req: LookupRequest): Promise<LookupResponse> {
+  async lookup(req: LookupRequest): Promise<LookupResponse[]> {
     this.logger.debug(`lookup request: ${JSON.stringify(req, undefined, 2)}`);
     if (!req.companyId && !req.companyName) {
       this.logger.warn('Bad request: request must contain a companyId or companyName');
@@ -83,7 +83,7 @@ export class ScraperRegistry {
       );
       const res = await scraper.lookup(req);
       if (res.foundCompanies.length > 0) {
-        return { scraperName: scraper.name(), foundCompanies: res.foundCompanies };
+        return [{ scraperName: scraper.name(), foundCompanies: res.foundCompanies }];
       }
     }
     this.logger.warn('No match found in any of the scrapers');

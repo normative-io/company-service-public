@@ -31,6 +31,12 @@ export class Company {
   public companyId?: string;
 
   @ApiProperty({
+    description: 'The International Standard Industrial Classification (ISIC) for the company',
+    example: '123',
+  })
+  public isic?: string;
+
+  @ApiProperty({
     type: Date,
     description: 'The date the company was added to the service. Defaults to the current date',
   })
@@ -41,6 +47,7 @@ export class Company {
     this.companyName = createCompanyDto.companyName;
     this.country = createCompanyDto.country;
     this.companyId = createCompanyDto.companyId;
+    this.isic = createCompanyDto.isic;
     const now = new Date();
     this.created = now;
   }
@@ -54,6 +61,9 @@ export class Company {
     }
     if (updateCompanyDto.companyId) {
       this.companyId = updateCompanyDto.companyId;
+    }
+    if (updateCompanyDto.isic) {
+      this.isic = updateCompanyDto.isic;
     }
   }
 }

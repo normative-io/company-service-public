@@ -158,13 +158,17 @@ export class CompanyService implements ICompanyService {
       );
       this.logger.verbose(`scraper lookup got response: ${JSON.stringify(response.data, undefined, 2)}`);
 
-      for (const dto of response.data) {
-        const company = await this.add(dto);
-        results.push({
-          company: company,
-          confidence: dto.confidence,
-          foundBy: dto.scraperName ? `Scraper ${dto.scraperName}` : undefined,
-        });
+      for (const scraperResponse of response.data) {
+        for (const dto of scraperResponse.foundCompanies) {
+          this.logger.debug(`Processing result: ${JSON.stringify(dto, undefined, 2)}`);
+          const company = await this.add(dto);
+          this.logger.debug(`Added company: ${JSON.stringify(company, undefined, 2)}`);
+          results.push({
+            company: company,
+            confidence: dto.confidence,
+            foundBy: scraperResponse.scraperName ? `Scraper ${scraperResponse.scraperName}` : undefined,
+          });
+        }
       }
     } catch (e) {
       this.logger.error(`Could not get companies from ScraperService: ${e}`);

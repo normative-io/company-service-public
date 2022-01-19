@@ -7,6 +7,7 @@ import { NaceIsicMapping } from '../../common/naceisicmapping.model';
 import { VirkResponse } from './response';
 import { DKSicMappingRepository } from './repository/dksicmapping.repository';
 import { NaceIsicMappingRepository } from '../../common/naceisicmapping.repository';
+import fetch from 'node-fetch';
 
 const URI = 'http://distribution.virk.dk/cvr-permanent/virksomhed/_search';
 
@@ -16,13 +17,14 @@ export class DenmarkScraper implements IScraper {
   private password: string = process.env.DK_VIRK_PASSWORD;
   private dkSicMapping = new DKSicMappingRepository();
   private naceIsicMapping = new NaceIsicMappingRepository();
+  private countryCode = 'DK';
 
   name() {
     return 'denmark-scraper';
   }
 
   check(req: LookupRequest): CheckResult {
-    if (req.country === 'DK') {
+    if (req.country === this.countryCode) {
       return { isApplicable: true, priority: 10 };
     }
     return { isApplicable: false };
@@ -50,10 +52,14 @@ export class DenmarkScraper implements IScraper {
    */
   private async fetchRequest(request: LookupRequest): Promise<FoundCompany[]> {
     const auth = Buffer.from(`${this.username}:${this.password}`).toString('base64');
+    if (!request.companyId) {
+      this.logger.warn('Got request without companyId; the fetch operation might fail');
+    }
     const requestBody = this.requestWithCVRNr(request.companyId);
     this.logger.verbose(`Request body: ${requestBody}`);
 
     this.logger.debug(`Authorization: Basic ${auth}`);
+    let text;
     try {
       const response = await fetch(URI, {
         method: 'post',
@@ -63,13 +69,14 @@ export class DenmarkScraper implements IScraper {
           'Content-Type': 'application/json',
         },
       });
-      const text = await response.text();
+      text = await response.text();
       this.logger.debug(`Fetch response length: ${text.length}`);
       const responseBody = JSON.parse(text) as VirkResponse;
       this.logger.debug('Fetch response succesfully parsed');
       return this.toCompanies(request, responseBody);
     } catch (e) {
       this.logger.error(`Error fetching response: ${e}`);
+      this.logger.debug(`Response text: ${text}`);
       return [];
     }
   }
@@ -81,6 +88,12 @@ export class DenmarkScraper implements IScraper {
    */
   async toCompanies(request: LookupRequest, response: VirkResponse): Promise<FoundCompany[]> {
     const companies: FoundCompany[] = [];
+    if (!response.hits || !response.hits.hits) {
+      this.logger.error(
+        `Unexpected format in response: expected 'hits.hits' item but got: ${JSON.stringify(response, undefined, 2)}`,
+      );
+      return companies;
+    }
     for (const hit of response.hits.hits) {
       const names = hit._source.Vrvirksomhed.navne.filter(this.validPeriod).map((name) => name.navn);
       this.logger.debug(`Found names: ${names}`);
@@ -117,10 +130,10 @@ export class DenmarkScraper implements IScraper {
           continue;
         }
 
-        const company = new FoundCompany(1.0, name, isicV4, taxID);
+        const company = new FoundCompany(1.0, name, isicV4, this.countryCode, taxID);
 
         companies.push(company);
-        this.logger.debug(`Added ${JSON.stringify(company)} to list of companies`);
+        this.logger.debug(`Added ${JSON.stringify(company)} to list of companies to return`);
       } catch (error) {
         this.logger.error(`Error fetching isic: ${error}`);
       }
