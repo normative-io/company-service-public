@@ -12,4 +12,5 @@ export interface ICompanyRepository {
   delete(id: string);
   findById(id: string): Company | undefined;
   findByName(name: string): Company[];
+  findByCompanyIdAndCountry(companyId: string, country: string): Company | undefined;
 }
