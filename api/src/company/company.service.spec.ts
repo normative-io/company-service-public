@@ -166,6 +166,25 @@ describe('CompanyService', () => {
     ]);
   });
 
+  it('should find a company by company id and country', async () => {
+    await service.add({ companyName: '1', companyId: '123', country: 'CH' });
+
+    expect(await service.find({ companyId: '123', country: 'CH' })).toEqual([
+      {
+        company: {
+          id: expect.any(String),
+          companyName: '1',
+          companyId: '123',
+          country: 'CH',
+          created: expect.any(Date),
+        },
+
+        confidence: expect.any(Number),
+        foundBy: expect.any(String),
+      },
+    ]);
+  });
+
   it('should find all companies that match a name', async () => {
     await service.add({ companyName: '1' });
     await service.add({ companyName: '1' });
@@ -213,18 +232,32 @@ describe('CompanyService', () => {
   });
 
   it('should find companies that match individual fields, ordered by confidence', async () => {
-    const company1 = await service.add({ companyName: '1' });
-    await service.add({ companyName: '2' });
+    const company1 = await service.add({ companyName: 'to-find-by-id' });
+    await service.add({ companyName: 'to-find-by-name' });
+    await service.add({ companyName: 'to-find-by-company-id-and-country', companyId: '123', country: 'CH' });
 
-    expect(await service.find({ id: company1.id, companyName: '2' })).toEqual([
-      // A match by id has higher confidence than the match by name.
+    expect(
+      await service.find({ id: company1.id, companyId: '123', country: 'CH', companyName: 'to-find-by-name' }),
+    ).toEqual([
+      // The ranking of confidences are: (1) match by id, (2) match by companyId and country, and (3) match by name.
       {
-        company: { id: company1.id, companyName: '1', created: expect.any(Date) },
+        company: { id: company1.id, companyName: 'to-find-by-id', created: expect.any(Date) },
         confidence: expect.any(Number),
         foundBy: expect.any(String),
       },
       {
-        company: { id: expect.any(String), companyName: '2', created: expect.any(Date) },
+        company: {
+          id: expect.any(String),
+          companyName: 'to-find-by-company-id-and-country',
+          companyId: '123',
+          country: 'CH',
+          created: expect.any(Date),
+        },
+        confidence: expect.any(Number),
+        foundBy: expect.any(String),
+      },
+      {
+        company: { id: expect.any(String), companyName: 'to-find-by-name', created: expect.any(Date) },
         confidence: expect.any(Number),
         foundBy: expect.any(String),
       },
@@ -232,11 +265,17 @@ describe('CompanyService', () => {
   });
 
   it('should find and deduplicate companies that match multiple individual fields', async () => {
-    const company = await service.add({ companyName: '1' });
+    const company = await service.add({ companyName: '1', companyId: '123', country: 'CH' });
 
-    expect(await service.find({ id: company.id, companyName: '1' })).toEqual([
+    expect(await service.find({ id: company.id, companyName: '1', companyId: '123', country: 'CH' })).toEqual([
       {
-        company: { id: expect.any(String), companyName: '1', created: expect.any(Date) },
+        company: {
+          id: expect.any(String),
+          companyName: '1',
+          companyId: '123',
+          country: 'CH',
+          created: expect.any(Date),
+        },
         confidence: expect.any(Number),
         foundBy: expect.any(String),
       },

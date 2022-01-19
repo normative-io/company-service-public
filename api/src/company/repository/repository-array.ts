@@ -50,6 +50,10 @@ export class CompanyRepositoryArray implements ICompanyRepository {
     return this.companies.filter((company) => company.companyName === name);
   }
 
+  findByCompanyIdAndCountry(companyId: string, country: string): Company | undefined {
+    return this.companies.find((company) => company.companyId === companyId && company.country === country);
+  }
+
   private findByIdOrThrow(id: string): [number, Company] {
     if (!id) {
       throw new UnprocessableEntityException('An id must be specified');

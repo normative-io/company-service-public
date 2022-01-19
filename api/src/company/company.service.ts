@@ -23,7 +23,8 @@ export class CompanyService implements ICompanyService {
 
   // These confidence values have been chosen intuitively.
   static readonly confidenceById = 1;
-  static readonly confidenceByName = 0.9;
+  static readonly confidenceByCompanyIdAndCountry = 0.9;
+  static readonly confidenceByName = 0.7;
 
   private scraperServiceAddress;
 
@@ -117,6 +118,16 @@ export class CompanyService implements ICompanyService {
         results.push({
           confidence: CompanyService.confidenceById,
           foundBy: 'Repository by id',
+          company: company,
+        });
+      }
+    }
+    if (findCompanyDto.companyId && findCompanyDto.country) {
+      const company = this.companyRepo.findByCompanyIdAndCountry(findCompanyDto.companyId, findCompanyDto.country);
+      if (company) {
+        results.push({
+          confidence: CompanyService.confidenceByCompanyIdAndCountry,
+          foundBy: 'Repository by companyId and country',
           company: company,
         });
       }
