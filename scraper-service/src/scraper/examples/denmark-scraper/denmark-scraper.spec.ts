@@ -28,7 +28,8 @@ describe('DenmarkScraper', () => {
         confidence: 1.0,
         companyName: 'Meta Mind AB',
         isic: '6201',
-        orgNr: '37018848',
+        companyId: '37018848',
+        country: 'DK',
       },
     ]);
   });

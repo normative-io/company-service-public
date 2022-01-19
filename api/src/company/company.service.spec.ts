@@ -247,7 +247,12 @@ describe('CompanyService', () => {
     describe('and the company is found by the scraper service', () => {
       beforeEach(() => {
         const httpResponse: AxiosResponse = {
-          data: [{ companyName: 'company found', country: 'CH', companyId: '456', confidence: 1, scraperName: 'CH' }],
+          data: [
+            {
+              foundCompanies: [{ companyName: 'company found', country: 'CH', companyId: '456', confidence: 1 }],
+              scraperName: 'CH',
+            },
+          ],
           status: 200,
           statusText: 'OK',
           headers: {},
@@ -285,8 +290,12 @@ describe('CompanyService', () => {
       beforeEach(() => {
         const httpResponse: AxiosResponse = {
           data: [
-            { companyName: 'company found' },
-            { companyName: 'another company found', country: 'CH', companyId: '456' },
+            {
+              foundCompanies: [
+                { companyName: 'company found' },
+                { companyName: 'another company found', country: 'CH', companyId: '456' },
+              ],
+            },
           ],
           status: 200,
           statusText: 'OK',
@@ -298,7 +307,13 @@ describe('CompanyService', () => {
       it('should find and create all companies', async () => {
         const found = await service.find({ companyName: 'irrelevant' });
         expect(found).toEqual([
-          { company: { id: expect.any(String), companyName: 'company found', created: expect.any(Date) } },
+          {
+            company: {
+              id: expect.any(String),
+              companyName: 'company found',
+              created: expect.any(Date),
+            },
+          },
           {
             company: {
               id: expect.any(String),
@@ -327,11 +342,15 @@ describe('CompanyService', () => {
         beforeEach(() => {
           const httpResponse: AxiosResponse = {
             data: [
-              { companyName: '1', confidence: 0.5 },
-              { companyName: '2', confidence: 0.7 },
-              { companyName: '3', confidence: 0.9 },
-              { companyName: '4', confidence: 0.6 },
-              { companyName: '5' },
+              {
+                foundCompanies: [
+                  { companyName: '1', confidence: 0.5 },
+                  { companyName: '2', confidence: 0.7 },
+                  { companyName: '3', confidence: 0.9 },
+                  { companyName: '4', confidence: 0.6 },
+                  { companyName: '5' },
+                ],
+              },
             ],
             status: 200,
             statusText: 'OK',

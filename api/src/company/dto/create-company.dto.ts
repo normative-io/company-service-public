@@ -21,4 +21,11 @@ export class CreateCompanyDto {
     required: false,
   })
   readonly companyId?: string;
+
+  @ApiProperty({
+    description: 'The International Standard Industrial Classification (ISIC) for the company',
+    example: '123',
+    required: false,
+  })
+  readonly isic?: string;
 }

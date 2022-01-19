@@ -38,8 +38,10 @@ export class FoundCompany {
     public readonly companyName: string,
     // ISIC rev 4 of the company
     public readonly isic: string,
+    // The country of the company
+    public readonly country: string,
     // Organization number of the company (Tax ID when applicable)
-    public readonly orgNr?: string,
+    public readonly companyId?: string,
     // Scraper that found the company.
     public readonly scraperName?: string,
   ) {}
