@@ -9,7 +9,7 @@ export interface ICompanyRepository {
   // Find a company or throw NotFoundException
   getById(id: string): Company;
   // Delete a company identified by id
-  delete(id: string);
+  delete(id: string): void;
   findById(id: string): Company | undefined;
   findByName(name: string): Company[];
   findByCompanyIdAndCountry(companyId: string, country: string): Company | undefined;
