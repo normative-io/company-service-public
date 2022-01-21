@@ -21,9 +21,6 @@ $ npm install
 
 ```bash
 
-# Pre-requisites
-$ cp config/local.env .env
-
 # development
 $ npm run start
 
