@@ -9,7 +9,7 @@ export class Company {
     description: 'The identifier of the company. Defaults to a randomly generated value',
     example: '123456',
   })
-  readonly id: string;
+  public id: string;
 
   @ApiProperty({
     type: String,
@@ -40,7 +40,7 @@ export class Company {
     type: Date,
     description: 'The date the company was added to the service. Defaults to the current date',
   })
-  readonly created: Date;
+  public created: Date;
 
   constructor(createCompanyDto: CreateCompanyDto) {
     this.id = uuid();
