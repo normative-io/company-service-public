@@ -13,12 +13,12 @@ export class CompanyRepositoryArray implements ICompanyRepository {
 
   companies: Company[] = [];
 
-  exists(company: Company): boolean {
+  async exists(company: Company): Promise<boolean> {
     return this.companies.find((c) => c.id === company.id) != null;
   }
 
-  save(company: Company): Company {
-    if (!this.exists(company)) {
+  async save(company: Company): Promise<Company> {
+    if (!(await this.exists(company))) {
       this.companies.push(company);
     } else {
       const [index, _] = this.findByIdOrThrow(company.id);
@@ -27,13 +27,13 @@ export class CompanyRepositoryArray implements ICompanyRepository {
     return company;
   }
 
-  listAll(): Company[] {
+  async listAll(): Promise<Company[]> {
     return [...this.companies];
   }
 
-  getById(id: string): Company {
+  getById(id: string): Promise<Company> {
     const [_, company] = this.findByIdOrThrow(id);
-    return company;
+    return Promise.resolve(company);
   }
 
   // Delete a company identified by id
@@ -42,15 +42,15 @@ export class CompanyRepositoryArray implements ICompanyRepository {
     this.companies.splice(index, 1);
   }
 
-  findById(id: string): Company | undefined {
+  async findById(id: string): Promise<Company | undefined> {
     return this.companies.find((company) => company.id === id);
   }
 
-  findByName(name: string): Company[] {
+  async findByName(name: string): Promise<Company[]> {
     return this.companies.filter((company) => company.companyName === name);
   }
 
-  findByCompanyIdAndCountry(companyId: string, country: string): Company | undefined {
+  async findByCompanyIdAndCountry(companyId: string, country: string): Promise<Company | undefined> {
     return this.companies.find((company) => company.companyId === companyId && company.country === country);
   }
 

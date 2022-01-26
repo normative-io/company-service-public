@@ -52,18 +52,15 @@ export class CompanyService implements ICompanyService {
   }
 
   async listAll(): Promise<Company[]> {
-    const all = this.companyRepo.listAll();
-    return [...all];
+    return await this.companyRepo.listAll();
   }
 
   async add(createCompanyDto: CreateCompanyDto): Promise<Company> {
-    const company = new Company(createCompanyDto);
-    this.companyRepo.save(company);
-    return company;
+    return await this.companyRepo.save(new Company(createCompanyDto));
   }
 
   async addMany(createCompanyDtos: CreateCompanyDto[]): Promise<Company[]> {
-    return createCompanyDtos.map((dto) => new Company(dto)).map((company) => this.companyRepo.save(company));
+    return Promise.all(createCompanyDtos.map(async (dto) => await this.companyRepo.save(new Company(dto))));
   }
 
   async getById(id: string): Promise<Company | undefined> {
@@ -71,19 +68,19 @@ export class CompanyService implements ICompanyService {
   }
 
   async update(id: string, updateCompanyDto: UpdateCompanyDto): Promise<Company> {
-    const company = this.companyRepo.getById(id);
+    const company = await this.companyRepo.getById(id);
     company.update(updateCompanyDto);
-    this.companyRepo.save(company);
+    await this.companyRepo.save(company);
     return company;
   }
 
   async delete(id: string): Promise<void> {
-    this.companyRepo.delete(id);
+    await this.companyRepo.delete(id);
   }
 
   async find(findCompanyDto: FindCompanyDto): Promise<CompanyFoundInServiceDto[]> {
     this.findInboundTotal.inc();
-    const results = this.findInRepo(findCompanyDto);
+    const results = await this.findInRepo(findCompanyDto);
     if (results.length != 0) {
       this.findFoundInRepoTotal.inc();
     } else {
@@ -110,10 +107,10 @@ export class CompanyService implements ICompanyService {
       );
   }
 
-  private findInRepo(findCompanyDto: FindCompanyDto): CompanyFoundInServiceDto[] {
+  private async findInRepo(findCompanyDto: FindCompanyDto): Promise<CompanyFoundInServiceDto[]> {
     const results = [];
     if (findCompanyDto.id) {
-      const company = this.companyRepo.findById(findCompanyDto.id);
+      const company = await this.companyRepo.findById(findCompanyDto.id);
       if (company) {
         results.push({
           confidence: CompanyService.confidenceById,
@@ -123,7 +120,10 @@ export class CompanyService implements ICompanyService {
       }
     }
     if (findCompanyDto.companyId && findCompanyDto.country) {
-      const company = this.companyRepo.findByCompanyIdAndCountry(findCompanyDto.companyId, findCompanyDto.country);
+      const company = await this.companyRepo.findByCompanyIdAndCountry(
+        findCompanyDto.companyId,
+        findCompanyDto.country,
+      );
       if (company) {
         results.push({
           confidence: CompanyService.confidenceByCompanyIdAndCountry,
@@ -134,7 +134,7 @@ export class CompanyService implements ICompanyService {
     }
     if (findCompanyDto.companyName) {
       results.push(
-        ...this.companyRepo.findByName(findCompanyDto.companyName).map(function (company) {
+        ...(await this.companyRepo.findByName(findCompanyDto.companyName)).map(function (company) {
           return {
             confidence: CompanyService.confidenceByName,
             foundBy: 'Repository by name',
