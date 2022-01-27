@@ -22,6 +22,9 @@ jobs:
       - name: run unit tests
         run: npm run test
 
+      - name: set up local mongo
+        run: sudo docker run -d -p 27017:27017 mongo:latest
+
       - name: run e2e tests
         run: npm run test:e2e
 
