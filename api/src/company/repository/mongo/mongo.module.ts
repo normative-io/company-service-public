@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Company, CompanySchema } from './company.schema';
+import { CompanyDbObject, CompanySchema } from './company.schema';
 
-const schemas = [{ name: Company.name, schema: CompanySchema }];
+const schemas = [{ name: CompanyDbObject.name, schema: CompanySchema }];
 
 @Module({
   imports: [
