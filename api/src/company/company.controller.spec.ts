@@ -2,19 +2,30 @@ import { HttpModule } from '@nestjs/axios';
 import { NotFoundException } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import { Connection } from 'mongoose';
 import { COMPANY_SERVICE } from './company-service.interface';
 import { CompanyController } from './company.controller';
 import { CompanyService } from './company.service';
-import { CompanyRepositoryArray } from './repository/repository-array';
+import { MongoRepositoryModule } from './repository/mongo/mongo.module';
+import { MongoRepositoryService } from './repository/mongo/mongo.service';
 import { COMPANY_REPOSITORY } from './repository/repository-interface';
 import { TestMetrics } from './test-utils/company-service-metrics';
+import { getConnectionToken } from '@nestjs/mongoose';
 
 describe('CompanyController', () => {
   let controller: CompanyController;
+  let mongoServer: MongoMemoryServer;
+  let mongoConnection: Connection;
+
+  beforeAll(async () => {
+    mongoServer = await MongoMemoryServer.create();
+    process.env.MONGO_URI = mongoServer.getUri();
+  });
 
   beforeEach(async () => {
-    const app: TestingModule = await Test.createTestingModule({
-      imports: [HttpModule, ConfigModule.forRoot()],
+    const module: TestingModule = await Test.createTestingModule({
+      imports: [HttpModule, ConfigModule.forRoot(), MongoRepositoryModule],
       controllers: [CompanyController],
       providers: [
         {
@@ -23,13 +34,23 @@ describe('CompanyController', () => {
         },
         {
           provide: COMPANY_REPOSITORY,
-          useClass: CompanyRepositoryArray,
+          useClass: MongoRepositoryService,
         },
         ...TestMetrics,
       ],
     }).compile();
 
-    controller = app.get<CompanyController>(CompanyController);
+    controller = module.get<CompanyController>(CompanyController);
+    mongoConnection = module.get<Connection>(getConnectionToken());
+  });
+
+  afterEach(async () => {
+    await mongoConnection.dropCollection('companydbobjects');
+    await mongoConnection.close(/*force=*/ true);
+  });
+
+  afterAll(async () => {
+    await mongoServer.stop();
   });
 
   it('should be defined', () => {

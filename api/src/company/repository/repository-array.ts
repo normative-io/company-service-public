@@ -37,7 +37,7 @@ export class CompanyRepositoryArray implements ICompanyRepository {
   }
 
   // Delete a company identified by id
-  delete(id: string) {
+  async delete(id: string): Promise<void> {
     const [index, _] = this.findByIdOrThrow(id);
     this.companies.splice(index, 1);
   }
