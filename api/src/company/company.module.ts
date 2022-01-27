@@ -2,14 +2,15 @@ import { Module } from '@nestjs/common';
 import { CompanyController } from './company.controller';
 import { COMPANY_SERVICE } from './company-service.interface';
 import { CompanyService } from './company.service';
-import { CompanyRepositoryArray } from './repository/repository-array';
 import { COMPANY_REPOSITORY } from './repository/repository-interface';
 import { HttpModule } from '@nestjs/axios';
 import { PrometheusModule, makeCounterProvider } from '@willsoto/nestjs-prometheus';
 import { ConfigModule } from '@nestjs/config';
+import { MongoRepositoryModule } from './repository/mongo/mongo.module';
+import { MongoRepositoryService } from './repository/mongo/mongo.service';
 
 @Module({
-  imports: [HttpModule, PrometheusModule.register(), ConfigModule],
+  imports: [HttpModule, PrometheusModule.register(), ConfigModule, MongoRepositoryModule],
   controllers: [CompanyController],
   providers: [
     {
@@ -18,7 +19,7 @@ import { ConfigModule } from '@nestjs/config';
     },
     {
       provide: COMPANY_REPOSITORY,
-      useClass: CompanyRepositoryArray,
+      useClass: MongoRepositoryService,
     },
 
     makeCounterProvider({ name: 'find_inbound_total', help: 'The number of find inbound requests' }),
