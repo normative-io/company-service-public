@@ -12,16 +12,17 @@ This repo contains several loosely-coupled microservices. To develop on a partic
 
 ## Building and running
 
-To get everything up and running, there are two routes to go:
+To get everything up and running, there are a few routes to go:
 
 - Running on host system, for development
-- Running dockerized, for testing purposes
+- Running dockerized with a local image, for testing purposes
+- Running in Kubernetes with a remote image
 
 Take either approach, depending on your use-case, but rarely both or a combination of the two.
 
-### Running on host system
+### Running on host system (for development)
 
-Runnning locally means starting each service independently. Each service will have its own README file
+Runnning locally means starting each service independently. Each service has its own README file
 which describes the process, but it is generally something along the lines of:
 
 ```
@@ -31,7 +32,7 @@ npm install
 npm start
 ```
 
-### Running dockerized
+### Running dockerized with a local image (for testing)
 
 Running in docker is as simple as:
 
@@ -46,3 +47,7 @@ rebuilt before running:
 docker compose build --no-cache
 docker compose up
 ```
+
+### Running in Kubernetes with a remote image (API only)
+
+See kube/README.md.
