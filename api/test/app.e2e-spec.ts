@@ -2,17 +2,25 @@ import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { AppModule } from './../src/app.module';
 import { INestApplication } from '@nestjs/common';
+import { Connection, Mongoose } from 'mongoose';
+import { getConnectionToken } from '@nestjs/mongoose';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
+  let mongoConnection: Connection;
 
   beforeAll(async () => {
-    const moduleFixture = await Test.createTestingModule({
+    const module = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
 
-    app = moduleFixture.createNestApplication();
+    app = module.createNestApplication();
+    mongoConnection = module.get<Connection>(getConnectionToken());
     await app.init();
+  });
+
+  afterAll(async () => {
+    await mongoConnection.close(/*force=*/ true);
   });
 
   it('/ (GET)', () => {

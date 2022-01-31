@@ -1,6 +1,5 @@
-import { NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { CompanyRepositoryArray } from './repository/repository-array';
 import { COMPANY_REPOSITORY } from './repository/repository-interface';
 import { CompanyService } from './company.service';
 import { TestMetrics } from './test-utils/company-service-metrics';
@@ -8,19 +7,31 @@ import { HttpModule, HttpService } from '@nestjs/axios';
 import { AxiosResponse } from 'axios';
 import { of } from 'rxjs';
 import { ConfigModule } from '@nestjs/config';
+import { MongoRepositoryModule } from './repository/mongo/mongo.module';
+import { MongoRepositoryService } from './repository/mongo/mongo.service';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import { Connection } from 'mongoose';
+import { getConnectionToken } from '@nestjs/mongoose';
 
 describe('CompanyService', () => {
   let service: CompanyService;
   let httpService: HttpService;
+  let mongoServer: MongoMemoryServer;
+  let mongoConnection: Connection;
+
+  beforeAll(async () => {
+    mongoServer = await MongoMemoryServer.create();
+    process.env.MONGO_URI = mongoServer.getUri();
+  });
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [HttpModule, ConfigModule.forRoot()],
+      imports: [HttpModule, ConfigModule.forRoot(), MongoRepositoryModule],
       providers: [
         CompanyService,
         {
           provide: COMPANY_REPOSITORY,
-          useClass: CompanyRepositoryArray,
+          useClass: MongoRepositoryService,
         },
         ...TestMetrics,
       ],
@@ -28,8 +39,18 @@ describe('CompanyService', () => {
 
     service = module.get<CompanyService>(CompanyService);
     httpService = module.get<HttpService>(HttpService);
+    mongoConnection = module.get<Connection>(getConnectionToken());
     // By default, don't return anything.
     jest.spyOn(httpService, 'post').mockImplementation(() => of(undefined));
+  });
+
+  afterEach(async () => {
+    await mongoConnection.dropCollection('companydbobjects');
+    await mongoConnection.close(/*force=*/ true);
+  });
+
+  afterAll(async () => {
+    await mongoServer.stop();
   });
 
   it('should be defined', () => {
@@ -77,9 +98,9 @@ describe('CompanyService', () => {
   });
 
   it('cannot update a non-existent company', async () => {
-    expect(async () => {
-      await service.update('non-existent-id', { companyName: 'Fantastic Company' });
-    }).rejects.toThrowError(NotFoundException);
+    expect(service.update('non-existent-id', { companyName: 'Fantastic Company' })).rejects.toThrowError(
+      NotFoundException,
+    );
   });
 
   it('should list all companies', async () => {
@@ -115,9 +136,7 @@ describe('CompanyService', () => {
   });
 
   it('the id must be present if we want to get by id', async () => {
-    expect(async () => {
-      await service.getById('');
-    }).rejects.toThrowError(UnprocessableEntityException);
+    expect(service.getById('')).rejects.toThrowError(NotFoundException);
   });
 
   it('should delete a company by id', async () => {
@@ -143,15 +162,11 @@ describe('CompanyService', () => {
   });
 
   it('cannot delete a non-existent company', async () => {
-    expect(async () => {
-      await service.delete('non-existent-id');
-    }).rejects.toThrowError(NotFoundException);
+    expect(service.delete('non-existent-id')).rejects.toThrowError(NotFoundException);
   });
 
   it('the id must be present when we want to delete by id', async () => {
-    expect(async () => {
-      await service.delete('');
-    }).rejects.toThrowError(UnprocessableEntityException);
+    expect(service.delete('')).rejects.toThrowError(NotFoundException);
   });
 
   it('should find a company by id', async () => {

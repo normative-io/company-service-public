@@ -1,8 +1,8 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { InjectModel, Schema } from '@nestjs/mongoose';
+import { InjectModel } from '@nestjs/mongoose';
 import { Company } from '../../company.model';
 import { ICompanyRepository } from '../repository-interface';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { CompanyDbObject, CompanyDocument } from './company.schema';
 
 // A MongoDB-based repository for storing company data.
@@ -47,8 +47,11 @@ export class MongoRepositoryService implements ICompanyRepository {
     return dbObjectToModel(dbObject);
   }
 
-  async delete(id: string) {
-    await this.companyModel.findByIdAndDelete(id);
+  async delete(id: string): Promise<void> {
+    const dbObject = await this.companyModel.findByIdAndDelete(id);
+    if (!dbObject) {
+      throw new NotFoundException(`Could not find company with id '${id}'`);
+    }
   }
 
   async findById(id: string): Promise<Company | undefined> {
