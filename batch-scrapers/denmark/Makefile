@@ -8,7 +8,7 @@ run: company-service-client
 	poetry run python scrapers/denmark_scraper.py download upload
 
 typecheck:
-	poetry run mypy src test scrapers
+	poetry run mypy src test scrapers company-service-client
 
 test:
 	poetry run pytest --disable-pytest-warnings --log-cli-level WARNING -vv 
