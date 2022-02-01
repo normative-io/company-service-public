@@ -1,11 +1,11 @@
 DEFAULT_GOAL: run
 .PHONY: clean dep test run tidy typecheck company-service-client
 
-install: company-service-client 
+build: company-service-client 
 	poetry install
 
 run: company-service-client
-	poetry run scrapers/denmark_scraper.py
+	poetry run python scrapers/denmark_scraper.py download upload
 
 typecheck:
 	poetry run mypy src test scrapers
