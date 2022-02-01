@@ -16,6 +16,8 @@ services:
     restart: unless-stopped
     links:
       - scraper_dev
+    depends_on:
+      - mongodb_dev
     env_file:
       - ./api/config/docker_dev.env
   scraper_dev:
@@ -28,6 +30,14 @@ services:
     ports:
       - 3001:3001
       - 9230:9230
+    networks:
+      - nestjs-network
+    restart: unless-stopped
+  mongodb_dev:
+    container_name: mongodb_dev
+    image: mongo:latest
+    ports:
+      - 27017:27017
     networks:
       - nestjs-network
     restart: unless-stopped

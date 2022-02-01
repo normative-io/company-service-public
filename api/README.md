@@ -17,7 +17,7 @@ $ nvm use
 $ npm install
 ```
 
-## Running
+## Running for development and testing
 
 ```bash
 
@@ -26,24 +26,22 @@ $ npm run start
 
 # watch mode
 $ npm run start:dev
-
-# production mode
-$ npm run start:prod
 ```
+
+**Cleanup**: The Company Service API requires a Mongo database. If there's no existing database,
+the above commands will create it. To delete this database when you're done, run:
+
+```bash
+$ npm run stop:db
+```
+
+## Running in prod
+
+TODO: Confirm the instructions for prod. `npm run start:prod` hasn't been tested yet.
 
 ## Running in Docker
 
-Note that the `docker-compose` file is in the parent folder; this is
-because Company Service API depends on Scraper Service being up and
-running, and this dependency is reflected in such file.
-
-```bash
-# development. Note scraper_dev starts too.
-$ cp config/docker_dev.env .env
-$ docker compose -f ../docker-compose.yml up api_dev
-
-# production mode: TODO
-```
+See the main project's README.md.
 
 ## Testing
 
