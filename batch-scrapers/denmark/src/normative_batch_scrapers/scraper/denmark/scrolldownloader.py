@@ -30,7 +30,7 @@ class DownloaderSettings(BaseSettings):
     retry_settings: RetrySettings = RetrySettings()
 
     class Config:
-        env_file = "envs/denmark.env"
+        env_file = ".env"
         env_file_encoding = "utf-8"
 
 
