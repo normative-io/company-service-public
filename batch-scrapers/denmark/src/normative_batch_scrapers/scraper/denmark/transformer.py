@@ -1,3 +1,4 @@
+import logging
 import operator
 from dataclasses import dataclass
 from http.client import responses
@@ -5,7 +6,6 @@ from pydoc import visiblename
 from tkinter.font import names
 from typing import AsyncIterable, Iterable, Mapping, Optional
 
-from charset_normalizer import logging
 from company_service_client.models.create_company_dto import CreateCompanyDto
 
 from normative_batch_scrapers.scraper.denmark.classification_mappings import (
