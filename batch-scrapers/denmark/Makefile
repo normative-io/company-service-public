@@ -18,9 +18,9 @@ tidy:
 	poetry run black src test scrapers
 
 check:
-	$(MAKE) tidy 
-	$(MAKE) typecheck 
-	$(MAKE) test 
+	make tidy 
+	make typecheck 
+	make test 
 
 clean: clean-venv
 
@@ -34,8 +34,8 @@ run-services:
 company-service-client: company-service-client/company_service_client/README.md
 
 company-service-client/company_service_client/README.md:
-	$(MAKE) run-services
+	make run-services
 	( \
 		rm -rf company-service-client; \
-		pipx run openapi-python-client generate --url http://127.0.0.1:3000/api/json; \
+		pipx run openapi-python-client generate --config openapi_config.yaml --url http://127.0.0.1:3000/api/json; \
 	)
