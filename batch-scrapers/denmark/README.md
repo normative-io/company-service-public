@@ -1,22 +1,25 @@
-# Skeleton background scraper
+# Denmark background scraper
 
-This skeleton project provides helpers and minimum setup for creating a background python scraper for pre-populating
-the company-service database with companies.
+This scraper is used to scrape the Virk CVR registry of companies in Denmark.
 
 ## Prerequisites
 
 As a minimum, you should have make, git, and python3 installed.
 In addition some python specific tooling is needed to build and run the scraper.
- - `pipx` is used to invoke client generation (https://pypa.github.io/pipx/). 
-    - Installation on mac: `brew install pipx && pipx ensurepath` 
-    - Installation on Linux: `pip install pipx && pipx ensurepath`
- - `poetry` is used for project and dependency management (https://python-poetry.org/)
-    - `pipx` can be used for installation: `pipx install poetry` (https://python-poetry.org/docs/master/#installing-with-pipx)
 
-Also required credentials along with api urls must be supplied using env variables. The credential 
-env var names are `DK_VIRK_USERNAME` and `DK_VIRK_PASSWORD`. The system will attempt to load the env vars 
-from the .env file `.env` if the file exists. A template is supplied at `.env.template` 
-(`cp ./.env.template ./.env` and fill in credentials to use). 
+- Tk enabled Python
+  - Installation on Mac: `brew install python-tk` or `brew reinstall python-tk@3.10` where `3.10` is your python version.
+  - Installation on Linux: `sudo apt-get install python-tk python3-tk tk-dev`
+- `pipx` is used to invoke client generation (https://pypa.github.io/pipx/).
+  - Installation on Mac: `brew install pipx && pipx ensurepath`
+  - Installation on Linux: `pip install pipx && pipx ensurepath`
+- `poetry` is used for project and dependency management (https://python-poetry.org/)
+  - `pipx` can be used for installation: `pipx install poetry` (https://python-poetry.org/docs/master/#installing-with-pipx)
+
+Also required credentials along with api urls must be supplied using env variables. The credential
+env var names are `DK_VIRK_USERNAME` and `DK_VIRK_PASSWORD`. The system will attempt to load the env vars
+from the .env file `.env` if the file exists. A template is supplied at `.env.template`
+(`cp ./.env.template ./.env` and fill in credentials to use).
 
 ## Install dependencies and build project
 
