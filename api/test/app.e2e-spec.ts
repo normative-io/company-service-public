@@ -2,7 +2,7 @@ import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { AppModule } from './../src/app.module';
 import { INestApplication } from '@nestjs/common';
-import { Connection, Mongoose } from 'mongoose';
+import { Connection } from 'mongoose';
 import { getConnectionToken } from '@nestjs/mongoose';
 
 describe('AppController (e2e)', () => {
