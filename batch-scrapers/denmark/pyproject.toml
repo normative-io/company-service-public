@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "normative_batch_scrapers"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+company-service-client = {path = "company-service-client", develop = true}
+pydantic = "^1.9.0"
+httpx = ">=0.15.4,<0.22.0"
+python-dotenv = "^0.19.2"
+pandas = "^1.4.0"
+click = "^8.0.3"
+
+[tool.poetry.dev-dependencies]
+black = "^21.12b0"
+isort = "^5.10.1"
+pytest = "^6.2.5"
+mypy = "^0.931"
+pytest-asyncio = "^0.17.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "black"
+src_paths = ["src", "test", "scrapers"]
+
+[tool.black]
+target-version = ['py39']

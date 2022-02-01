@@ -1,0 +1,27 @@
+{
+  "editor.formatOnSave": true,
+  "editor.trimAutoWhitespace": true,
+  "files.exclude": {
+    "**/*.pyc": {
+      "when": "$(basename).py"
+    },
+    "**/__pycache__": {},
+    "**/.pytest_cache": {}
+  },
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.trimTrailingWhitespace": true,
+  "html.format.wrapLineLength": 120,
+  "search.useIgnoreFiles": true,
+  "python.testing.pytestEnabled": true,
+  "python.testing.unittestEnabled": false,
+  "search.exclude": {
+    "shared": true,
+    "**/.venv": true
+  },
+  "python.formatting.provider": "none",
+  "python.analysis.extraPaths": [
+    "src"
+  ],
+  "python.analysis.typeCheckingMode": "basic"
+}
