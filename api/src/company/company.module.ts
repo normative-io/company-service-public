@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { CompanyController } from './company.controller';
-import { COMPANY_SERVICE } from './company-service.interface';
 import { CompanyService } from './company.service';
 import { COMPANY_REPOSITORY } from './repository/repository-interface';
 import { HttpModule } from '@nestjs/axios';
@@ -13,10 +12,7 @@ import { MongoRepositoryService } from './repository/mongo/mongo.service';
   imports: [HttpModule, PrometheusModule.register(), ConfigModule, MongoRepositoryModule],
   controllers: [CompanyController],
   providers: [
-    {
-      provide: COMPANY_SERVICE,
-      useClass: CompanyService,
-    },
+    CompanyService,
     {
       provide: COMPANY_REPOSITORY,
       useClass: MongoRepositoryService,

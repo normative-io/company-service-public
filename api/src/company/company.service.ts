@@ -1,7 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
-import { ICompanyService } from './company-service.interface';
 import { Company } from './company.model';
 import { COMPANY_REPOSITORY, ICompanyRepository } from './repository/repository-interface';
 import { FindCompanyDto } from './dto/find-company.dto';
@@ -14,7 +13,7 @@ import { firstValueFrom } from 'rxjs';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
-export class CompanyService implements ICompanyService {
+export class CompanyService {
   static readonly requestConfig: AxiosRequestConfig = {
     headers: { 'Content-Type': 'application/json' },
   };

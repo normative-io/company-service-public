@@ -4,7 +4,6 @@ import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { Connection } from 'mongoose';
-import { COMPANY_SERVICE } from './company-service.interface';
 import { CompanyController } from './company.controller';
 import { CompanyService } from './company.service';
 import { MongoRepositoryModule } from './repository/mongo/mongo.module';
@@ -28,10 +27,7 @@ describe('CompanyController', () => {
       imports: [HttpModule, ConfigModule.forRoot(), MongoRepositoryModule],
       controllers: [CompanyController],
       providers: [
-        {
-          provide: COMPANY_SERVICE,
-          useClass: CompanyService,
-        },
+        CompanyService,
         {
           provide: COMPANY_REPOSITORY,
           useClass: MongoRepositoryService,

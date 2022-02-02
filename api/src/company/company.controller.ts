@@ -1,6 +1,5 @@
-import { Body, Controller, Delete, Get, HttpCode, Inject, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { COMPANY_SERVICE, ICompanyService } from './company-service.interface';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { FindCompanyDto } from './dto/find-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
@@ -8,14 +7,12 @@ import { InsertOrUpdateDto } from './dto/insert-or-update.dto';
 import { GetCompanyDto } from './dto/get-company.dto';
 import { MarkDeletedDto } from './dto/mark-deleted.dto';
 import { SearchDto } from './dto/search.dto';
+import { CompanyService } from './company.service';
 
 @ApiTags('company')
 @Controller('company')
 export class CompanyController {
-  constructor(
-    @Inject(COMPANY_SERVICE)
-    private readonly companyService: ICompanyService,
-  ) {}
+  constructor(private readonly companyService: CompanyService) {}
 
   @Get('v1')
   @ApiOperation({ summary: 'Look up metadata for a company.' })
