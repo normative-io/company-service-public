@@ -438,8 +438,16 @@ describe('CompanyService', () => {
         };
         jest.spyOn(httpService, 'post').mockImplementation(() => of(httpResponse));
       });
-      it('should not find a company', async () => {
+      it('should not find a company if we provide the company name', async () => {
         expect(await service.find({ companyName: 'non-existent-name' })).toEqual([]);
+      });
+
+      it('should not find a company if we provide company id and country', async () => {
+        expect(await service.find({ companyId: '123', country: 'CH' })).toEqual([]);
+      });
+
+      it('should not find a company if we provide the id', async () => {
+        expect(await service.find({ id: 'non-existent-id' })).toEqual([]);
       });
     });
 
