@@ -11,6 +11,7 @@ import { HttpService } from '@nestjs/axios';
 import { AxiosRequestConfig } from 'axios';
 import { firstValueFrom } from 'rxjs';
 import { ConfigService } from '@nestjs/config';
+import { GetCompanyDto } from './dto/get-company.dto';
 
 @Injectable()
 export class CompanyService {
@@ -48,6 +49,43 @@ export class CompanyService {
     const scraperAddress = this.configService.get<string>('SCRAPER_ADDRESS');
     this.scraperServiceAddress = `http://${scraperAddress}/scraper/lookup`;
     this.logger.log(`Will use Scraper Service on address: ${this.scraperServiceAddress}`);
+  }
+
+  // Fetches the metadata of the requested company. First checks the repository if
+  // the company is already known. If not found in the repository, contacts the
+  // scraper service to check external data sources for this company.
+  // Note: `atTime` represents the database-insertion time of the record and not any
+  // business-related timestamp (ex: date which the company was founded or dissolved).
+  async get(getCompanyDto: GetCompanyDto): Promise<CompanyFoundInServiceDto[]> {
+    this.logger.verbose(`Looking in repo for company: ${JSON.stringify(getCompanyDto)}`);
+    const company = await this.companyRepo.get(getCompanyDto.country, getCompanyDto.companyId, getCompanyDto.atTime);
+    if (company) {
+      return [
+        {
+          confidence: CompanyService.confidenceByCompanyIdAndCountry,
+          foundBy: 'Repository by companyId and country',
+          company: company,
+        },
+      ];
+    }
+    this.logger.debug(`Could not find company in the repo: ${JSON.stringify(getCompanyDto)}`);
+
+    // If the requested company was not found in the local repository,
+    // this may be the first time we are encountering this company.
+    // The scraper service should be contacted to perform an on-demand
+    // search of external data sources in order to find the company.
+    // If successful, the next request for this company should be
+    // found in the local repository right away.
+    // Note: if `atTime` is specified, the scraping portion is skipped
+    // because the client is requesting data from the past anyways.
+    if (!getCompanyDto.atTime) {
+      this.logger.verbose(`Requesting scraper lookup for company: ${JSON.stringify(getCompanyDto)}`);
+      return await this.findInScraperService({
+        country: getCompanyDto.country,
+        companyId: getCompanyDto.companyId,
+      });
+    }
+    this.logger.debug(`Could not find company anywhere: ${JSON.stringify(getCompanyDto)}`);
   }
 
   async listAll(): Promise<Company[]> {

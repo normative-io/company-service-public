@@ -12,6 +12,21 @@ export class MongoRepositoryService implements ICompanyRepository {
 
   constructor(@InjectModel(CompanyDbObject.name) private readonly companyModel: Model<CompanyDocument>) {}
 
+  async get(country: string, companyId: string, atTime?: Date): Promise<Company | undefined> {
+    const dbObjects = await this.companyModel.find({ country, companyId }).sort('-created');
+    if (!atTime && dbObjects.length > 0) {
+      return dbObjectToModel(dbObjects[0]);
+    }
+    // The first item in this descending-creation-time-ordered
+    // list that was created before `atTime` is the record
+    // that was active during the requested `atTime`.
+    for (const dbObject of dbObjects) {
+      if (dbObject.created <= atTime) {
+        return dbObjectToModel(dbObject);
+      }
+    }
+  }
+
   async exists(company: Company): Promise<boolean> {
     // TODO: properly integrate checking for company presence.
     return await this.companyModel.exists({

@@ -3,6 +3,10 @@ import { Company } from '../company.model';
 export const COMPANY_REPOSITORY = 'COMPANY_REPOSITORY';
 
 export interface ICompanyRepository {
+  // Fetch the metadata of a particular company.
+  // If `atTime` is set, return the metadata at that particular time.
+  // If unset, return the most recent metadata for the company.
+  get(country: string, companyId: string, atTime?: Date): Promise<Company | undefined>;
   exists(company: Company): Promise<boolean>;
   save(company: Company): Promise<Company>;
   listAll(): Promise<Company[]>;

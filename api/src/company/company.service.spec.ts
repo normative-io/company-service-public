@@ -12,6 +12,7 @@ import { MongoRepositoryService } from './repository/mongo/mongo.service';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { Connection } from 'mongoose';
 import { getConnectionToken } from '@nestjs/mongoose';
+import { Company } from './company.model';
 
 describe('CompanyService', () => {
   let service: CompanyService;
@@ -126,6 +127,53 @@ describe('CompanyService', () => {
       id: company2.id,
       companyName: '2',
       created: expect.any(Date),
+    });
+  });
+
+  describe('the get method', () => {
+    it('should return the most recent record when `atTime` is not set', async () => {
+      await service.add({ country: 'CH', companyId: '1', companyName: 'name1' });
+      await service.add({ country: 'CH', companyId: '1', companyName: 'name2' });
+      const mostRecent = await service.add({ country: 'CH', companyId: '1', companyName: 'name3' });
+
+      expect(await service.get({ country: 'CH', companyId: '1' })).toEqual([
+        {
+          confidence: expect.any(Number),
+          foundBy: 'Repository by companyId and country',
+          company: mostRecent,
+        },
+      ]);
+    });
+
+    it('should return historical records that corresponds to the requested `atTime`', async () => {
+      const firstRecord = await service.add({ country: 'CH', companyId: '1', companyName: 'name1' });
+      const secondRecord = await service.add({ country: 'CH', companyId: '1', companyName: 'name2' });
+      const mostRecent = await service.add({ country: 'CH', companyId: '1', companyName: 'name3' });
+
+      // Note: these unit tests use the real clock and may show up as flakey in the
+      // unlikely case that the records above were created at the same millisecond.
+      const atTimeExpectations = new Map<Date, Company>([
+        [firstRecord.created, firstRecord],
+        [new Date(secondRecord.created.getTime() - 1), firstRecord],
+        [secondRecord.created, secondRecord],
+        [new Date(mostRecent.created.getTime() - 1), secondRecord],
+        [mostRecent.created, mostRecent],
+        [new Date(mostRecent.created.getTime() + 5000), mostRecent],
+      ]);
+      for (const [atTime, company] of atTimeExpectations) {
+        expect(await service.get({ country: 'CH', companyId: '1', atTime: atTime })).toEqual([
+          {
+            confidence: expect.any(Number),
+            foundBy: 'Repository by companyId and country',
+            company: company,
+          },
+        ]);
+      }
+    });
+
+    it('should not contact scraper service for historical queries', async () => {
+      expect(await service.get({ country: 'DK', companyId: '42', atTime: new Date('2020') })).toEqual(undefined);
+      expect(httpService.post).not.toHaveBeenCalled();
     });
   });
 
