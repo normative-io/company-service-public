@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scraper-service
+  labels:
+    app: scraper-service
+  namespace: company-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scraper-service
+  template:
+    metadata:
+      labels:
+        app: scraper-service
+    spec:
+      containers:
+        - name: scraper-service
+          # Before running, replace ECR_REGISTRY with your registry in the next line.
+          image: $ECR_REGISTRY/company-service/scraper-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3001
+      imagePullSecrets:
+        - name: scraper-service-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: scraper-service
+  namespace: company-service
+spec:
+  type: NodePort
+  selector:
+    app: scraper-service
+  ports:
+    - protocol: TCP
+      port: 3001
+      targetPort: 3001
+      nodePort: 30201
