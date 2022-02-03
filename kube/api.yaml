@@ -25,6 +25,8 @@ spec:
           env:
             - name: SCRAPER_ADDRESS
               value: scraper-service:3001
+            - name: MONGO_URI
+              value: mongodb://mongo-service/company-service
       imagePullSecrets:
         - name: company-api-secret
 ---

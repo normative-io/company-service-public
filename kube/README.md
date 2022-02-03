@@ -76,10 +76,10 @@ work with a different setup.
       secrets, so that this same command can be run again without problems.
     - See more information [here](https://skryvets.com/blog/2021/03/15/kubernetes-pull-image-from-private-ecr-registry/).
 
-1.  Start the API and the Scraper Service:
+1.  Start everything:
 
     ```
-    kubectl apply -f kube/api.yaml -f kube/scraper-service.yaml
+    kubectl apply -f kube/api.yaml -f kube/scraper-service.yaml -f kube/mongo.yaml
     ```
 
 1.  Test it's all working.
