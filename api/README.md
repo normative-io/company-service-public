@@ -17,6 +17,10 @@ $ nvm use
 $ npm install
 ```
 
+## Configuration
+
+See the `.env` file.
+
 ## Running for development and testing
 
 ```bash
