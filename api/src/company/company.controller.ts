@@ -22,10 +22,11 @@ export class CompanyController {
   }
 
   @Get('v1/get')
-  @ApiOperation({ summary: 'Get the metadata of the requested company.' })
-  @ApiResponse({ description: 'The requested company.' })
+  @ApiOperation({ summary: 'Get the historical metadata of the requested company.' })
+  @ApiResponse({ description: 'The metadata of the found company. May be multiple if the data had to be scraped.' })
+  @ApiBody({ type: GetCompanyDto, description: 'The requested company.' })
   async get(@Body() getCompanyDto: GetCompanyDto) {
-    // TODO: implement.
+    return { companies: await this.companyService.get(getCompanyDto) };
   }
 
   @Post('v1/insertOrUpdate')
