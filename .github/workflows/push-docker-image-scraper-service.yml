@@ -8,7 +8,7 @@ on:
     branches:
       - main
     paths:
-      - 'scraper-service/*'
+      - scraper-service/**
 
 env:
   ECR_REPOSITORY: company-service/scraper-service
