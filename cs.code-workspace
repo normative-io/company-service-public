@@ -1,0 +1,38 @@
+{
+  "folders": [
+    {
+      "path": "api"
+    },
+    {
+      "path": "scraper-service"
+    },
+    {
+      "path": "batch-scrapers/skeleton"
+    },
+    {
+      "path": "batch-scrapers/denmark"
+    },
+    {
+      "name": "root",
+      "path": "."
+    }
+  ],
+  "launch": {
+    "configurations": [],
+    "compounds": [
+      {
+        "name": "Start services",
+        "configurations": [
+          {
+            "folder": "api",
+            "name": "Run npm start"
+          },
+          {
+            "folder": "scraper-service",
+            "name": "Run npm start"
+          }
+        ]
+      }
+    ]
+  }
+}
