@@ -32,6 +32,8 @@ npm install
 npm start
 ```
 
+See each service's `.env` file for configuration options.
+
 ### Running dockerized with a local image (for testing)
 
 Running in docker is as simple as:
@@ -47,6 +49,9 @@ rebuilt before running:
 docker compose build --no-cache
 docker compose up
 ```
+
+Some services use a different dotenv file when running in Docker, see
+the `docker-compose.yml` to find the relevant dotenv file's.
 
 ### Running in Kubernetes with a remote image (API only)
 
