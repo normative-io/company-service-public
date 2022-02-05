@@ -34,7 +34,8 @@ export class CompanyController {
   @ApiResponse({ description: 'The metadata of the new/updated company.' })
   @ApiBody({ type: InsertOrUpdateDto, description: 'The new/updated company.' })
   async insertOrUpdate(@Body() insertOrUpdateDto: InsertOrUpdateDto) {
-    // TODO: implement.
+    const [company, message] = await this.companyService.insertOrUpdate(insertOrUpdateDto);
+    return { company, message };
   }
 
   @Post('v1/insertOrUpdateBulk')

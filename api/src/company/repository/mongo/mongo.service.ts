@@ -4,6 +4,8 @@ import { Company } from '../../company.model';
 import { ICompanyRepository } from '../repository-interface';
 import { Model } from 'mongoose';
 import { CompanyDbObject, CompanyDocument } from './company.schema';
+import { InsertOrUpdateDto } from 'src/company/dto/insert-or-update.dto';
+import { CompanyKeyDto } from 'src/company/dto/company-key.dto';
 
 // A MongoDB-based repository for storing company data.
 @Injectable()
@@ -25,6 +27,35 @@ export class MongoRepositoryService implements ICompanyRepository {
         return dbObjectToModel(dbObject);
       }
     }
+  }
+
+  async insertOrUpdate(insertOrUpdateDto: InsertOrUpdateDto): Promise<[Company, string]> {
+    // Operation is performed in a transaction to avoid race conditions
+    // between checking the most recent record and inserting a new one.
+    const session = await this.companyModel.startSession();
+    let dbObject: CompanyDbObject;
+    let msg: string;
+    await session.withTransaction(async (): Promise<[CompanyDbObject, string]> => {
+      const newRecord = new Company(insertOrUpdateDto);
+      const mostRecent = dbObjectToModel(await this.getMostRecentRecord(insertOrUpdateDto));
+      if (newRecord.isMetadataEqual(mostRecent)) {
+        msg = `Skipped update; metadata is equal to the most recent record: ${JSON.stringify(insertOrUpdateDto)}`;
+        this.logger.debug(msg);
+        return;
+      }
+      dbObject = await this.companyModel.create(modelToDbObject(newRecord));
+      if (mostRecent) {
+        msg = `Updated metadata for company: ${JSON.stringify(insertOrUpdateDto)}`;
+      } else {
+        msg = `Inserted an initial record for company: ${JSON.stringify(insertOrUpdateDto)}`;
+      }
+    });
+    session.endSession();
+    return [dbObjectToModel(dbObject), msg];
+  }
+
+  private async getMostRecentRecord(key: CompanyKeyDto): Promise<CompanyDbObject> {
+    return await this.companyModel.findOne({ country: key.country, companyId: key.companyId }).sort('-created');
   }
 
   async exists(company: Company): Promise<boolean> {
@@ -95,6 +126,9 @@ export class MongoRepositoryService implements ICompanyRepository {
 }
 
 function modelToDbObject(company: Company): CompanyDbObject {
+  if (!company) {
+    return;
+  }
   return {
     _id: company.id,
     companyId: company.companyId,
@@ -106,6 +140,9 @@ function modelToDbObject(company: Company): CompanyDbObject {
 }
 
 function dbObjectToModel(dbObject: CompanyDbObject): Company {
+  if (!dbObject) {
+    return;
+  }
   const company = new Company({
     companyId: dbObject.companyId,
     country: dbObject.country,

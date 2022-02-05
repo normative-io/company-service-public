@@ -182,6 +182,62 @@ describe('CompanyService', () => {
     });
   });
 
+  describe('the insertOrUpdate method', () => {
+    it('should insert a new record for a non-existent company', async () => {
+      const company = { country: 'CH', companyId: '1', companyName: 'name1' };
+
+      const wantInDb = {
+        id: expect.any(String),
+        country: company.country,
+        companyId: company.companyId,
+        companyName: company.companyName,
+        created: expect.any(Date),
+      };
+      expect(await service.insertOrUpdate(company)).toEqual([wantInDb, expect.stringContaining('Inserted')]);
+      expect(await service.listAll()).toEqual([wantInDb]);
+    });
+
+    it('should not insert a new record if metadata did not change', async () => {
+      const company = { country: 'CH', companyId: '1', companyName: 'name1' };
+
+      const wantInDb = {
+        id: expect.any(String),
+        country: company.country,
+        companyId: company.companyId,
+        companyName: company.companyName,
+        created: expect.any(Date),
+      };
+      expect(await service.insertOrUpdate(company)).toEqual([wantInDb, expect.stringContaining('Inserted')]);
+      expect(await service.insertOrUpdate(company)).toEqual([undefined, expect.stringContaining('Skipped')]);
+      expect(await service.listAll()).toEqual([wantInDb]);
+    });
+
+    it('should insert a new record for updates to the same company', async () => {
+      const metadata1 = { country: 'CH', companyId: '1', companyName: 'Old Name LLC' };
+      const metadata2 = { country: 'CH', companyId: '1', companyName: 'New Name Inc' };
+
+      const wantMetadata1 = {
+        id: expect.any(String),
+        country: metadata1.country,
+        companyId: metadata1.companyId,
+        companyName: metadata1.companyName,
+        created: expect.any(Date),
+      };
+      const wantMetadata2 = {
+        id: expect.any(String),
+        country: metadata2.country,
+        companyId: metadata2.companyId,
+        companyName: metadata2.companyName,
+        created: expect.any(Date),
+      };
+      expect(await service.insertOrUpdate(metadata1)).toEqual([wantMetadata1, expect.stringContaining('Inserted')]);
+      expect(await service.insertOrUpdate(metadata2)).toEqual([wantMetadata2, expect.stringContaining('Updated')]);
+      expect(await service.insertOrUpdate(metadata1)).toEqual([wantMetadata1, expect.stringContaining('Updated')]);
+      expect(await service.insertOrUpdate(metadata1)).toEqual([undefined, expect.stringContaining('Skipped')]);
+      expect(await service.listAll()).toEqual([wantMetadata1, wantMetadata2, wantMetadata1]);
+    });
+  });
+
   it('cannot get a non-existent company', async () => {
     expect(async () => {
       await service.getById('non-existent-id');

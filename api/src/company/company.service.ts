@@ -4,6 +4,7 @@ import { UpdateCompanyDto } from './dto/update-company.dto';
 import { Company } from './company.model';
 import { COMPANY_REPOSITORY, ICompanyRepository } from './repository/repository-interface';
 import { FindCompanyDto } from './dto/find-company.dto';
+import { InsertOrUpdateDto } from './dto/insert-or-update.dto';
 import { CompanyFoundInServiceDto } from './dto/company-found.dto';
 import { Counter } from 'prom-client';
 import { InjectMetric } from '@willsoto/nestjs-prometheus';
@@ -90,6 +91,10 @@ export class CompanyService {
       });
     }
     this.logger.debug(`Could not find company anywhere: ${JSON.stringify(getCompanyDto)}`);
+  }
+
+  async insertOrUpdate(insertOrUpdateDto: InsertOrUpdateDto): Promise<[Company, string]> {
+    return await this.companyRepo.insertOrUpdate(insertOrUpdateDto);
   }
 
   async listAll(): Promise<Company[]> {
