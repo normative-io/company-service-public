@@ -48,10 +48,11 @@ export class CompanyController {
 
   @Delete('v1/markDeleted')
   @ApiOperation({ summary: 'Mark a company as deleted.' })
-  @ApiBody({ type: [MarkDeletedDto], description: 'The company to delete.' })
+  @ApiBody({ type: MarkDeletedDto, description: 'The company to delete.' })
   @HttpCode(204)
-  async markDeleted(@Body() MarkDeletedDto: MarkDeletedDto) {
-    // TODO: implement.
+  async markDeleted(@Body() markDeletedDto: MarkDeletedDto) {
+    const [company, message] = await this.companyService.markDeleted(markDeletedDto);
+    return { company, message };
   }
 
   @Post('v1/search')

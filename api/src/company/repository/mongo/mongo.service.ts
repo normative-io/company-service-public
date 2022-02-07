@@ -59,6 +59,31 @@ export class MongoRepositoryService implements ICompanyRepository {
     return [dbObjectToModel(dbObject), msg];
   }
 
+  async markDeleted(key: CompanyKeyDto): Promise<[Company, string]> {
+    const session = await this.companyModel.startSession();
+    let dbObject: CompanyDbObject;
+    let msg: string;
+    await session.withTransaction(async () => {
+      const mostRecent = await this.getMostRecentRecord(key);
+      if (!mostRecent || !mostRecent.isDeleted) {
+        const deleteRecord = new Company({ country: key.country, companyId: key.companyId });
+        deleteRecord.isDeleted = true;
+        dbObject = await this.companyModel.create(modelToDbObject(deleteRecord));
+        msg = `Marked as deleted: ${JSON.stringify(key)}`;
+      } else {
+        dbObject = await this.companyModel.findByIdAndUpdate(
+          mostRecent._id,
+          { lastUpdated: new Date() },
+          { returnDocument: 'after' },
+        );
+        msg = `Marked as up-to-date; company already marked as deleted: ${JSON.stringify(key)}`;
+      }
+    });
+    session.endSession();
+    this.logger.debug(msg);
+    return [dbObjectToModel(dbObject), msg];
+  }
+
   private async getMostRecentRecord(key: CompanyKeyDto): Promise<CompanyDbObject> {
     return await this.companyModel.findOne({ country: key.country, companyId: key.companyId }).sort('-created');
   }
@@ -134,7 +159,7 @@ function modelToDbObject(company: Company): CompanyDbObject {
   if (!company) {
     return;
   }
-  return {
+  const dbObject: CompanyDbObject = {
     _id: company.id,
     companyId: company.companyId,
     country: company.country,
@@ -143,6 +168,10 @@ function modelToDbObject(company: Company): CompanyDbObject {
     created: company.created,
     lastUpdated: company.lastUpdated,
   };
+  if (company.isDeleted) {
+    dbObject.isDeleted = true;
+  }
+  return dbObject;
 }
 
 function dbObjectToModel(dbObject: CompanyDbObject): Company {
@@ -158,5 +187,8 @@ function dbObjectToModel(dbObject: CompanyDbObject): Company {
   company.id = dbObject._id;
   company.created = dbObject.created;
   company.lastUpdated = dbObject.lastUpdated;
+  if (dbObject.isDeleted) {
+    company.isDeleted = true;
+  }
   return company;
 }

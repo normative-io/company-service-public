@@ -16,6 +16,7 @@ import { GetCompanyDto } from './dto/get-company.dto';
 import { SentryService } from '@ntegral/nestjs-sentry/dist/sentry.service';
 import { InjectSentry } from '@ntegral/nestjs-sentry/dist/sentry.decorator';
 import * as Sentry from '@sentry/node';
+import { CompanyKeyDto } from './dto/company-key.dto';
 
 @Injectable()
 export class CompanyService {
@@ -95,6 +96,10 @@ export class CompanyService {
 
   async insertOrUpdate(insertOrUpdateDto: InsertOrUpdateDto): Promise<[Company, string]> {
     return await this.companyRepo.insertOrUpdate(insertOrUpdateDto);
+  }
+
+  async markDeleted(key: CompanyKeyDto): Promise<[Company, string]> {
+    return await this.companyRepo.markDeleted(key);
   }
 
   async listAll(): Promise<Company[]> {

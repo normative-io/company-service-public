@@ -14,6 +14,7 @@ import { Connection } from 'mongoose';
 import { getConnectionToken } from '@nestjs/mongoose';
 import { Company } from './company.model';
 import { SENTRY_TOKEN } from '@ntegral/nestjs-sentry';
+import { CompanyKeyDto } from './dto/company-key.dto';
 
 describe('CompanyService', () => {
   let service: CompanyService;
@@ -255,6 +256,81 @@ describe('CompanyService', () => {
       expect(await service.listAll()).toEqual([want1, want2]);
       expect(await service.insertOrUpdate(metadata2)).toEqual([want2, expect.stringContaining('Marked as up-to-date')]);
       expect(await service.listAll()).toEqual([want1, want2]);
+    });
+  });
+
+  describe('the markDeleted method', () => {
+    it('should insert a delete record for a non-existent company', async () => {
+      const nonExistent: CompanyKeyDto = { country: 'YZ', companyId: '123' };
+
+      const wantDelete = {
+        id: expect.any(String),
+        created: expect.any(Date),
+        lastUpdated: expect.any(Date),
+        country: nonExistent.country,
+        companyId: nonExistent.companyId,
+        isDeleted: true,
+      };
+      expect(await service.markDeleted(nonExistent)).toEqual([
+        wantDelete,
+        expect.stringContaining('Marked as deleted'),
+      ]);
+      expect(await service.listAll()).toEqual([wantDelete]);
+    });
+
+    it('should insert a delete record for an active company', async () => {
+      const company = { country: 'CH', companyId: '1', companyName: 'name1' };
+      await service.insertOrUpdate(company);
+
+      const wantInitial = {
+        id: expect.any(String),
+        created: expect.any(Date),
+        lastUpdated: expect.any(Date),
+        country: company.country,
+        companyId: company.companyId,
+        companyName: company.companyName,
+      };
+      const wantDelete = {
+        id: expect.any(String),
+        created: expect.any(Date),
+        lastUpdated: expect.any(Date),
+        country: company.country,
+        companyId: company.companyId,
+        isDeleted: true,
+      };
+      expect(await service.markDeleted(company)).toEqual([wantDelete, expect.stringContaining('Marked as deleted')]);
+      expect(await service.listAll()).toEqual([wantInitial, wantDelete]);
+    });
+
+    it('should update the latest delete record for an already-deleted company', async () => {
+      const company = { country: 'CH', companyId: '1', companyName: 'name1' };
+      await service.insertOrUpdate(company);
+      await service.markDeleted(company);
+
+      const wantInitial = {
+        id: expect.any(String),
+        created: expect.any(Date),
+        lastUpdated: expect.any(Date),
+        country: company.country,
+        companyId: company.companyId,
+        companyName: company.companyName,
+      };
+      const wantDelete = {
+        id: expect.any(String),
+        created: expect.any(Date),
+        lastUpdated: expect.any(Date),
+        country: company.country,
+        companyId: company.companyId,
+        isDeleted: true,
+      };
+
+      // The return value and the db contents should reflect a change in `lastUpdated` time.
+      const result = await service.markDeleted(company);
+      expect(result).toEqual([wantDelete, expect.stringContaining('Marked as up-to-date')]);
+      expect(result[0].lastUpdated.getTime()).toBeGreaterThan(result[0].created.getTime());
+      const dbContents = await service.listAll();
+      expect(dbContents).toEqual([wantInitial, wantDelete]);
+      expect(dbContents[1].lastUpdated.getTime()).toBeGreaterThan(dbContents[1].created.getTime());
     });
   });
 

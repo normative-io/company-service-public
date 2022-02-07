@@ -11,6 +11,9 @@ export class CompanyDbObject {
   _id: string;
 
   @Prop()
+  isDeleted?: boolean;
+
+  @Prop()
   companyId: string;
 
   @Prop()
