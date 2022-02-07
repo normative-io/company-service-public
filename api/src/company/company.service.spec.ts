@@ -208,6 +208,7 @@ describe('CompanyService', () => {
         created: expect.any(Date),
       };
       expect(await service.insertOrUpdate(company)).toEqual([wantInDb, expect.stringContaining('Inserted')]);
+      expect(await service.listAll()).toEqual([wantInDb]);
       expect(await service.insertOrUpdate(company)).toEqual([undefined, expect.stringContaining('Skipped')]);
       expect(await service.listAll()).toEqual([wantInDb]);
     });
@@ -231,8 +232,11 @@ describe('CompanyService', () => {
         created: expect.any(Date),
       };
       expect(await service.insertOrUpdate(metadata1)).toEqual([wantMetadata1, expect.stringContaining('Inserted')]);
+      expect(await service.listAll()).toEqual([wantMetadata1]);
       expect(await service.insertOrUpdate(metadata2)).toEqual([wantMetadata2, expect.stringContaining('Updated')]);
+      expect(await service.listAll()).toEqual([wantMetadata1, wantMetadata2]);
       expect(await service.insertOrUpdate(metadata1)).toEqual([wantMetadata1, expect.stringContaining('Updated')]);
+      expect(await service.listAll()).toEqual([wantMetadata1, wantMetadata2, wantMetadata1]);
       expect(await service.insertOrUpdate(metadata1)).toEqual([undefined, expect.stringContaining('Skipped')]);
       expect(await service.listAll()).toEqual([wantMetadata1, wantMetadata2, wantMetadata1]);
     });

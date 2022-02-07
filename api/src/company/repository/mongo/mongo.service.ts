@@ -40,7 +40,6 @@ export class MongoRepositoryService implements ICompanyRepository {
       const mostRecent = dbObjectToModel(await this.getMostRecentRecord(insertOrUpdateDto));
       if (newRecord.isMetadataEqual(mostRecent)) {
         msg = `Skipped update; metadata is equal to the most recent record: ${JSON.stringify(insertOrUpdateDto)}`;
-        this.logger.debug(msg);
         return;
       }
       dbObject = await this.companyModel.create(modelToDbObject(newRecord));
@@ -51,6 +50,7 @@ export class MongoRepositoryService implements ICompanyRepository {
       }
     });
     session.endSession();
+    this.logger.debug(msg);
     return [dbObjectToModel(dbObject), msg];
   }
 

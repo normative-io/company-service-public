@@ -9,10 +9,12 @@ export interface ICompanyRepository {
   // If unset, return the most recent metadata for the company.
   get(country: string, companyId: string, atTime?: Date): Promise<Company | undefined>;
 
-  // Add or update information about a particular company.
-  // Note that this creates a new record and the previous data is still
-  // queryable by clients using the `atTime` parameter.
-  // Will skip updating if the metadata is equivalent to the most recent record.
+  // Add or update information about a particular company:
+  // * If the company does not exist, inserts a new record.
+  // * If the new metadata is equivalent to the most recent, does not insert.
+  // * If the new metadata is different from the most recent, inserts a new record.
+  //
+  // Previous updates will still be readable by clients using the `atTime` parameter.
   // Returns the new company, if applicable, and a message describing the outcome.
   insertOrUpdate(insertOrUpdateDto: InsertOrUpdateDto): Promise<[Company, string]>;
 
