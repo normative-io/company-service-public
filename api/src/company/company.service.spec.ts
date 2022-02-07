@@ -68,6 +68,7 @@ describe('CompanyService', () => {
       id: expect.any(String),
       companyName: 'Fantastic Company',
       created: expect.any(Date),
+      lastUpdated: expect.any(Date),
       country: 'CH',
       companyId: '456',
     });
@@ -83,6 +84,7 @@ describe('CompanyService', () => {
         ...dto,
         id: expect.any(String),
         created: expect.any(Date),
+        lastUpdated: expect.any(Date),
       };
     });
     expect(await service.addMany(companyDtos)).toEqual(companies);
@@ -98,6 +100,7 @@ describe('CompanyService', () => {
       id: company1.id,
       companyName: 'Awesome Company',
       created: expect.any(Date),
+      lastUpdated: expect.any(Date),
       country: 'CH',
       companyId: '456',
     });
@@ -116,9 +119,9 @@ describe('CompanyService', () => {
     await service.add({ companyName: '3' });
 
     expect(await service.listAll()).toEqual([
-      { id: expect.any(String), companyName: '1', created: expect.any(Date) },
-      { id: expect.any(String), companyName: '2', created: expect.any(Date) },
-      { id: expect.any(String), companyName: '3', created: expect.any(Date) },
+      { id: expect.any(String), companyName: '1', created: expect.any(Date), lastUpdated: expect.any(Date) },
+      { id: expect.any(String), companyName: '2', created: expect.any(Date), lastUpdated: expect.any(Date) },
+      { id: expect.any(String), companyName: '3', created: expect.any(Date), lastUpdated: expect.any(Date) },
     ]);
   });
 
@@ -132,6 +135,7 @@ describe('CompanyService', () => {
       id: company2.id,
       companyName: '2',
       created: expect.any(Date),
+      lastUpdated: expect.any(Date),
     });
   });
 
@@ -182,6 +186,78 @@ describe('CompanyService', () => {
     });
   });
 
+  describe('the insertOrUpdate method', () => {
+    it('should insert a new record for a non-existent company', async () => {
+      const company = { country: 'CH', companyId: '1', companyName: 'name1' };
+
+      const wantInDb = {
+        id: expect.any(String),
+        country: company.country,
+        companyId: company.companyId,
+        companyName: company.companyName,
+        created: expect.any(Date),
+        lastUpdated: expect.any(Date),
+      };
+      expect(await service.insertOrUpdate(company)).toEqual([wantInDb, expect.stringContaining('Inserted')]);
+      expect(await service.listAll()).toEqual([wantInDb]);
+    });
+
+    it('should not insert a new record if metadata did not change', async () => {
+      const company = { country: 'CH', companyId: '1', companyName: 'name1' };
+
+      const want = {
+        id: expect.any(String),
+        country: company.country,
+        companyId: company.companyId,
+        companyName: company.companyName,
+        created: expect.any(Date),
+        lastUpdated: expect.any(Date),
+      };
+      let result = await service.insertOrUpdate(company);
+      expect(result).toEqual([want, expect.stringContaining('Inserted')]);
+      expect(result[0].lastUpdated.getTime()).toEqual(result[0].created.getTime());
+      let dbContents = await service.listAll();
+      expect(dbContents).toEqual([want]);
+      expect(dbContents[0].lastUpdated.getTime()).toEqual(dbContents[0].created.getTime());
+
+      // The return value and the db contents should reflect a change in `lastUpdated` time.
+      result = await service.insertOrUpdate(company);
+      expect(result).toEqual([want, expect.stringContaining('Marked as up-to-date')]);
+      expect(result[0].lastUpdated.getTime()).toBeGreaterThan(result[0].created.getTime());
+      dbContents = await service.listAll();
+      expect(dbContents).toEqual([want]);
+      expect(dbContents[0].lastUpdated.getTime()).toBeGreaterThan(dbContents[0].created.getTime());
+    });
+
+    it('should insert a new record for updates to the same company', async () => {
+      const metadata1 = { country: 'CH', companyId: '1', companyName: 'Old Name LLC' };
+      const metadata2 = { country: 'CH', companyId: '1', companyName: 'New Name Inc' };
+
+      const want1 = {
+        id: expect.any(String),
+        country: metadata1.country,
+        companyId: metadata1.companyId,
+        companyName: metadata1.companyName,
+        created: expect.any(Date),
+        lastUpdated: expect.any(Date),
+      };
+      const want2 = {
+        id: expect.any(String),
+        country: metadata2.country,
+        companyId: metadata2.companyId,
+        companyName: metadata2.companyName,
+        created: expect.any(Date),
+        lastUpdated: expect.any(Date),
+      };
+      expect(await service.insertOrUpdate(metadata1)).toEqual([want1, expect.stringContaining('Inserted')]);
+      expect(await service.listAll()).toEqual([want1]);
+      expect(await service.insertOrUpdate(metadata2)).toEqual([want2, expect.stringContaining('Updated')]);
+      expect(await service.listAll()).toEqual([want1, want2]);
+      expect(await service.insertOrUpdate(metadata2)).toEqual([want2, expect.stringContaining('Marked as up-to-date')]);
+      expect(await service.listAll()).toEqual([want1, want2]);
+    });
+  });
+
   it('cannot get a non-existent company', async () => {
     expect(async () => {
       await service.getById('non-existent-id');
@@ -200,17 +276,17 @@ describe('CompanyService', () => {
 
     // Verify that the company is there.
     expect(await service.listAll()).toEqual([
-      { id: expect.any(String), companyName: '1', created: expect.any(Date) },
-      { id: expect.any(String), companyName: '2', created: expect.any(Date) },
-      { id: expect.any(String), companyName: '3', created: expect.any(Date) },
+      { id: expect.any(String), companyName: '1', created: expect.any(Date), lastUpdated: expect.any(Date) },
+      { id: expect.any(String), companyName: '2', created: expect.any(Date), lastUpdated: expect.any(Date) },
+      { id: expect.any(String), companyName: '3', created: expect.any(Date), lastUpdated: expect.any(Date) },
     ]);
 
     await service.delete(company2.id);
 
     // Verify that the company is deleted.
     expect(await service.listAll()).toEqual([
-      { id: expect.any(String), companyName: '1', created: expect.any(Date) },
-      { id: expect.any(String), companyName: '3', created: expect.any(Date) },
+      { id: expect.any(String), companyName: '1', created: expect.any(Date), lastUpdated: expect.any(Date) },
+      { id: expect.any(String), companyName: '3', created: expect.any(Date), lastUpdated: expect.any(Date) },
     ]);
   });
 
@@ -227,7 +303,7 @@ describe('CompanyService', () => {
 
     expect(await service.find({ id: company.id })).toEqual([
       {
-        company: { id: company.id, companyName: '1', created: expect.any(Date) },
+        company: { id: company.id, companyName: '1', created: expect.any(Date), lastUpdated: expect.any(Date) },
         confidence: expect.any(Number),
         foundBy: expect.any(String),
       },
@@ -245,8 +321,8 @@ describe('CompanyService', () => {
           companyId: '123',
           country: 'CH',
           created: expect.any(Date),
+          lastUpdated: expect.any(Date),
         },
-
         confidence: expect.any(Number),
         foundBy: expect.any(String),
       },
@@ -259,12 +335,12 @@ describe('CompanyService', () => {
 
     expect(await service.find({ companyName: '1' })).toEqual([
       {
-        company: { id: expect.any(String), companyName: '1', created: expect.any(Date) },
+        company: { id: expect.any(String), companyName: '1', created: expect.any(Date), lastUpdated: expect.any(Date) },
         confidence: expect.any(Number),
         foundBy: expect.any(String),
       },
       {
-        company: { id: expect.any(String), companyName: '1', created: expect.any(Date) },
+        company: { id: expect.any(String), companyName: '1', created: expect.any(Date), lastUpdated: expect.any(Date) },
         confidence: expect.any(Number),
         foundBy: expect.any(String),
       },
@@ -276,7 +352,7 @@ describe('CompanyService', () => {
 
     expect(await service.find({ id: 'non-existent-id', companyName: '1' })).toEqual([
       {
-        company: { id: expect.any(String), companyName: '1', created: expect.any(Date) },
+        company: { id: expect.any(String), companyName: '1', created: expect.any(Date), lastUpdated: expect.any(Date) },
         confidence: expect.any(Number),
         foundBy: expect.any(String),
       },
@@ -290,7 +366,7 @@ describe('CompanyService', () => {
 
     expect(await service.find({ id: 'non-existent-id', companyName: '1' })).toEqual([
       {
-        company: { id: expect.any(String), companyName: '1', created: expect.any(Date) },
+        company: { id: expect.any(String), companyName: '1', created: expect.any(Date), lastUpdated: expect.any(Date) },
         confidence: expect.any(Number),
         foundBy: expect.any(String),
       },
@@ -309,7 +385,12 @@ describe('CompanyService', () => {
     ).toEqual([
       // The ranking of confidences are: (1) match by id, (2) match by companyId and country, and (3) match by name.
       {
-        company: { id: company1.id, companyName: 'to-find-by-id', created: expect.any(Date) },
+        company: {
+          id: company1.id,
+          companyName: 'to-find-by-id',
+          created: expect.any(Date),
+          lastUpdated: expect.any(Date),
+        },
         confidence: expect.any(Number),
         foundBy: expect.any(String),
       },
@@ -320,12 +401,18 @@ describe('CompanyService', () => {
           companyId: '123',
           country: 'CH',
           created: expect.any(Date),
+          lastUpdated: expect.any(Date),
         },
         confidence: expect.any(Number),
         foundBy: expect.any(String),
       },
       {
-        company: { id: expect.any(String), companyName: 'to-find-by-name', created: expect.any(Date) },
+        company: {
+          id: expect.any(String),
+          companyName: 'to-find-by-name',
+          created: expect.any(Date),
+          lastUpdated: expect.any(Date),
+        },
         confidence: expect.any(Number),
         foundBy: expect.any(String),
       },
@@ -343,6 +430,7 @@ describe('CompanyService', () => {
           companyId: '123',
           country: 'CH',
           created: expect.any(Date),
+          lastUpdated: expect.any(Date),
         },
         confidence: expect.any(Number),
         foundBy: expect.any(String),
@@ -375,6 +463,7 @@ describe('CompanyService', () => {
               id: expect.any(String),
               companyName: 'company found',
               created: expect.any(Date),
+              lastUpdated: expect.any(Date),
               country: 'CH',
               companyId: '456',
             },
@@ -387,6 +476,7 @@ describe('CompanyService', () => {
           id: expect.any(String),
           companyName: 'company found',
           created: expect.any(Date),
+          lastUpdated: expect.any(Date),
           country: 'CH',
           companyId: '456',
         });
@@ -419,6 +509,7 @@ describe('CompanyService', () => {
               id: expect.any(String),
               companyName: 'company found',
               created: expect.any(Date),
+              lastUpdated: expect.any(Date),
             },
           },
           {
@@ -426,6 +517,7 @@ describe('CompanyService', () => {
               id: expect.any(String),
               companyName: 'another company found',
               created: expect.any(Date),
+              lastUpdated: expect.any(Date),
               country: 'CH',
               companyId: '456',
             },
@@ -435,11 +527,13 @@ describe('CompanyService', () => {
           id: expect.any(String),
           companyName: 'company found',
           created: expect.any(Date),
+          lastUpdated: expect.any(Date),
         });
         expect(await service.getById(found[1].company.id)).toEqual({
           id: expect.any(String),
           companyName: 'another company found',
           created: expect.any(Date),
+          lastUpdated: expect.any(Date),
           country: 'CH',
           companyId: '456',
         });
@@ -469,12 +563,51 @@ describe('CompanyService', () => {
         it('results should be sorted by confidence in descending order', async () => {
           const found = await service.find({ companyName: 'irrelevant' });
           expect(found).toEqual([
-            { company: { companyName: '3', id: expect.any(String), created: expect.any(Date) }, confidence: 0.9 },
-            { company: { companyName: '2', id: expect.any(String), created: expect.any(Date) }, confidence: 0.7 },
-            { company: { companyName: '4', id: expect.any(String), created: expect.any(Date) }, confidence: 0.6 },
-            { company: { companyName: '1', id: expect.any(String), created: expect.any(Date) }, confidence: 0.5 },
+            {
+              company: {
+                companyName: '3',
+                id: expect.any(String),
+                created: expect.any(Date),
+                lastUpdated: expect.any(Date),
+              },
+              confidence: 0.9,
+            },
+            {
+              company: {
+                companyName: '2',
+                id: expect.any(String),
+                created: expect.any(Date),
+                lastUpdated: expect.any(Date),
+              },
+              confidence: 0.7,
+            },
+            {
+              company: {
+                companyName: '4',
+                id: expect.any(String),
+                created: expect.any(Date),
+                lastUpdated: expect.any(Date),
+              },
+              confidence: 0.6,
+            },
+            {
+              company: {
+                companyName: '1',
+                id: expect.any(String),
+                created: expect.any(Date),
+                lastUpdated: expect.any(Date),
+              },
+              confidence: 0.5,
+            },
             // Items without confidences come last.
-            { company: { companyName: '5', id: expect.any(String), created: expect.any(Date) } },
+            {
+              company: {
+                companyName: '5',
+                id: expect.any(String),
+                created: expect.any(Date),
+                lastUpdated: expect.any(Date),
+              },
+            },
           ]);
         });
       });

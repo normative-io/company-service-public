@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { v4 as uuid } from 'uuid';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
+import { isEqual, omit } from 'lodash';
 
 export class Company {
   @ApiProperty({
@@ -42,6 +43,12 @@ export class Company {
   })
   public created: Date;
 
+  @ApiProperty({
+    type: Date,
+    description: "The most recent date this company's metadata was changed or verified.",
+  })
+  public lastUpdated: Date;
+
   constructor(createCompanyDto: CreateCompanyDto) {
     this.id = uuid();
     this.companyName = createCompanyDto.companyName;
@@ -50,6 +57,7 @@ export class Company {
     this.isic = createCompanyDto.isic;
     const now = new Date();
     this.created = now;
+    this.lastUpdated = now;
   }
 
   update(updateCompanyDto: UpdateCompanyDto) {
@@ -65,5 +73,12 @@ export class Company {
     if (updateCompanyDto.isic) {
       this.isic = updateCompanyDto.isic;
     }
+    this.lastUpdated = new Date();
+  }
+
+  // Compares whether two Company objects represent the equivalent metadata.
+  isMetadataEqual(other: Company): boolean {
+    const internalFields = ['id', 'created', 'lastUpdated'];
+    return isEqual(omit(this, internalFields), omit(other, internalFields));
   }
 }

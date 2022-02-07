@@ -21,7 +21,7 @@ export class CompanyController {
     return { description: 'example-company' };
   }
 
-  @Get('v1/get')
+  @Post('v1/get')
   @ApiOperation({ summary: 'Get the historical metadata of the requested company.' })
   @ApiResponse({ description: 'The metadata of the found company. May be multiple if the data had to be scraped.' })
   @ApiBody({ type: GetCompanyDto, description: 'The requested company.' })
@@ -34,7 +34,8 @@ export class CompanyController {
   @ApiResponse({ description: 'The metadata of the new/updated company.' })
   @ApiBody({ type: InsertOrUpdateDto, description: 'The new/updated company.' })
   async insertOrUpdate(@Body() insertOrUpdateDto: InsertOrUpdateDto) {
-    // TODO: implement.
+    const [company, message] = await this.companyService.insertOrUpdate(insertOrUpdateDto);
+    return { company, message };
   }
 
   @Post('v1/insertOrUpdateBulk')
