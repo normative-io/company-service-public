@@ -24,6 +24,9 @@ export class CompanyDbObject {
 
   @Prop()
   created: Date;
+
+  @Prop()
+  lastUpdated: Date;
 }
 
 export const CompanySchema = SchemaFactory.createForClass(CompanyDbObject);

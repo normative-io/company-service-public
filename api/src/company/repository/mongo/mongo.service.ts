@@ -35,18 +35,23 @@ export class MongoRepositoryService implements ICompanyRepository {
     const session = await this.companyModel.startSession();
     let dbObject: CompanyDbObject;
     let msg: string;
-    await session.withTransaction(async (): Promise<[CompanyDbObject, string]> => {
+    await session.withTransaction(async () => {
       const newRecord = new Company(insertOrUpdateDto);
       const mostRecent = dbObjectToModel(await this.getMostRecentRecord(insertOrUpdateDto));
       if (newRecord.isMetadataEqual(mostRecent)) {
-        msg = `Skipped update; metadata is equal to the most recent record: ${JSON.stringify(insertOrUpdateDto)}`;
-        return;
-      }
-      dbObject = await this.companyModel.create(modelToDbObject(newRecord));
-      if (mostRecent) {
-        msg = `Updated metadata for company: ${JSON.stringify(insertOrUpdateDto)}`;
+        dbObject = await this.companyModel.findByIdAndUpdate(
+          mostRecent.id,
+          { lastUpdated: new Date() },
+          { returnDocument: 'after' },
+        );
+        msg = `Marked as up-to-date; metadata is equal to the most recent record: ${JSON.stringify(insertOrUpdateDto)}`;
       } else {
-        msg = `Inserted an initial record for company: ${JSON.stringify(insertOrUpdateDto)}`;
+        dbObject = await this.companyModel.create(modelToDbObject(newRecord));
+        if (mostRecent) {
+          msg = `Updated metadata for company: ${JSON.stringify(insertOrUpdateDto)}`;
+        } else {
+          msg = `Inserted an initial record for company: ${JSON.stringify(insertOrUpdateDto)}`;
+        }
       }
     });
     session.endSession();
@@ -136,6 +141,7 @@ function modelToDbObject(company: Company): CompanyDbObject {
     companyName: company.companyName,
     isic: company.isic,
     created: company.created,
+    lastUpdated: company.lastUpdated,
   };
 }
 
@@ -151,5 +157,6 @@ function dbObjectToModel(dbObject: CompanyDbObject): Company {
   });
   company.id = dbObject._id;
   company.created = dbObject.created;
+  company.lastUpdated = dbObject.lastUpdated;
   return company;
 }

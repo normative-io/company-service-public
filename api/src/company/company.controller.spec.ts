@@ -64,6 +64,7 @@ describe('CompanyController', () => {
         id: expect.any(String),
         companyName: 'Fantastic Company',
         created: expect.any(Date),
+        lastUpdated: expect.any(Date),
       },
     });
   });
@@ -78,6 +79,7 @@ describe('CompanyController', () => {
         ...dto,
         id: expect.any(String),
         created: expect.any(Date),
+        lastUpdated: expect.any(Date),
       };
     });
     expect(await controller.addMany(companyDtos)).toEqual({ companies });
@@ -92,6 +94,7 @@ describe('CompanyController', () => {
         id: company1.id,
         companyName: 'Awesome Company',
         created: expect.any(Date),
+        lastUpdated: expect.any(Date),
       },
     });
   });
@@ -110,9 +113,9 @@ describe('CompanyController', () => {
 
     expect(await controller.companies()).toEqual({
       companies: [
-        { id: expect.any(String), companyName: '1', created: expect.any(Date) },
-        { id: expect.any(String), companyName: '2', created: expect.any(Date) },
-        { id: expect.any(String), companyName: '3', created: expect.any(Date) },
+        { id: expect.any(String), companyName: '1', created: expect.any(Date), lastUpdated: expect.any(Date) },
+        { id: expect.any(String), companyName: '2', created: expect.any(Date), lastUpdated: expect.any(Date) },
+        { id: expect.any(String), companyName: '3', created: expect.any(Date), lastUpdated: expect.any(Date) },
       ],
     });
   });
@@ -124,7 +127,7 @@ describe('CompanyController', () => {
     await controller.add({ companyName: '3' });
 
     expect(await controller.getById(company2.id)).toEqual({
-      company: { id: company2.id, companyName: '2', created: expect.any(Date) },
+      company: { id: company2.id, companyName: '2', created: expect.any(Date), lastUpdated: expect.any(Date) },
     });
   });
 
@@ -142,7 +145,7 @@ describe('CompanyController', () => {
 
     // Verify that the company is there.
     expect(await controller.getById(company2.id)).toEqual({
-      company: { id: company2.id, companyName: '2', created: expect.any(Date) },
+      company: { id: company2.id, companyName: '2', created: expect.any(Date), lastUpdated: expect.any(Date) },
     });
 
     await controller.delete(company2.id);
@@ -166,12 +169,12 @@ describe('CompanyController', () => {
 
     expect(await controller.find({ companyName: '2' })).toEqual([
       {
-        company: { id: expect.any(String), companyName: '2', created: expect.any(Date) },
+        company: { id: expect.any(String), companyName: '2', created: expect.any(Date), lastUpdated: expect.any(Date) },
         confidence: expect.any(Number),
         foundBy: expect.any(String),
       },
       {
-        company: { id: expect.any(String), companyName: '2', created: expect.any(Date) },
+        company: { id: expect.any(String), companyName: '2', created: expect.any(Date), lastUpdated: expect.any(Date) },
         confidence: expect.any(Number),
         foundBy: expect.any(String),
       },
