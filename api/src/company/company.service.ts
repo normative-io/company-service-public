@@ -201,8 +201,7 @@ export class CompanyService {
       for (const scraperResponse of response.data) {
         for (const dto of scraperResponse.foundCompanies) {
           this.logger.debug(`Processing result: ${JSON.stringify(dto, undefined, 2)}`);
-          const company = await this.add(dto);
-          this.logger.debug(`Added company: ${JSON.stringify(company, undefined, 2)}`);
+          const [company] = await this.insertOrUpdate(dto);
           results.push({
             company: company,
             confidence: dto.confidence,
