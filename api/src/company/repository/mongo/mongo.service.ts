@@ -129,14 +129,6 @@ export class MongoRepositoryService implements ICompanyRepository {
     }
     return [...companies];
   }
-
-  async findByCompanyIdAndCountry(companyId: string, country: string): Promise<Company> {
-    const dbObject = await this.companyModel.findOne({ companyId: companyId, country: country });
-    if (!dbObject) {
-      return;
-    }
-    return dbObjectToModel(dbObject);
-  }
 }
 
 function modelToDbObject(company: Company): CompanyDbObject {

@@ -152,10 +152,7 @@ export class CompanyService {
       }
     }
     if (findCompanyDto.companyId && findCompanyDto.country) {
-      const company = await this.companyRepo.findByCompanyIdAndCountry(
-        findCompanyDto.companyId,
-        findCompanyDto.country,
-      );
+      const company = await this.companyRepo.get(findCompanyDto.country, findCompanyDto.companyId);
       if (company) {
         results.push({
           confidence: CompanyService.confidenceByCompanyIdAndCountry,

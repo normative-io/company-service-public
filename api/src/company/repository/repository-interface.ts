@@ -38,5 +38,4 @@ export interface ICompanyRepository {
   save(company: Company): Promise<Company>;
   findById(id: string): Promise<Company | undefined>;
   findByName(name: string): Promise<Company[]>;
-  findByCompanyIdAndCountry(companyId: string, country: string): Promise<Company | undefined>;
 }
