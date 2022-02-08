@@ -1,6 +1,5 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { CreateCompanyDto } from './dto/create-company.dto';
-import { UpdateCompanyDto } from './dto/update-company.dto';
 import { Company } from './company.model';
 import { COMPANY_REPOSITORY, ICompanyRepository } from './repository/repository-interface';
 import { FindCompanyDto } from './dto/find-company.dto';
@@ -117,13 +116,6 @@ export class CompanyService {
 
   async getById(id: string): Promise<Company | undefined> {
     return this.companyRepo.getById(id);
-  }
-
-  async update(id: string, updateCompanyDto: UpdateCompanyDto): Promise<Company> {
-    const company = await this.companyRepo.getById(id);
-    company.update(updateCompanyDto);
-    await this.companyRepo.save(company);
-    return company;
   }
 
   async find(findCompanyDto: FindCompanyDto): Promise<CompanyFoundInServiceDto[]> {

@@ -2,7 +2,6 @@ import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post } from '@ne
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { FindCompanyDto } from './dto/find-company.dto';
-import { UpdateCompanyDto } from './dto/update-company.dto';
 import { InsertOrUpdateDto } from './dto/insert-or-update.dto';
 import { GetCompanyDto } from './dto/get-company.dto';
 import { MarkDeletedDto } from './dto/mark-deleted.dto';
@@ -98,15 +97,6 @@ export class CompanyController {
   async getById(@Param('id') id: string) {
     // TODO: remove; clients won't have access to this low-level db operation.
     return { company: await this.companyService.getById(id) };
-  }
-
-  @Patch('v1/update/:id')
-  @ApiOperation({ summary: 'Update a company.' })
-  @ApiResponse({ description: 'The updated company.' })
-  @ApiBody({ type: UpdateCompanyDto, description: 'The fields to update. Absent fields will be ignored.' })
-  async update(@Param('id') id: string, @Body() updateCompanyDto: UpdateCompanyDto) {
-    // TODO: remove; clients won't have access to this low-level db operation.
-    return { company: await this.companyService.update(id, updateCompanyDto) };
   }
 
   @Post('v1/find')

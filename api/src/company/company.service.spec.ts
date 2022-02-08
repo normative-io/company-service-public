@@ -91,28 +91,6 @@ describe('CompanyService', () => {
     expect(await service.addMany(companyDtos)).toEqual(companies);
   });
 
-  it('should update a company', async () => {
-    const company1 = await service.add({ companyName: 'Fantastic Company' });
-    service.add({ companyName: 'Most fantastic Company' });
-
-    expect(
-      await service.update(company1.id, { companyName: 'Awesome Company', country: 'CH', companyId: '456' }),
-    ).toEqual({
-      id: company1.id,
-      companyName: 'Awesome Company',
-      created: expect.any(Date),
-      lastUpdated: expect.any(Date),
-      country: 'CH',
-      companyId: '456',
-    });
-  });
-
-  it('cannot update a non-existent company', async () => {
-    expect(service.update('non-existent-id', { companyName: 'Fantastic Company' })).rejects.toThrowError(
-      NotFoundException,
-    );
-  });
-
   it('should list all companies', async () => {
     // We first need to create a few companies.
     await service.add({ companyName: '1' });

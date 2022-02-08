@@ -85,26 +85,6 @@ describe('CompanyController', () => {
     expect(await controller.addMany(companyDtos)).toEqual({ companies });
   });
 
-  it('should update a company', async () => {
-    const company1 = (await controller.add({ companyName: 'Fantastic Company' })).company;
-    await controller.add({ companyName: 'Most fantastic Company' });
-
-    expect(await controller.update(company1.id, { companyName: 'Awesome Company' })).toEqual({
-      company: {
-        id: company1.id,
-        companyName: 'Awesome Company',
-        created: expect.any(Date),
-        lastUpdated: expect.any(Date),
-      },
-    });
-  });
-
-  it('cannot update a non-existent company', async () => {
-    expect(async () => {
-      await controller.update('non-existent-id', { companyName: 'Fantastic Company' });
-    }).rejects.toThrowError(NotFoundException);
-  });
-
   it('should list all companies', async () => {
     // We first need to create a few companies.
     await controller.add({ companyName: '1' });
