@@ -92,6 +92,7 @@ export class CompanyService {
       });
     }
     this.logger.debug(`Could not find company anywhere: ${JSON.stringify(getCompanyDto)}`);
+    return [];
   }
 
   async insertOrUpdate(insertOrUpdateDto: InsertOrUpdateDto): Promise<[Company, string]> {

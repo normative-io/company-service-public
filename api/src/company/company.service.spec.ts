@@ -141,6 +141,11 @@ describe('CompanyService', () => {
   });
 
   describe('the get method', () => {
+    beforeEach(() => {
+      const httpResponse: AxiosResponse = { data: [], status: 200, statusText: 'OK', headers: {}, config: {} };
+      jest.spyOn(httpService, 'post').mockImplementation(() => of(httpResponse));
+    });
+
     it('should return the most recent record when `atTime` is not set', async () => {
       await service.add({ country: 'CH', companyId: '1', companyName: 'name1' });
       await service.add({ country: 'CH', companyId: '1', companyName: 'name2' });
@@ -181,8 +186,92 @@ describe('CompanyService', () => {
       }
     });
 
+    it('should not return deleted records', async () => {
+      const company = { country: 'CH', companyId: '1' };
+      await service.markDeleted(company);
+
+      const wantInDb = {
+        id: expect.any(String),
+        created: expect.any(Date),
+        lastUpdated: expect.any(Date),
+        isDeleted: true,
+        country: company.country,
+        companyId: company.companyId,
+      };
+      expect(await service.listAll()).toEqual([wantInDb]);
+      expect(await service.get({ country: company.country, companyId: company.companyId })).toEqual([]);
+    });
+
+    it('should not return historical records marked as deleted', async () => {
+      const company = { country: 'CH', companyId: '1', companyName: 'name1' };
+
+      await service.insertOrUpdate(company);
+      await service.markDeleted(company);
+      await service.insertOrUpdate(company);
+
+      const wantInserted = {
+        id: expect.any(String),
+        created: expect.any(Date),
+        lastUpdated: expect.any(Date),
+        country: company.country,
+        companyId: company.companyId,
+        companyName: company.companyName,
+      };
+      const wantDeleted = {
+        id: expect.any(String),
+        created: expect.any(Date),
+        lastUpdated: expect.any(Date),
+        isDeleted: true,
+        country: company.country,
+        companyId: company.companyId,
+      };
+      const dbContents = await service.listAll();
+      expect(dbContents).toEqual([wantInserted, wantDeleted, wantInserted]);
+
+      expect(
+        await service.get({
+          country: company.country,
+          companyId: company.companyId,
+          atTime: new Date(dbContents[0].created.getTime() - 1),
+        }),
+      ).toEqual([]);
+      expect(
+        await service.get({
+          country: company.country,
+          companyId: company.companyId,
+          atTime: dbContents[0].created,
+        }),
+      ).toEqual([
+        {
+          confidence: expect.any(Number),
+          foundBy: 'Repository by companyId and country',
+          company: wantInserted,
+        },
+      ]);
+      expect(
+        await service.get({
+          country: company.country,
+          companyId: company.companyId,
+          atTime: dbContents[1].created,
+        }),
+      ).toEqual([]);
+      expect(
+        await service.get({
+          country: company.country,
+          companyId: company.companyId,
+          atTime: dbContents[2].created,
+        }),
+      ).toEqual([
+        {
+          confidence: expect.any(Number),
+          foundBy: 'Repository by companyId and country',
+          company: wantInserted,
+        },
+      ]);
+    });
+
     it('should not contact scraper service for historical queries', async () => {
-      expect(await service.get({ country: 'DK', companyId: '42', atTime: new Date('2020') })).toEqual(undefined);
+      expect(await service.get({ country: 'DK', companyId: '42', atTime: new Date('2020') })).toEqual([]);
       expect(httpService.post).not.toHaveBeenCalled();
     });
   });

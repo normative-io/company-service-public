@@ -16,7 +16,11 @@ export class MongoRepositoryService implements ICompanyRepository {
 
   async get(country: string, companyId: string, atTime?: Date): Promise<Company | undefined> {
     if (!atTime) {
-      return dbObjectToModel(await this.getMostRecentRecord({ country, companyId }));
+      const mostRecent = await this.getMostRecentRecord({ country, companyId });
+      if (!mostRecent || mostRecent.isDeleted) {
+        return; // Deleted records should not be returned.
+      }
+      return dbObjectToModel(mostRecent);
     }
     const dbObjects = await this.companyModel.find({ country, companyId }).sort('-created');
     // The first item in this descending-creation-time-ordered
@@ -24,6 +28,9 @@ export class MongoRepositoryService implements ICompanyRepository {
     // that was active during the requested `atTime`.
     for (const dbObject of dbObjects) {
       if (dbObject.created <= atTime) {
+        if (dbObject.isDeleted) {
+          return; // Deleted records should not be returned.
+        }
         return dbObjectToModel(dbObject);
       }
     }

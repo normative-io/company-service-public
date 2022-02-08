@@ -14,6 +14,7 @@ export interface ICompanyRepository {
   // * If the company does not exist, inserts a new record.
   // * If the new metadata is equivalent to the most recent, updates the `lastUpdated` timestamp.
   // * If the new metadata is different from the most recent, inserts a new record.
+  // * If the most recent metadata is marked as deleted, inserts a record.
   //
   // Previous updates will still be readable by clients using the `atTime` parameter.
   // Returns the new company record and a message describing the outcome.
