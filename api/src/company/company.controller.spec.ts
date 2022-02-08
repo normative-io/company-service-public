@@ -58,17 +58,6 @@ describe('CompanyController', () => {
     expect(controller.v1()).toBeDefined();
   });
 
-  it('should create a company', async () => {
-    expect(await controller.add({ companyName: 'Fantastic Company' })).toEqual({
-      company: {
-        id: expect.any(String),
-        companyName: 'Fantastic Company',
-        created: expect.any(Date),
-        lastUpdated: expect.any(Date),
-      },
-    });
-  });
-
   it('should create many companies', async () => {
     const companyDtos = [
       { companyName: 'Fantastic Company', country: 'CH', companyId: '456' },
@@ -87,27 +76,51 @@ describe('CompanyController', () => {
 
   it('should list all companies', async () => {
     // We first need to create a few companies.
-    await controller.add({ companyName: '1' });
-    await controller.add({ companyName: '2' });
-    await controller.add({ companyName: '3' });
+    await controller.insertOrUpdate({ country: 'CH', companyId: '1' });
+    await controller.insertOrUpdate({ country: 'CH', companyId: '2' });
+    await controller.insertOrUpdate({ country: 'CH', companyId: '3' });
 
     expect(await controller.companies()).toEqual({
       companies: [
-        { id: expect.any(String), companyName: '1', created: expect.any(Date), lastUpdated: expect.any(Date) },
-        { id: expect.any(String), companyName: '2', created: expect.any(Date), lastUpdated: expect.any(Date) },
-        { id: expect.any(String), companyName: '3', created: expect.any(Date), lastUpdated: expect.any(Date) },
+        {
+          id: expect.any(String),
+          country: 'CH',
+          companyId: '1',
+          created: expect.any(Date),
+          lastUpdated: expect.any(Date),
+        },
+        {
+          id: expect.any(String),
+          country: 'CH',
+          companyId: '2',
+          created: expect.any(Date),
+          lastUpdated: expect.any(Date),
+        },
+        {
+          id: expect.any(String),
+          country: 'CH',
+          companyId: '3',
+          created: expect.any(Date),
+          lastUpdated: expect.any(Date),
+        },
       ],
     });
   });
 
   it('should get a company by id', async () => {
     // We first need to create a few companies.
-    await controller.add({ companyName: '1' });
-    const company2 = (await controller.add({ companyName: '2' })).company;
-    await controller.add({ companyName: '3' });
+    await controller.insertOrUpdate({ country: 'CH', companyId: '1' });
+    const company2 = (await controller.insertOrUpdate({ country: 'CH', companyId: '2' })).company;
+    await controller.insertOrUpdate({ country: 'CH', companyId: '2' });
 
     expect(await controller.getById(company2.id)).toEqual({
-      company: { id: company2.id, companyName: '2', created: expect.any(Date), lastUpdated: expect.any(Date) },
+      company: {
+        id: company2.id,
+        country: 'CH',
+        companyId: '2',
+        created: expect.any(Date),
+        lastUpdated: expect.any(Date),
+      },
     });
   });
 
@@ -119,18 +132,32 @@ describe('CompanyController', () => {
 
   it('should find a company', async () => {
     // We first need to create a few companies.
-    await controller.add({ companyName: '1' });
-    await controller.add({ companyName: '2' });
-    await controller.add({ companyName: '2' });
+    await controller.insertOrUpdate({ country: 'CH', companyId: '1', companyName: 'name1' });
+    await controller.insertOrUpdate({ country: 'CH', companyId: '2', companyName: 'some-name' });
+    await controller.insertOrUpdate({ country: 'CH', companyId: '3', companyName: 'some-name' });
 
-    expect(await controller.find({ companyName: '2' })).toEqual([
+    expect(await controller.find({ companyName: 'some-name' })).toEqual([
       {
-        company: { id: expect.any(String), companyName: '2', created: expect.any(Date), lastUpdated: expect.any(Date) },
+        company: {
+          id: expect.any(String),
+          country: 'CH',
+          companyId: '2',
+          companyName: 'some-name',
+          created: expect.any(Date),
+          lastUpdated: expect.any(Date),
+        },
         confidence: expect.any(Number),
         foundBy: expect.any(String),
       },
       {
-        company: { id: expect.any(String), companyName: '2', created: expect.any(Date), lastUpdated: expect.any(Date) },
+        company: {
+          id: expect.any(String),
+          country: 'CH',
+          companyId: '3',
+          companyName: 'some-name',
+          created: expect.any(Date),
+          lastUpdated: expect.any(Date),
+        },
         confidence: expect.any(Number),
         foundBy: expect.any(String),
       },

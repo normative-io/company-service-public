@@ -73,15 +73,6 @@ export class CompanyController {
     return { companies: await this.companyService.listAll() };
   }
 
-  @Post('v1/add')
-  @ApiOperation({ summary: 'Add a company.' })
-  @ApiResponse({ description: 'The new company, including any initialised fields.' })
-  @ApiBody({ type: CreateCompanyDto, description: 'The new company' })
-  async add(@Body() createCompanyDto: CreateCompanyDto) {
-    // TODO: remove; superceded by insertOrUpdate.
-    return { company: await this.companyService.add(createCompanyDto) };
-  }
-
   @Post('v1/addMany')
   @ApiOperation({ summary: 'Add many companies.' })
   @ApiResponse({ description: 'The new companies, including any initialised fields.' })

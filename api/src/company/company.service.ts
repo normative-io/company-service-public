@@ -106,10 +106,6 @@ export class CompanyService {
     return await this.companyRepo.listAll();
   }
 
-  async add(createCompanyDto: CreateCompanyDto): Promise<Company> {
-    return await this.companyRepo.save(new Company(createCompanyDto));
-  }
-
   async addMany(createCompanyDtos: CreateCompanyDto[]): Promise<Company[]> {
     return Promise.all(createCompanyDtos.map(async (dto) => await this.companyRepo.save(new Company(dto))));
   }
