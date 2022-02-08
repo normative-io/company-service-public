@@ -1,6 +1,5 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreateCompanyDto } from './dto/create-company.dto';
 import { FindCompanyDto } from './dto/find-company.dto';
 import { InsertOrUpdateDto } from './dto/insert-or-update.dto';
 import { GetCompanyDto } from './dto/get-company.dto';
@@ -42,7 +41,16 @@ export class CompanyController {
   @ApiResponse({ description: 'The metadata of the new/updated companies.' })
   @ApiBody({ type: [InsertOrUpdateDto], description: 'The new/updated companies.' })
   async insertOrUpdateBulk(@Body() insertOrUpdateDtos: InsertOrUpdateDto[]) {
-    // TODO: implement.
+    // NOTE: this is currently a naive implementation that calls insertOrUpdate serially.
+    // This should be improved:
+    //  1) Perform the insertions in parallel.
+    //  2) Take advantage of insertMany database operations.
+    //  3) Consider how errors should be handled: should this be transactional? Or are partial errors okay?
+    const results = [];
+    for (const insertOrUpdateDto of insertOrUpdateDtos) {
+      results.push(await this.insertOrUpdate(insertOrUpdateDto));
+    }
+    return results;
   }
 
   @Delete('v1/markDeleted')
@@ -63,15 +71,6 @@ export class CompanyController {
   })
   async search(@Body() searchDto: SearchDto) {
     // TODO: implement.
-  }
-
-  @Post('v1/addMany')
-  @ApiOperation({ summary: 'Add many companies.' })
-  @ApiResponse({ description: 'The new companies, including any initialised fields.' })
-  @ApiBody({ type: [CreateCompanyDto], description: 'The new companies' })
-  async addMany(@Body() createCompanyDtos: CreateCompanyDto[]) {
-    // TODO: remove; superceded by insertOrUpdateBulk.
-    return { companies: await this.companyService.addMany(createCompanyDtos) };
   }
 
   @Post('v1/find')

@@ -1,5 +1,4 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { CreateCompanyDto } from './dto/create-company.dto';
 import { Company } from './company.model';
 import { COMPANY_REPOSITORY, ICompanyRepository } from './repository/repository-interface';
 import { FindCompanyDto } from './dto/find-company.dto';
@@ -104,10 +103,6 @@ export class CompanyService {
 
   async listAll(): Promise<Company[]> {
     return await this.companyRepo.listAll();
-  }
-
-  async addMany(createCompanyDtos: CreateCompanyDto[]): Promise<Company[]> {
-    return Promise.all(createCompanyDtos.map(async (dto) => await this.companyRepo.save(new Company(dto))));
   }
 
   async find(findCompanyDto: FindCompanyDto): Promise<CompanyFoundInServiceDto[]> {

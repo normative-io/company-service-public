@@ -1,5 +1,4 @@
 import { HttpModule } from '@nestjs/axios';
-import { NotFoundException } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MongoMemoryServer } from 'mongodb-memory-server';
@@ -59,19 +58,28 @@ describe('CompanyController', () => {
   });
 
   it('should create many companies', async () => {
-    const companyDtos = [
-      { companyName: 'Fantastic Company', country: 'CH', companyId: '456' },
-      { companyName: 'Mediocre Company', country: 'PL', companyId: '789' },
-    ];
-    const companies = companyDtos.map((dto) => {
-      return {
-        ...dto,
-        id: expect.any(String),
-        created: expect.any(Date),
-        lastUpdated: expect.any(Date),
-      };
-    });
-    expect(await controller.addMany(companyDtos)).toEqual({ companies });
+    const company1 = { country: 'CH', companyId: '456', companyName: 'Fantastic Company' };
+    const company2 = { country: 'PL', companyId: '789', companyName: 'Mediocore Company' };
+    expect(await controller.insertOrUpdateBulk([company1, company2])).toEqual([
+      {
+        company: {
+          ...company1,
+          id: expect.any(String),
+          created: expect.any(Date),
+          lastUpdated: expect.any(Date),
+        },
+        message: expect.stringContaining('Inserted'),
+      },
+      {
+        company: {
+          ...company2,
+          id: expect.any(String),
+          created: expect.any(Date),
+          lastUpdated: expect.any(Date),
+        },
+        message: expect.stringContaining('Inserted'),
+      },
+    ]);
   });
 
   it('should find a company', async () => {

@@ -1,4 +1,3 @@
-import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { COMPANY_REPOSITORY } from './repository/repository-interface';
 import { CompanyService } from './company.service';
@@ -62,22 +61,6 @@ describe('CompanyService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
-  });
-
-  it('should create many companies', async () => {
-    const companyDtos = [
-      { companyName: 'Fantastic Company', country: 'CH', companyId: '456' },
-      { companyName: 'Mediocre Company', country: 'PL', companyId: '789' },
-    ];
-    const companies = companyDtos.map((dto) => {
-      return {
-        ...dto,
-        id: expect.any(String),
-        created: expect.any(Date),
-        lastUpdated: expect.any(Date),
-      };
-    });
-    expect(await service.addMany(companyDtos)).toEqual(companies);
   });
 
   it('should list all companies', async () => {

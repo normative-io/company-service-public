@@ -95,17 +95,6 @@ export class MongoRepositoryService implements ICompanyRepository {
     return await this.companyModel.findOne({ country: key.country, companyId: key.companyId }).sort('-created');
   }
 
-  async save(company: Company): Promise<Company> {
-    // TODO: properly implement an append-only interface.
-    const dbObject = await this.companyModel.findByIdAndUpdate(company.id, modelToDbObject(company), {
-      upsert: true,
-      new: true,
-    });
-    const newCompany = dbObjectToModel(dbObject);
-    this.logger.log(`Saved company ${JSON.stringify(newCompany, undefined, 2)}`);
-    return newCompany;
-  }
-
   async listAll(): Promise<Company[]> {
     const companies: Company[] = [];
     for (const dbObject of await this.companyModel.find()) {

@@ -35,7 +35,6 @@ export interface ICompanyRepository {
   // The production database will be too large to serve all the data in a single request.
   listAll(): Promise<Company[]>;
 
-  save(company: Company): Promise<Company>;
   findById(id: string): Promise<Company | undefined>;
   findByName(name: string): Promise<Company[]>;
 }
