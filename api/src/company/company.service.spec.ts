@@ -114,22 +114,6 @@ describe('CompanyService', () => {
     ]);
   });
 
-  it('should get a company by id', async () => {
-    // We first need to create a few companies.
-    await service.insertOrUpdate({ country: 'CH', companyId: '1', companyName: '1' });
-    const [company2] = await service.insertOrUpdate({ country: 'US', companyId: '2', companyName: '2' });
-    await service.insertOrUpdate({ country: 'DK', companyId: '3', companyName: '3' });
-
-    expect(await service.getById(company2.id)).toEqual({
-      id: company2.id,
-      country: company2.country,
-      companyId: company2.companyId,
-      companyName: company2.companyName,
-      created: expect.any(Date),
-      lastUpdated: expect.any(Date),
-    });
-  });
-
   describe('the get method', () => {
     beforeEach(() => {
       const httpResponse: AxiosResponse = { data: [], status: 200, statusText: 'OK', headers: {}, config: {} };
@@ -413,16 +397,6 @@ describe('CompanyService', () => {
     });
   });
 
-  it('cannot get a non-existent company', async () => {
-    expect(async () => {
-      await service.getById('non-existent-id');
-    }).rejects.toThrowError(NotFoundException);
-  });
-
-  it('the id must be present if we want to get by id', async () => {
-    expect(service.getById('')).rejects.toThrowError(NotFoundException);
-  });
-
   it('should find a company by id', async () => {
     const [company] = await service.insertOrUpdate({ country: 'CH', companyId: '1', companyName: '1' });
 
@@ -636,14 +610,22 @@ describe('CompanyService', () => {
           },
         ]);
 
-        expect(await service.getById(found[0].company.id)).toEqual({
-          id: expect.any(String),
-          companyName: 'company found',
-          created: expect.any(Date),
-          lastUpdated: expect.any(Date),
-          country: 'CH',
-          companyId: '456',
-        });
+        expect(await service.get({ country: found[0].company.country, companyId: found[0].company.companyId })).toEqual(
+          [
+            {
+              company: {
+                id: expect.any(String),
+                created: expect.any(Date),
+                lastUpdated: expect.any(Date),
+                country: 'CH',
+                companyId: '456',
+                companyName: 'company found',
+              },
+              confidence: expect.any(Number),
+              foundBy: expect.any(String),
+            },
+          ],
+        );
       });
     });
 
@@ -687,20 +669,36 @@ describe('CompanyService', () => {
             },
           },
         ]);
-        expect(await service.getById(found[0].company.id)).toEqual({
-          id: expect.any(String),
-          companyName: 'company found',
-          created: expect.any(Date),
-          lastUpdated: expect.any(Date),
-        });
-        expect(await service.getById(found[1].company.id)).toEqual({
-          id: expect.any(String),
-          companyName: 'another company found',
-          created: expect.any(Date),
-          lastUpdated: expect.any(Date),
-          country: 'CH',
-          companyId: '456',
-        });
+        expect(await service.get({ country: found[0].company.country, companyId: found[0].company.companyId })).toEqual(
+          [
+            {
+              company: {
+                id: expect.any(String),
+                companyName: 'company found',
+                created: expect.any(Date),
+                lastUpdated: expect.any(Date),
+              },
+              confidence: expect.any(Number),
+              foundBy: expect.any(String),
+            },
+          ],
+        );
+        expect(await service.get({ country: found[1].company.country, companyId: found[1].company.companyId })).toEqual(
+          [
+            {
+              company: {
+                id: expect.any(String),
+                companyName: 'another company found',
+                created: expect.any(Date),
+                lastUpdated: expect.any(Date),
+                country: 'CH',
+                companyId: '456',
+              },
+              confidence: expect.any(Number),
+              foundBy: expect.any(String),
+            },
+          ],
+        );
       });
 
       describe('and results contain a confidence value', () => {

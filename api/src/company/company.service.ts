@@ -110,10 +110,6 @@ export class CompanyService {
     return Promise.all(createCompanyDtos.map(async (dto) => await this.companyRepo.save(new Company(dto))));
   }
 
-  async getById(id: string): Promise<Company | undefined> {
-    return this.companyRepo.getById(id);
-  }
-
   async find(findCompanyDto: FindCompanyDto): Promise<CompanyFoundInServiceDto[]> {
     this.findInboundTotal.inc();
     const results = await this.findInRepo(findCompanyDto);

@@ -74,14 +74,6 @@ export class CompanyController {
     return { companies: await this.companyService.addMany(createCompanyDtos) };
   }
 
-  @Get('v1/:id')
-  @ApiOperation({ summary: 'Retrieve a company given its id.' })
-  @ApiResponse({ description: 'The matching company.' })
-  async getById(@Param('id') id: string) {
-    // TODO: remove; clients won't have access to this low-level db operation.
-    return { company: await this.companyService.getById(id) };
-  }
-
   @Post('v1/find')
   @ApiOperation({ summary: 'Find companies by metadata.' })
   @ApiResponse({ description: 'The matching companies.' })

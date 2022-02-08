@@ -114,14 +114,6 @@ export class MongoRepositoryService implements ICompanyRepository {
     return [...companies];
   }
 
-  async getById(id: string): Promise<Company> {
-    const dbObject = await this.companyModel.findById(id);
-    if (!dbObject) {
-      throw new NotFoundException(`Could not find company with id '${id}'`);
-    }
-    return dbObjectToModel(dbObject);
-  }
-
   async findById(id: string): Promise<Company | undefined> {
     const dbObject = await this.companyModel.findById(id);
     if (!dbObject) {

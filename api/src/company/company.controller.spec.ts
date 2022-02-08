@@ -74,29 +74,6 @@ describe('CompanyController', () => {
     expect(await controller.addMany(companyDtos)).toEqual({ companies });
   });
 
-  it('should get a company by id', async () => {
-    // We first need to create a few companies.
-    await controller.insertOrUpdate({ country: 'CH', companyId: '1' });
-    const company2 = (await controller.insertOrUpdate({ country: 'CH', companyId: '2' })).company;
-    await controller.insertOrUpdate({ country: 'CH', companyId: '2' });
-
-    expect(await controller.getById(company2.id)).toEqual({
-      company: {
-        id: company2.id,
-        country: 'CH',
-        companyId: '2',
-        created: expect.any(Date),
-        lastUpdated: expect.any(Date),
-      },
-    });
-  });
-
-  it('cannot get a non-existent company', async () => {
-    expect(async () => {
-      await controller.getById('non-existent-id');
-    }).rejects.toThrowError(NotFoundException);
-  });
-
   it('should find a company', async () => {
     // We first need to create a few companies.
     await controller.insertOrUpdate({ country: 'CH', companyId: '1', companyName: 'name1' });
