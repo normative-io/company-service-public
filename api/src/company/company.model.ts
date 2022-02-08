@@ -13,6 +13,12 @@ export class Company {
   public id: string;
 
   @ApiProperty({
+    type: Boolean,
+    description: 'If true, this company record was marked as deleted',
+  })
+  public isDeleted?: boolean;
+
+  @ApiProperty({
     type: String,
     description: 'The name of the company',
     example: 'An awesome company',

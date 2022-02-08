@@ -16,7 +16,11 @@ export class MongoRepositoryService implements ICompanyRepository {
 
   async get(country: string, companyId: string, atTime?: Date): Promise<Company | undefined> {
     if (!atTime) {
-      return dbObjectToModel(await this.getMostRecentRecord({ country, companyId }));
+      const mostRecent = await this.getMostRecentRecord({ country, companyId });
+      if (!mostRecent || mostRecent.isDeleted) {
+        return; // Deleted records should not be returned.
+      }
+      return dbObjectToModel(mostRecent);
     }
     const dbObjects = await this.companyModel.find({ country, companyId }).sort('-created');
     // The first item in this descending-creation-time-ordered
@@ -24,6 +28,9 @@ export class MongoRepositoryService implements ICompanyRepository {
     // that was active during the requested `atTime`.
     for (const dbObject of dbObjects) {
       if (dbObject.created <= atTime) {
+        if (dbObject.isDeleted) {
+          return; // Deleted records should not be returned.
+        }
         return dbObjectToModel(dbObject);
       }
     }
@@ -52,6 +59,31 @@ export class MongoRepositoryService implements ICompanyRepository {
         } else {
           msg = `Inserted an initial record for company: ${JSON.stringify(insertOrUpdateDto)}`;
         }
+      }
+    });
+    session.endSession();
+    this.logger.debug(msg);
+    return [dbObjectToModel(dbObject), msg];
+  }
+
+  async markDeleted(key: CompanyKeyDto): Promise<[Company, string]> {
+    const session = await this.companyModel.startSession();
+    let dbObject: CompanyDbObject;
+    let msg: string;
+    await session.withTransaction(async () => {
+      const mostRecent = await this.getMostRecentRecord(key);
+      if (!mostRecent || !mostRecent.isDeleted) {
+        const deleteRecord = new Company({ country: key.country, companyId: key.companyId });
+        deleteRecord.isDeleted = true;
+        dbObject = await this.companyModel.create(modelToDbObject(deleteRecord));
+        msg = `Marked as deleted: ${JSON.stringify(key)}`;
+      } else {
+        dbObject = await this.companyModel.findByIdAndUpdate(
+          mostRecent._id,
+          { lastUpdated: new Date() },
+          { returnDocument: 'after' },
+        );
+        msg = `Marked as up-to-date; company already marked as deleted: ${JSON.stringify(key)}`;
       }
     });
     session.endSession();
@@ -134,7 +166,7 @@ function modelToDbObject(company: Company): CompanyDbObject {
   if (!company) {
     return;
   }
-  return {
+  const dbObject: CompanyDbObject = {
     _id: company.id,
     companyId: company.companyId,
     country: company.country,
@@ -143,6 +175,10 @@ function modelToDbObject(company: Company): CompanyDbObject {
     created: company.created,
     lastUpdated: company.lastUpdated,
   };
+  if (company.isDeleted) {
+    dbObject.isDeleted = true;
+  }
+  return dbObject;
 }
 
 function dbObjectToModel(dbObject: CompanyDbObject): Company {
@@ -158,5 +194,8 @@ function dbObjectToModel(dbObject: CompanyDbObject): Company {
   company.id = dbObject._id;
   company.created = dbObject.created;
   company.lastUpdated = dbObject.lastUpdated;
+  if (dbObject.isDeleted) {
+    company.isDeleted = true;
+  }
   return company;
 }
