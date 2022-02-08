@@ -95,14 +95,6 @@ export class MongoRepositoryService implements ICompanyRepository {
     return await this.companyModel.findOne({ country: key.country, companyId: key.companyId }).sort('-created');
   }
 
-  async exists(company: Company): Promise<boolean> {
-    // TODO: properly integrate checking for company presence.
-    return await this.companyModel.exists({
-      companyId: company.companyId,
-      country: company.country,
-    });
-  }
-
   async save(company: Company): Promise<Company> {
     // TODO: properly implement an append-only interface.
     const dbObject = await this.companyModel.findByIdAndUpdate(company.id, modelToDbObject(company), {

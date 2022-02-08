@@ -30,7 +30,6 @@ export interface ICompanyRepository {
   // Returns the new deleted company record and a message describing the outcome.
   markDeleted(key: CompanyKeyDto): Promise<[Company, string]>;
 
-  exists(company: Company): Promise<boolean>;
   save(company: Company): Promise<Company>;
   listAll(): Promise<Company[]>;
   // Find a company or throw NotFoundException
