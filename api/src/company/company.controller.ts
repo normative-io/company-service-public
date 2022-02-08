@@ -12,13 +12,6 @@ import { CompanyService } from './company.service';
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
-  @Get('v1')
-  @ApiOperation({ summary: 'Look up metadata for a company.' })
-  @ApiResponse({ description: 'The metadata of the matching company.' })
-  v1() {
-    return { description: 'example-company' };
-  }
-
   @Post('v1/get')
   @ApiOperation({ summary: 'Get the historical metadata of the requested company.' })
   @ApiResponse({ description: 'The metadata of the found company. May be multiple if the data had to be scraped.' })

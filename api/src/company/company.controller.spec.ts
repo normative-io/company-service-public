@@ -53,10 +53,6 @@ describe('CompanyController', () => {
     await mongoServer.stop();
   });
 
-  it('should be defined', () => {
-    expect(controller.v1()).toBeDefined();
-  });
-
   it('should create many companies', async () => {
     const company1 = { country: 'CH', companyId: '456', companyName: 'Fantastic Company' };
     const company2 = { country: 'PL', companyId: '789', companyName: 'Mediocore Company' };
