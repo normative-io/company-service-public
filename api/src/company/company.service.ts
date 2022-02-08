@@ -126,10 +126,6 @@ export class CompanyService {
     return company;
   }
 
-  async delete(id: string): Promise<void> {
-    await this.companyRepo.delete(id);
-  }
-
   async find(findCompanyDto: FindCompanyDto): Promise<CompanyFoundInServiceDto[]> {
     this.findInboundTotal.inc();
     const results = await this.findInRepo(findCompanyDto);

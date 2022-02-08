@@ -130,13 +130,6 @@ export class MongoRepositoryService implements ICompanyRepository {
     return dbObjectToModel(dbObject);
   }
 
-  async delete(id: string): Promise<void> {
-    const dbObject = await this.companyModel.findByIdAndDelete(id);
-    if (!dbObject) {
-      throw new NotFoundException(`Could not find company with id '${id}'`);
-    }
-  }
-
   async findById(id: string): Promise<Company | undefined> {
     const dbObject = await this.companyModel.findById(id);
     if (!dbObject) {

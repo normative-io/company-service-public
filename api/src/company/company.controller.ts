@@ -100,14 +100,6 @@ export class CompanyController {
     return { company: await this.companyService.getById(id) };
   }
 
-  @Delete('v1/delete/:id')
-  @ApiOperation({ summary: 'Delete a company given its id.' })
-  @HttpCode(204)
-  async delete(@Param('id') id: string) {
-    // TODO: remove; clients won't have access to this low-level db operation.
-    await this.companyService.delete(id);
-  }
-
   @Patch('v1/update/:id')
   @ApiOperation({ summary: 'Update a company.' })
   @ApiResponse({ description: 'The updated company.' })

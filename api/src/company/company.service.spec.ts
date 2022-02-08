@@ -433,36 +433,6 @@ describe('CompanyService', () => {
     expect(service.getById('')).rejects.toThrowError(NotFoundException);
   });
 
-  it('should delete a company by id', async () => {
-    // We first need to create a few companies.
-    await service.add({ companyName: '1' });
-    const company2 = await service.add({ companyName: '2' });
-    await service.add({ companyName: '3' });
-
-    // Verify that the company is there.
-    expect(await service.listAll()).toEqual([
-      { id: expect.any(String), companyName: '1', created: expect.any(Date), lastUpdated: expect.any(Date) },
-      { id: expect.any(String), companyName: '2', created: expect.any(Date), lastUpdated: expect.any(Date) },
-      { id: expect.any(String), companyName: '3', created: expect.any(Date), lastUpdated: expect.any(Date) },
-    ]);
-
-    await service.delete(company2.id);
-
-    // Verify that the company is deleted.
-    expect(await service.listAll()).toEqual([
-      { id: expect.any(String), companyName: '1', created: expect.any(Date), lastUpdated: expect.any(Date) },
-      { id: expect.any(String), companyName: '3', created: expect.any(Date), lastUpdated: expect.any(Date) },
-    ]);
-  });
-
-  it('cannot delete a non-existent company', async () => {
-    expect(service.delete('non-existent-id')).rejects.toThrowError(NotFoundException);
-  });
-
-  it('the id must be present when we want to delete by id', async () => {
-    expect(service.delete('')).rejects.toThrowError(NotFoundException);
-  });
-
   it('should find a company by id', async () => {
     const company = await service.add({ companyName: '1' });
 
