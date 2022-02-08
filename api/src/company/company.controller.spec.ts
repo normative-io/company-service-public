@@ -74,39 +74,6 @@ describe('CompanyController', () => {
     expect(await controller.addMany(companyDtos)).toEqual({ companies });
   });
 
-  it('should list all companies', async () => {
-    // We first need to create a few companies.
-    await controller.insertOrUpdate({ country: 'CH', companyId: '1' });
-    await controller.insertOrUpdate({ country: 'CH', companyId: '2' });
-    await controller.insertOrUpdate({ country: 'CH', companyId: '3' });
-
-    expect(await controller.companies()).toEqual({
-      companies: [
-        {
-          id: expect.any(String),
-          country: 'CH',
-          companyId: '1',
-          created: expect.any(Date),
-          lastUpdated: expect.any(Date),
-        },
-        {
-          id: expect.any(String),
-          country: 'CH',
-          companyId: '2',
-          created: expect.any(Date),
-          lastUpdated: expect.any(Date),
-        },
-        {
-          id: expect.any(String),
-          country: 'CH',
-          companyId: '3',
-          created: expect.any(Date),
-          lastUpdated: expect.any(Date),
-        },
-      ],
-    });
-  });
-
   it('should get a company by id', async () => {
     // We first need to create a few companies.
     await controller.insertOrUpdate({ country: 'CH', companyId: '1' });

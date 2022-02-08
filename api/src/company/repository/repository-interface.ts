@@ -30,8 +30,12 @@ export interface ICompanyRepository {
   // Returns the new deleted company record and a message describing the outcome.
   markDeleted(key: CompanyKeyDto): Promise<[Company, string]>;
 
-  save(company: Company): Promise<Company>;
+  // Returns all of the companies in the repository.
+  // This should only be used for testing purposes and not exposed to external clients.
+  // The production database will be too large to serve all the data in a single request.
   listAll(): Promise<Company[]>;
+
+  save(company: Company): Promise<Company>;
   // Find a company or throw NotFoundException
   getById(id: string): Promise<Company>;
   findById(id: string): Promise<Company | undefined>;

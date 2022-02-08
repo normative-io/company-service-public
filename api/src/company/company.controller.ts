@@ -65,14 +65,6 @@ export class CompanyController {
     // TODO: implement.
   }
 
-  @Get('v1/companies')
-  @ApiOperation({ summary: 'List all companies.' })
-  @ApiResponse({ description: 'All the available companies.' })
-  async companies() {
-    // TODO: remove as a public API; this would return too many results in production.
-    return { companies: await this.companyService.listAll() };
-  }
-
   @Post('v1/addMany')
   @ApiOperation({ summary: 'Add many companies.' })
   @ApiResponse({ description: 'The new companies, including any initialised fields.' })
