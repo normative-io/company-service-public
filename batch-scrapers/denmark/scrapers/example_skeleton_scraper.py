@@ -2,10 +2,10 @@ import os
 
 from company_service_client import Client
 from company_service_client.api.company import (
-    company_controller_add_many,
+    company_controller_insert_or_update_bulk,
     company_controller_companies,
 )
-from company_service_client.models import CreateCompanyDto
+from company_service_client.models import InsertOrUpdateDto
 
 production = os.environ.get("PRODUCTION", False)
 url = os.environ.get("API_URL", "http://127.0.0.1:3000")
@@ -13,13 +13,13 @@ url = os.environ.get("API_URL", "http://127.0.0.1:3000")
 client = Client(base_url=url, timeout=30.0, verify_ssl=production)
 
 # TODO: Insert scraping code here, and use the call outlined below to insert companies
-company_controller_add_many.sync_detailed(
+company_controller_insert_or_update_bulk.sync_detailed(
     client=client,
     json_body=[
-        CreateCompanyDto(
+        InsertOrUpdateDto(
             company_name="some company", country="DK", company_id="121212"
         ),
-        CreateCompanyDto(
+        InsertOrUpdateDto(
             company_name="some other company", country="DK", company_id="454545"
         ),
     ],

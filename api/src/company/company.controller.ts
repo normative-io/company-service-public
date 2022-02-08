@@ -1,8 +1,6 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreateCompanyDto } from './dto/create-company.dto';
 import { FindCompanyDto } from './dto/find-company.dto';
-import { UpdateCompanyDto } from './dto/update-company.dto';
 import { InsertOrUpdateDto } from './dto/insert-or-update.dto';
 import { GetCompanyDto } from './dto/get-company.dto';
 import { MarkDeletedDto } from './dto/mark-deleted.dto';
@@ -13,13 +11,6 @@ import { CompanyService } from './company.service';
 @Controller('company')
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
-
-  @Get('v1')
-  @ApiOperation({ summary: 'Look up metadata for a company.' })
-  @ApiResponse({ description: 'The metadata of the matching company.' })
-  v1() {
-    return { description: 'example-company' };
-  }
 
   @Post('v1/get')
   @ApiOperation({ summary: 'Get the historical metadata of the requested company.' })
@@ -43,7 +34,16 @@ export class CompanyController {
   @ApiResponse({ description: 'The metadata of the new/updated companies.' })
   @ApiBody({ type: [InsertOrUpdateDto], description: 'The new/updated companies.' })
   async insertOrUpdateBulk(@Body() insertOrUpdateDtos: InsertOrUpdateDto[]) {
-    // TODO: implement.
+    // NOTE: this is currently a naive implementation that calls insertOrUpdate serially.
+    // This should be improved:
+    //  1) Perform the insertions in parallel.
+    //  2) Take advantage of insertMany database operations.
+    //  3) Consider how errors should be handled: should this be transactional? Or are partial errors okay?
+    const results = [];
+    for (const insertOrUpdateDto of insertOrUpdateDtos) {
+      results.push(await this.insertOrUpdate(insertOrUpdateDto));
+    }
+    return results;
   }
 
   @Delete('v1/markDeleted')
@@ -64,57 +64,6 @@ export class CompanyController {
   })
   async search(@Body() searchDto: SearchDto) {
     // TODO: implement.
-  }
-
-  @Get('v1/companies')
-  @ApiOperation({ summary: 'List all companies.' })
-  @ApiResponse({ description: 'All the available companies.' })
-  async companies() {
-    // TODO: remove as a public API; this would return too many results in production.
-    return { companies: await this.companyService.listAll() };
-  }
-
-  @Post('v1/add')
-  @ApiOperation({ summary: 'Add a company.' })
-  @ApiResponse({ description: 'The new company, including any initialised fields.' })
-  @ApiBody({ type: CreateCompanyDto, description: 'The new company' })
-  async add(@Body() createCompanyDto: CreateCompanyDto) {
-    // TODO: remove; superceded by insertOrUpdate.
-    return { company: await this.companyService.add(createCompanyDto) };
-  }
-
-  @Post('v1/addMany')
-  @ApiOperation({ summary: 'Add many companies.' })
-  @ApiResponse({ description: 'The new companies, including any initialised fields.' })
-  @ApiBody({ type: [CreateCompanyDto], description: 'The new companies' })
-  async addMany(@Body() createCompanyDtos: CreateCompanyDto[]) {
-    // TODO: remove; superceded by insertOrUpdateBulk.
-    return { companies: await this.companyService.addMany(createCompanyDtos) };
-  }
-
-  @Get('v1/:id')
-  @ApiOperation({ summary: 'Retrieve a company given its id.' })
-  @ApiResponse({ description: 'The matching company.' })
-  async getById(@Param('id') id: string) {
-    // TODO: remove; clients won't have access to this low-level db operation.
-    return { company: await this.companyService.getById(id) };
-  }
-
-  @Delete('v1/delete/:id')
-  @ApiOperation({ summary: 'Delete a company given its id.' })
-  @HttpCode(204)
-  async delete(@Param('id') id: string) {
-    // TODO: remove; clients won't have access to this low-level db operation.
-    await this.companyService.delete(id);
-  }
-
-  @Patch('v1/update/:id')
-  @ApiOperation({ summary: 'Update a company.' })
-  @ApiResponse({ description: 'The updated company.' })
-  @ApiBody({ type: UpdateCompanyDto, description: 'The fields to update. Absent fields will be ignored.' })
-  async update(@Param('id') id: string, @Body() updateCompanyDto: UpdateCompanyDto) {
-    // TODO: remove; clients won't have access to this low-level db operation.
-    return { company: await this.companyService.update(id, updateCompanyDto) };
   }
 
   @Post('v1/find')

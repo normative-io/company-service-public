@@ -95,46 +95,12 @@ export class MongoRepositoryService implements ICompanyRepository {
     return await this.companyModel.findOne({ country: key.country, companyId: key.companyId }).sort('-created');
   }
 
-  async exists(company: Company): Promise<boolean> {
-    // TODO: properly integrate checking for company presence.
-    return await this.companyModel.exists({
-      companyId: company.companyId,
-      country: company.country,
-    });
-  }
-
-  async save(company: Company): Promise<Company> {
-    // TODO: properly implement an append-only interface.
-    const dbObject = await this.companyModel.findByIdAndUpdate(company.id, modelToDbObject(company), {
-      upsert: true,
-      new: true,
-    });
-    const newCompany = dbObjectToModel(dbObject);
-    this.logger.log(`Saved company ${JSON.stringify(newCompany, undefined, 2)}`);
-    return newCompany;
-  }
-
-  async listAll(): Promise<Company[]> {
+  async listAllForTesting(): Promise<Company[]> {
     const companies: Company[] = [];
     for (const dbObject of await this.companyModel.find()) {
       companies.push(dbObjectToModel(dbObject));
     }
     return [...companies];
-  }
-
-  async getById(id: string): Promise<Company> {
-    const dbObject = await this.companyModel.findById(id);
-    if (!dbObject) {
-      throw new NotFoundException(`Could not find company with id '${id}'`);
-    }
-    return dbObjectToModel(dbObject);
-  }
-
-  async delete(id: string): Promise<void> {
-    const dbObject = await this.companyModel.findByIdAndDelete(id);
-    if (!dbObject) {
-      throw new NotFoundException(`Could not find company with id '${id}'`);
-    }
   }
 
   async findById(id: string): Promise<Company | undefined> {
@@ -151,14 +117,6 @@ export class MongoRepositoryService implements ICompanyRepository {
       companies.push(dbObjectToModel(dbObject));
     }
     return [...companies];
-  }
-
-  async findByCompanyIdAndCountry(companyId: string, country: string): Promise<Company> {
-    const dbObject = await this.companyModel.findOne({ companyId: companyId, country: country });
-    if (!dbObject) {
-      return;
-    }
-    return dbObjectToModel(dbObject);
   }
 }
 

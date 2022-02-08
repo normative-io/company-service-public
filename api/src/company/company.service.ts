@@ -1,6 +1,4 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { CreateCompanyDto } from './dto/create-company.dto';
-import { UpdateCompanyDto } from './dto/update-company.dto';
 import { Company } from './company.model';
 import { COMPANY_REPOSITORY, ICompanyRepository } from './repository/repository-interface';
 import { FindCompanyDto } from './dto/find-company.dto';
@@ -103,31 +101,8 @@ export class CompanyService {
     return await this.companyRepo.markDeleted(key);
   }
 
-  async listAll(): Promise<Company[]> {
-    return await this.companyRepo.listAll();
-  }
-
-  async add(createCompanyDto: CreateCompanyDto): Promise<Company> {
-    return await this.companyRepo.save(new Company(createCompanyDto));
-  }
-
-  async addMany(createCompanyDtos: CreateCompanyDto[]): Promise<Company[]> {
-    return Promise.all(createCompanyDtos.map(async (dto) => await this.companyRepo.save(new Company(dto))));
-  }
-
-  async getById(id: string): Promise<Company | undefined> {
-    return this.companyRepo.getById(id);
-  }
-
-  async update(id: string, updateCompanyDto: UpdateCompanyDto): Promise<Company> {
-    const company = await this.companyRepo.getById(id);
-    company.update(updateCompanyDto);
-    await this.companyRepo.save(company);
-    return company;
-  }
-
-  async delete(id: string): Promise<void> {
-    await this.companyRepo.delete(id);
+  async listAllForTesting(): Promise<Company[]> {
+    return await this.companyRepo.listAllForTesting();
   }
 
   async find(findCompanyDto: FindCompanyDto): Promise<CompanyFoundInServiceDto[]> {
@@ -172,10 +147,7 @@ export class CompanyService {
       }
     }
     if (findCompanyDto.companyId && findCompanyDto.country) {
-      const company = await this.companyRepo.findByCompanyIdAndCountry(
-        findCompanyDto.companyId,
-        findCompanyDto.country,
-      );
+      const company = await this.companyRepo.get(findCompanyDto.country, findCompanyDto.companyId);
       if (company) {
         results.push({
           confidence: CompanyService.confidenceByCompanyIdAndCountry,
@@ -213,8 +185,7 @@ export class CompanyService {
       for (const scraperResponse of response.data) {
         for (const dto of scraperResponse.foundCompanies) {
           this.logger.debug(`Processing result: ${JSON.stringify(dto, undefined, 2)}`);
-          const company = await this.add(dto);
-          this.logger.debug(`Added company: ${JSON.stringify(company, undefined, 2)}`);
+          const [company] = await this.insertOrUpdate(dto);
           results.push({
             company: company,
             confidence: dto.confidence,
