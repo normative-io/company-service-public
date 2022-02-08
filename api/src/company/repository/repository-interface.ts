@@ -33,7 +33,7 @@ export interface ICompanyRepository {
   // Returns all of the companies in the repository.
   // This should only be used for testing purposes and not exposed to external clients.
   // The production database will be too large to serve all the data in a single request.
-  listAll(): Promise<Company[]>;
+  listAllForTesting(): Promise<Company[]>;
 
   findById(id: string): Promise<Company | undefined>;
   findByName(name: string): Promise<Company[]>;

@@ -95,7 +95,7 @@ export class MongoRepositoryService implements ICompanyRepository {
     return await this.companyModel.findOne({ country: key.country, companyId: key.companyId }).sort('-created');
   }
 
-  async listAll(): Promise<Company[]> {
+  async listAllForTesting(): Promise<Company[]> {
     const companies: Company[] = [];
     for (const dbObject of await this.companyModel.find()) {
       companies.push(dbObjectToModel(dbObject));

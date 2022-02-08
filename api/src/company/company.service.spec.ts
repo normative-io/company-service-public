@@ -69,7 +69,7 @@ describe('CompanyService', () => {
     await service.insertOrUpdate({ country: 'CH', companyId: '2', companyName: '2' });
     await service.insertOrUpdate({ country: 'CH', companyId: '3', companyName: '3' });
 
-    expect(await service.listAll()).toEqual([
+    expect(await service.listAllForTesting()).toEqual([
       {
         id: expect.any(String),
         country: 'CH',
@@ -155,7 +155,7 @@ describe('CompanyService', () => {
         country: company.country,
         companyId: company.companyId,
       };
-      expect(await service.listAll()).toEqual([wantInDb]);
+      expect(await service.listAllForTesting()).toEqual([wantInDb]);
       expect(await service.get({ country: company.country, companyId: company.companyId })).toEqual([]);
     });
 
@@ -182,7 +182,7 @@ describe('CompanyService', () => {
         country: company.country,
         companyId: company.companyId,
       };
-      const dbContents = await service.listAll();
+      const dbContents = await service.listAllForTesting();
       expect(dbContents).toEqual([wantInserted, wantDeleted, wantInserted]);
 
       expect(
@@ -246,7 +246,7 @@ describe('CompanyService', () => {
         lastUpdated: expect.any(Date),
       };
       expect(await service.insertOrUpdate(company)).toEqual([wantInDb, expect.stringContaining('Inserted')]);
-      expect(await service.listAll()).toEqual([wantInDb]);
+      expect(await service.listAllForTesting()).toEqual([wantInDb]);
     });
 
     it('should not insert a new record if metadata did not change', async () => {
@@ -263,7 +263,7 @@ describe('CompanyService', () => {
       let result = await service.insertOrUpdate(company);
       expect(result).toEqual([want, expect.stringContaining('Inserted')]);
       expect(result[0].lastUpdated.getTime()).toEqual(result[0].created.getTime());
-      let dbContents = await service.listAll();
+      let dbContents = await service.listAllForTesting();
       expect(dbContents).toEqual([want]);
       expect(dbContents[0].lastUpdated.getTime()).toEqual(dbContents[0].created.getTime());
 
@@ -271,7 +271,7 @@ describe('CompanyService', () => {
       result = await service.insertOrUpdate(company);
       expect(result).toEqual([want, expect.stringContaining('Marked as up-to-date')]);
       expect(result[0].lastUpdated.getTime()).toBeGreaterThan(result[0].created.getTime());
-      dbContents = await service.listAll();
+      dbContents = await service.listAllForTesting();
       expect(dbContents).toEqual([want]);
       expect(dbContents[0].lastUpdated.getTime()).toBeGreaterThan(dbContents[0].created.getTime());
     });
@@ -297,11 +297,11 @@ describe('CompanyService', () => {
         lastUpdated: expect.any(Date),
       };
       expect(await service.insertOrUpdate(metadata1)).toEqual([want1, expect.stringContaining('Inserted')]);
-      expect(await service.listAll()).toEqual([want1]);
+      expect(await service.listAllForTesting()).toEqual([want1]);
       expect(await service.insertOrUpdate(metadata2)).toEqual([want2, expect.stringContaining('Updated')]);
-      expect(await service.listAll()).toEqual([want1, want2]);
+      expect(await service.listAllForTesting()).toEqual([want1, want2]);
       expect(await service.insertOrUpdate(metadata2)).toEqual([want2, expect.stringContaining('Marked as up-to-date')]);
-      expect(await service.listAll()).toEqual([want1, want2]);
+      expect(await service.listAllForTesting()).toEqual([want1, want2]);
     });
   });
 
@@ -321,7 +321,7 @@ describe('CompanyService', () => {
         wantDelete,
         expect.stringContaining('Marked as deleted'),
       ]);
-      expect(await service.listAll()).toEqual([wantDelete]);
+      expect(await service.listAllForTesting()).toEqual([wantDelete]);
     });
 
     it('should insert a delete record for an active company', async () => {
@@ -345,7 +345,7 @@ describe('CompanyService', () => {
         isDeleted: true,
       };
       expect(await service.markDeleted(company)).toEqual([wantDelete, expect.stringContaining('Marked as deleted')]);
-      expect(await service.listAll()).toEqual([wantInitial, wantDelete]);
+      expect(await service.listAllForTesting()).toEqual([wantInitial, wantDelete]);
     });
 
     it('should update the latest delete record for an already-deleted company', async () => {
@@ -374,7 +374,7 @@ describe('CompanyService', () => {
       const result = await service.markDeleted(company);
       expect(result).toEqual([wantDelete, expect.stringContaining('Marked as up-to-date')]);
       expect(result[0].lastUpdated.getTime()).toBeGreaterThan(result[0].created.getTime());
-      const dbContents = await service.listAll();
+      const dbContents = await service.listAllForTesting();
       expect(dbContents).toEqual([wantInitial, wantDelete]);
       expect(dbContents[1].lastUpdated.getTime()).toBeGreaterThan(dbContents[1].created.getTime());
     });

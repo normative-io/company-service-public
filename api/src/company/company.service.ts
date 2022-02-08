@@ -101,8 +101,8 @@ export class CompanyService {
     return await this.companyRepo.markDeleted(key);
   }
 
-  async listAll(): Promise<Company[]> {
-    return await this.companyRepo.listAll();
+  async listAllForTesting(): Promise<Company[]> {
+    return await this.companyRepo.listAllForTesting();
   }
 
   async find(findCompanyDto: FindCompanyDto): Promise<CompanyFoundInServiceDto[]> {

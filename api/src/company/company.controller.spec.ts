@@ -55,7 +55,7 @@ describe('CompanyController', () => {
 
   it('should create many companies', async () => {
     const company1 = { country: 'CH', companyId: '456', companyName: 'Fantastic Company' };
-    const company2 = { country: 'PL', companyId: '789', companyName: 'Mediocore Company' };
+    const company2 = { country: 'PL', companyId: '789', companyName: 'Mediocre Company' };
     expect(await controller.insertOrUpdateBulk([company1, company2])).toEqual([
       {
         company: {
