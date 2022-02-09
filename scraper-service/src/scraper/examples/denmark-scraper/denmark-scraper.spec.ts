@@ -26,10 +26,12 @@ describe('DenmarkScraper', () => {
     expect(await scraper.toCompanies(request, response)).toEqual([
       {
         confidence: 1.0,
-        companyName: 'Meta Mind AB',
-        isic: '6201',
-        companyId: '37018848',
-        country: 'DK',
+        company: {
+          companyName: 'Meta Mind AB',
+          isic: '6201',
+          companyId: '37018848',
+          country: 'DK',
+        },
       },
     ]);
   });

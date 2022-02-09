@@ -99,7 +99,7 @@ describe('CompanyService', () => {
 
   describe('the get method', () => {
     beforeEach(() => {
-      const httpResponse: AxiosResponse = { data: [], status: 200, statusText: 'OK', headers: {}, config: {} };
+      const httpResponse: AxiosResponse = { data: {}, status: 200, statusText: 'OK', headers: {}, config: {} };
       jest.spyOn(httpService, 'post').mockImplementation(() => of(httpResponse));
     });
 
@@ -563,12 +563,19 @@ describe('CompanyService', () => {
     describe('and the company is found by the scraper service', () => {
       beforeEach(() => {
         const httpResponse: AxiosResponse = {
-          data: [
-            {
-              foundCompanies: [{ companyName: 'company found', country: 'CH', companyId: '456', confidence: 1 }],
-              scraperName: 'CH',
-            },
-          ],
+          data: {
+            companies: [
+              {
+                companies: [
+                  {
+                    company: { companyName: 'company found', country: 'CH', companyId: '456' },
+                    confidence: 1,
+                  },
+                ],
+                scraperName: 'CH',
+              },
+            ],
+          },
           status: 200,
           statusText: 'OK',
           headers: {},
@@ -615,14 +622,16 @@ describe('CompanyService', () => {
     describe('and multiple companies are found by the scraper service', () => {
       beforeEach(() => {
         const httpResponse: AxiosResponse = {
-          data: [
-            {
-              foundCompanies: [
-                { companyName: 'company found' },
-                { companyName: 'another company found', country: 'CH', companyId: '456' },
-              ],
-            },
-          ],
+          data: {
+            companies: [
+              {
+                companies: [
+                  { company: { companyName: 'company found' } },
+                  { company: { companyName: 'another company found', country: 'CH', companyId: '456' } },
+                ],
+              },
+            ],
+          },
           status: 200,
           statusText: 'OK',
           headers: {},
@@ -687,17 +696,19 @@ describe('CompanyService', () => {
       describe('and results contain a confidence value', () => {
         beforeEach(() => {
           const httpResponse: AxiosResponse = {
-            data: [
-              {
-                foundCompanies: [
-                  { companyName: '1', confidence: 0.5 },
-                  { companyName: '2', confidence: 0.7 },
-                  { companyName: '3', confidence: 0.9 },
-                  { companyName: '4', confidence: 0.6 },
-                  { companyName: '5' },
-                ],
-              },
-            ],
+            data: {
+              companies: [
+                {
+                  companies: [
+                    { company: { companyName: '1' }, confidence: 0.5 },
+                    { company: { companyName: '2' }, confidence: 0.7 },
+                    { company: { companyName: '3' }, confidence: 0.9 },
+                    { company: { companyName: '4' }, confidence: 0.6 },
+                    { company: { companyName: '5' } },
+                  ],
+                },
+              ],
+            },
             status: 200,
             statusText: 'OK',
             headers: {},
@@ -761,7 +772,7 @@ describe('CompanyService', () => {
     describe('and the company is not found by the scraper service', () => {
       beforeEach(() => {
         const httpResponse: AxiosResponse = {
-          data: [],
+          data: {},
           status: 200,
           statusText: 'OK',
           headers: {},

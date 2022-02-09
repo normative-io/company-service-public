@@ -36,4 +36,12 @@ export class SearchDto {
     required: false,
   })
   readonly isic?: string;
+
+  // TODO: Do not allow searching by id; this is an internal identifier.
+  @ApiProperty({
+    description: 'The identifier of the company',
+    example: '123456',
+    required: false,
+  })
+  readonly id?: string;
 }

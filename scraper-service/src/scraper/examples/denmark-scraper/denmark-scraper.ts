@@ -1,6 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { LookupRequest } from '../../../dto/lookup.dto';
-import { CheckResult, LookupResponse, FoundCompany, IScraper } from '../../../dto/scraper.interface';
+import { CheckResult, LookupResponse, FoundCompany, IScraper, Company } from '../../../dto/scraper.interface';
 import * as NrRequest from './cvrnr-request.json';
 import { DKSicMapping } from './repository/dksicmapping.model';
 import { NaceIsicMapping } from '../../common/naceisicmapping.model';
@@ -32,7 +32,7 @@ export class DenmarkScraper implements IScraper {
 
   async lookup(req: LookupRequest): Promise<LookupResponse> {
     return {
-      foundCompanies: await this.fetchRequest(req),
+      companies: await this.fetchRequest(req),
     };
   }
 
@@ -94,6 +94,7 @@ export class DenmarkScraper implements IScraper {
       );
       return companies;
     }
+    this.logger.debug(`Number of hits: ${response.hits.hits.length}`);
     for (const hit of response.hits.hits) {
       const names = hit._source.Vrvirksomhed.navne.filter(this.validPeriod).map((name) => name.navn);
       this.logger.debug(`Found names: ${names}`);
@@ -130,7 +131,7 @@ export class DenmarkScraper implements IScraper {
           continue;
         }
 
-        const company = new FoundCompany(1.0, name, isicV4, this.countryCode, taxID);
+        const company = new FoundCompany(new Company(name, isicV4, this.countryCode, taxID), 1.0);
 
         companies.push(company);
         this.logger.debug(`Added ${JSON.stringify(company)} to list of companies to return`);
@@ -138,6 +139,7 @@ export class DenmarkScraper implements IScraper {
         this.logger.error(`Error fetching isic: ${error}`);
       }
     }
+    this.logger.debug(`Number of companies to return: ${companies.length}`);
     return companies;
   }
 

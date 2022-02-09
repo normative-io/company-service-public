@@ -1,6 +1,5 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, HttpCode, Post } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { FindCompanyDto } from './dto/find-company.dto';
 import { InsertOrUpdateDto } from './dto/insert-or-update.dto';
 import { GetCompanyDto } from './dto/get-company.dto';
 import { MarkDeletedDto } from './dto/mark-deleted.dto';
@@ -70,11 +69,11 @@ export class CompanyController {
   @ApiOperation({ summary: 'Find companies by metadata.' })
   @ApiResponse({ description: 'The matching companies.' })
   @ApiBody({
-    type: FindCompanyDto,
+    type: SearchDto,
     description: 'The fields to look for; companies matching any field will be returned.',
   })
-  async find(@Body() findCompanyDto: FindCompanyDto) {
+  async find(@Body() searchDto: SearchDto) {
     // TODO: remove; superceded by search.
-    return [...(await this.companyService.find(findCompanyDto))];
+    return [...(await this.companyService.find(searchDto))];
   }
 }

@@ -15,7 +15,7 @@ export class ScraperController {
   @ApiOperation({ summary: 'Request on-demand lookup of a company.' })
   @ApiResponse({ type: LookupResponse })
   @ApiBody({ type: LookupRequest })
-  async lookup(@Body() req: LookupRequest): Promise<LookupResponse[]> {
+  async lookup(@Body() req: LookupRequest): Promise<LookupResponse> {
     return await this.scraperRegistry.lookup(req);
   }
 }
