@@ -20,29 +20,16 @@ export class CompanyController {
   }
 
   @Post('v1/insertOrUpdate')
-  @ApiOperation({ summary: 'Add/update metadata about the specified company.' })
-  @ApiResponse({ description: 'The metadata of the new/updated company.' })
-  @ApiBody({ type: InsertOrUpdateDto, description: 'The new/updated company.' })
-  async insertOrUpdate(@Body() insertOrUpdateDto: InsertOrUpdateDto) {
-    const [company, message] = await this.companyService.insertOrUpdate(insertOrUpdateDto);
-    return { company, message };
-  }
-
-  @Post('v1/insertOrUpdateBulk')
-  @ApiOperation({ summary: 'Add/update metdata of many companies.' })
+  @ApiOperation({ summary: 'Add/update metadata of the specified companies.' })
   @ApiResponse({ description: 'The metadata of the new/updated companies.' })
   @ApiBody({ type: [InsertOrUpdateDto], description: 'The new/updated companies.' })
-  async insertOrUpdateBulk(@Body() insertOrUpdateDtos: InsertOrUpdateDto[]) {
-    // NOTE: this is currently a naive implementation that calls insertOrUpdate serially.
-    // This should be improved:
-    //  1) Perform the insertions in parallel.
-    //  2) Take advantage of insertMany database operations.
-    //  3) Consider how errors should be handled: should this be transactional? Or are partial errors okay?
-    const results = [];
-    for (const insertOrUpdateDto of insertOrUpdateDtos) {
-      results.push(await this.insertOrUpdate(insertOrUpdateDto));
-    }
-    return results;
+  async insertOrUpdate(@Body() insertOrUpdateDtos: InsertOrUpdateDto[]) {
+    // Note: this currently requires all insertOrUpdates to succeed for the HTTP request to succeed.
+    // If any operation fails, the request fails fast and the remaining operations will not attempt to finish.
+    // We likely want to change this in the future to return any error messages per-operation.
+    return (await Promise.all(insertOrUpdateDtos.map((dto) => this.companyService.insertOrUpdate(dto)))).map(
+      ([company, message]) => ({ company, message }),
+    );
   }
 
   @Delete('v1/markDeleted')

@@ -56,7 +56,7 @@ describe('CompanyController', () => {
   it('should create many companies', async () => {
     const company1 = { country: 'CH', companyId: '456', companyName: 'Fantastic Company' };
     const company2 = { country: 'PL', companyId: '789', companyName: 'Mediocre Company' };
-    expect(await controller.insertOrUpdateBulk([company1, company2])).toEqual([
+    expect(await controller.insertOrUpdate([company1, company2])).toEqual([
       {
         company: {
           ...company1,
@@ -80,9 +80,9 @@ describe('CompanyController', () => {
 
   it('should find a company', async () => {
     // We first need to create a few companies.
-    await controller.insertOrUpdate({ country: 'CH', companyId: '1', companyName: 'name1' });
-    await controller.insertOrUpdate({ country: 'CH', companyId: '2', companyName: 'some-name' });
-    await controller.insertOrUpdate({ country: 'CH', companyId: '3', companyName: 'some-name' });
+    await controller.insertOrUpdate([{ country: 'CH', companyId: '1', companyName: 'name1' }]);
+    await controller.insertOrUpdate([{ country: 'CH', companyId: '2', companyName: 'some-name' }]);
+    await controller.insertOrUpdate([{ country: 'CH', companyId: '3', companyName: 'some-name' }]);
 
     expect(await controller.find({ companyName: 'some-name' })).toEqual([
       {
