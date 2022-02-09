@@ -21,7 +21,7 @@ export class LookupRequest {
   readonly companyName?: string;
 }
 
-export class LookupResponse {
+class ScraperLookupResponse {
   @ApiProperty({
     description: 'The name of the scraper that provided this data.',
     example: 'denmark-scraper',
@@ -31,5 +31,12 @@ export class LookupResponse {
   @ApiProperty({
     description: 'The company metadata that was scraped.',
   })
-  readonly foundCompanies: FoundCompany[];
+  readonly companies: FoundCompany[];
+}
+
+export class LookupResponse {
+  @ApiProperty({
+    description: 'The companies found.',
+  })
+  readonly companies: ScraperLookupResponse[];
 }

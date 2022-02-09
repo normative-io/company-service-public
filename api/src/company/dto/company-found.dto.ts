@@ -1,8 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Company } from '../company.model';
-import { CreateCompanyDto } from './create-company.dto';
 
-class CompanyFoundDto {
+export class CompanyFoundDto {
   @ApiProperty({
     type: String,
     description: 'Information about how this company was found, for debugging',
@@ -18,29 +17,31 @@ class CompanyFoundDto {
     required: false,
   })
   readonly confidence?: number;
-}
 
-export class CompanyFoundInScraperDto extends CompanyFoundDto {
   @ApiProperty({
     type: Company,
     description: 'Metadata about the company',
   })
-  readonly company: CreateCompanyDto;
-
-  @ApiProperty({
-    type: String,
-    description: 'The name of the scraper that found the company',
-    required: false,
-  })
-  readonly scraperName?: string;
-}
-
-export class CompanyFoundInRepositoryDto extends CompanyFoundDto {
-  @ApiProperty({
-    type: Company,
-    description: 'The company',
-  })
   readonly company: Company;
 }
 
-export class CompanyFoundInServiceDto extends CompanyFoundInRepositoryDto {}
+export class ScraperServiceResponse {
+  @ApiProperty({
+    description: 'The companies found by the ScraperService.',
+  })
+  readonly companies: IndividualScraperResponse[];
+}
+
+export class IndividualScraperResponse {
+  @ApiProperty({
+    description: 'The name of the scraper that provided this data.',
+    example: 'denmark-scraper',
+    required: false,
+  })
+  readonly scraperName: string;
+
+  @ApiProperty({
+    description: 'The company metadata that was scraped.',
+  })
+  readonly companies: CompanyFoundDto[];
+}

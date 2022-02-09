@@ -1,9 +1,8 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Company } from './company.model';
 import { COMPANY_REPOSITORY, ICompanyRepository } from './repository/repository-interface';
-import { FindCompanyDto } from './dto/find-company.dto';
 import { InsertOrUpdateDto } from './dto/insert-or-update.dto';
-import { CompanyFoundInServiceDto } from './dto/company-found.dto';
+import { CompanyFoundDto, ScraperServiceResponse } from './dto/company-found.dto';
 import { Counter } from 'prom-client';
 import { InjectMetric } from '@willsoto/nestjs-prometheus';
 import { HttpService } from '@nestjs/axios';
@@ -15,6 +14,7 @@ import { SentryService } from '@ntegral/nestjs-sentry/dist/sentry.service';
 import { InjectSentry } from '@ntegral/nestjs-sentry/dist/sentry.decorator';
 import * as Sentry from '@sentry/node';
 import { CompanyKeyDto } from './dto/company-key.dto';
+import { SearchDto } from './dto/search.dto';
 
 @Injectable()
 export class CompanyService {
@@ -60,7 +60,7 @@ export class CompanyService {
   // scraper service to check external data sources for this company.
   // Note: `atTime` represents the database-insertion time of the record and not any
   // business-related timestamp (ex: date which the company was founded or dissolved).
-  async get(getCompanyDto: GetCompanyDto): Promise<CompanyFoundInServiceDto[]> {
+  async get(getCompanyDto: GetCompanyDto): Promise<CompanyFoundDto[]> {
     this.logger.verbose(`Looking in repo for company: ${JSON.stringify(getCompanyDto)}`);
     const company = await this.companyRepo.get(getCompanyDto.country, getCompanyDto.companyId, getCompanyDto.atTime);
     if (company) {
@@ -105,16 +105,14 @@ export class CompanyService {
     return await this.companyRepo.listAllForTesting();
   }
 
-  async find(findCompanyDto: FindCompanyDto): Promise<CompanyFoundInServiceDto[]> {
+  async find(searchDto: SearchDto): Promise<CompanyFoundDto[]> {
     this.findInboundTotal.inc();
-    const results = await this.findInRepo(findCompanyDto);
+    const results = await this.findInRepo(searchDto);
     if (results.length != 0) {
       this.findFoundInRepoTotal.inc();
     } else {
-      this.logger.verbose(
-        `Could not find company in the repo; metadata: ${JSON.stringify(findCompanyDto, undefined, 2)}`,
-      );
-      const found = await this.findInScraperService(findCompanyDto);
+      this.logger.verbose(`Could not find company in the repo; metadata: ${JSON.stringify(searchDto)}`);
+      const found = await this.findInScraperService(searchDto);
       if (found.length != 0) {
         this.findFoundInScrapersTotal.inc();
       }
@@ -122,7 +120,7 @@ export class CompanyService {
     }
 
     if (results.length === 0) {
-      this.logger.verbose(`Could not find company anywhere; metadata: ${JSON.stringify(findCompanyDto, undefined, 2)}`);
+      this.logger.verbose(`Could not find company anywhere; metadata: ${JSON.stringify(searchDto)}`);
       this.findNotFoundTotal.inc();
     }
     return results
@@ -134,10 +132,10 @@ export class CompanyService {
       );
   }
 
-  private async findInRepo(findCompanyDto: FindCompanyDto): Promise<CompanyFoundInServiceDto[]> {
+  private async findInRepo(searchDto: SearchDto): Promise<CompanyFoundDto[]> {
     const results = [];
-    if (findCompanyDto.id) {
-      const company = await this.companyRepo.findById(findCompanyDto.id);
+    if (searchDto.id) {
+      const company = await this.companyRepo.findById(searchDto.id);
       if (company) {
         results.push({
           confidence: CompanyService.confidenceById,
@@ -146,8 +144,8 @@ export class CompanyService {
         });
       }
     }
-    if (findCompanyDto.companyId && findCompanyDto.country) {
-      const company = await this.companyRepo.get(findCompanyDto.country, findCompanyDto.companyId);
+    if (searchDto.companyId && searchDto.country) {
+      const company = await this.companyRepo.get(searchDto.country, searchDto.companyId);
       if (company) {
         results.push({
           confidence: CompanyService.confidenceByCompanyIdAndCountry,
@@ -156,9 +154,9 @@ export class CompanyService {
         });
       }
     }
-    if (findCompanyDto.companyName) {
+    if (searchDto.companyName) {
       results.push(
-        ...(await this.companyRepo.findByName(findCompanyDto.companyName)).map(function (company) {
+        ...(await this.companyRepo.findByName(searchDto.companyName)).map(function (company) {
           return {
             confidence: CompanyService.confidenceByName,
             foundBy: 'Repository by name',
@@ -170,27 +168,29 @@ export class CompanyService {
     return results;
   }
 
-  private async findInScraperService(findCompanyDto: FindCompanyDto): Promise<CompanyFoundInServiceDto[]> {
+  private async findInScraperService(searchDto: SearchDto): Promise<CompanyFoundDto[]> {
     // We don't want to contact the scraper service if the request is empty.
-    if (Object.keys(findCompanyDto).length === 0) {
+    if (Object.keys(searchDto).length === 0) {
       return [];
     }
     const results = [];
     try {
       const response = await firstValueFrom(
-        this.httpService.post(this.scraperServiceAddress, findCompanyDto, CompanyService.requestConfig),
+        this.httpService.post(this.scraperServiceAddress, searchDto, CompanyService.requestConfig),
       );
-      this.logger.verbose(`scraper lookup got response: ${JSON.stringify(response.data, undefined, 2)}`);
-
-      for (const scraperResponse of response.data) {
-        for (const dto of scraperResponse.foundCompanies) {
-          this.logger.debug(`Processing result: ${JSON.stringify(dto, undefined, 2)}`);
-          const [company] = await this.insertOrUpdate(dto);
-          results.push({
-            company: company,
-            confidence: dto.confidence,
-            foundBy: scraperResponse.scraperName ? `Scraper ${scraperResponse.scraperName}` : undefined,
-          });
+      this.logger.verbose(`scraper lookup got response: ${JSON.stringify(response.data)}`);
+      const data = response.data as ScraperServiceResponse;
+      if (data.companies) {
+        for (const scraperResponse of data.companies) {
+          for (const dto of scraperResponse.companies) {
+            this.logger.debug(`Processing result: ${JSON.stringify(dto)}`);
+            const [company] = await this.insertOrUpdate(dto.company as InsertOrUpdateDto);
+            results.push({
+              company: company,
+              confidence: dto.confidence,
+              foundBy: scraperResponse.scraperName ? `Scraper ${scraperResponse.scraperName}` : undefined,
+            });
+          }
         }
       }
     } catch (e) {

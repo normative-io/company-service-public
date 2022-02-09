@@ -26,14 +26,21 @@ export class CheckResult {
 
 export class LookupResponse {
   // The companies that the scraper determined matched the fetch request.
-  readonly foundCompanies: FoundCompany[];
+  readonly companies: FoundCompany[];
 }
 
 export class FoundCompany {
   constructor(
+    // Metadata of the company that was found.
+    public readonly company: Company,
     // A percentage value (as a value between 0.0 and 1.0) of how confident this data matches the fetch request.
     // This allows clients to make heuristics if there are multiple candidates found.
     public readonly confidence: number,
+  ) {}
+}
+
+export class Company {
+  constructor(
     // Name of the company.
     public readonly companyName: string,
     // ISIC rev 4 of the company
@@ -42,7 +49,5 @@ export class FoundCompany {
     public readonly country: string,
     // Organization number of the company (Tax ID when applicable)
     public readonly companyId?: string,
-    // Scraper that found the company.
-    public readonly scraperName?: string,
   ) {}
 }

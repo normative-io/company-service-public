@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { v4 as uuid } from 'uuid';
-import { CreateCompanyDto } from './dto/create-company.dto';
 import { isEqual, omit } from 'lodash';
+import { InsertOrUpdateDto } from './dto/insert-or-update.dto';
 
 export class Company {
   @ApiProperty({
@@ -54,7 +54,7 @@ export class Company {
   })
   public lastUpdated: Date;
 
-  constructor(createCompanyDto: CreateCompanyDto) {
+  constructor(createCompanyDto: InsertOrUpdateDto) {
     this.id = uuid();
     this.companyName = createCompanyDto.companyName;
     this.country = createCompanyDto.country;
