@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { SwaggerModule, DocumentBuilder, FastifySwaggerCustomOptions } from '@nestjs/swagger';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { AppModule } from './app.module';
 import * as swStats from 'swagger-stats';
@@ -17,7 +17,8 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   const apiSubpath = 'api';
-  SwaggerModule.setup(apiSubpath, app, document);
+  const swaggerOptions: FastifySwaggerCustomOptions = { uiConfig: { displayRequestDuration: true } };
+  SwaggerModule.setup(apiSubpath, app, document, swaggerOptions);
 
   await app.listen(3000, '0.0.0.0');
 
