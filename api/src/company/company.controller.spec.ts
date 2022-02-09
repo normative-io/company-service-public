@@ -10,7 +10,6 @@ import { MongoRepositoryService } from './repository/mongo/mongo.service';
 import { COMPANY_REPOSITORY } from './repository/repository-interface';
 import { TestMetrics } from './test-utils/company-service-metrics';
 import { getConnectionToken } from '@nestjs/mongoose';
-import { SENTRY_TOKEN } from '@ntegral/nestjs-sentry';
 
 describe('CompanyController', () => {
   let controller: CompanyController;
@@ -33,10 +32,6 @@ describe('CompanyController', () => {
           useClass: MongoRepositoryService,
         },
         ...TestMetrics,
-        {
-          provide: SENTRY_TOKEN,
-          useValue: { debug: jest.fn() },
-        },
       ],
     }).compile();
 
