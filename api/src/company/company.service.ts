@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { Company } from './company.model';
 import { COMPANY_REPOSITORY, ICompanyRepository } from './repository/repository-interface';
 import { InsertOrUpdateDto } from './dto/insert-or-update.dto';
@@ -6,20 +6,14 @@ import { CompanyFoundDto, ScraperServiceResponse } from './dto/company-found.dto
 import { Counter } from 'prom-client';
 import { InjectMetric } from '@willsoto/nestjs-prometheus';
 import { HttpService } from '@nestjs/axios';
-import { AxiosRequestConfig } from 'axios';
-import { firstValueFrom } from 'rxjs';
 import { ConfigService } from '@nestjs/config';
 import { GetCompanyDto } from './dto/get-company.dto';
-import * as Sentry from '@sentry/node';
 import { CompanyKeyDto } from './dto/company-key.dto';
 import { SearchDto } from './dto/search.dto';
+import fetch from 'node-fetch';
 
 @Injectable()
 export class CompanyService {
-  static readonly requestConfig: AxiosRequestConfig = {
-    headers: { 'Content-Type': 'application/json' },
-  };
-
   private readonly logger = new Logger(CompanyService.name);
 
   // These confidence values have been chosen intuitively.
@@ -165,38 +159,74 @@ export class CompanyService {
     return results;
   }
 
+  // There are three main error situations when contacting the ScraperService:
+  // 1. We cannot contact the ScraperService
+  // 2. The ScraperService returns a failure
+  // 3. We cannot parse the response
+  // Each of these increment `this.findScraperErrorTotal` and throw an HTTPException with
+  // a descriptive message.
   private async findInScraperService(searchDto: SearchDto): Promise<CompanyFoundDto[]> {
-    // We don't want to contact the scraper service if the request is empty.
     if (Object.keys(searchDto).length === 0) {
-      return [];
+      throw new HttpException(`Search request cannot be empty`, HttpStatus.BAD_REQUEST);
     }
     const results = [];
+    let response;
     try {
-      const response = await firstValueFrom(
-        this.httpService.post(this.scraperServiceAddress, searchDto, CompanyService.requestConfig),
-      );
-      this.logger.verbose(`scraper lookup got response: ${JSON.stringify(response.data)}`);
-      const data = response.data as ScraperServiceResponse;
-      if (data.companies) {
-        for (const scraperResponse of data.companies) {
-          for (const dto of scraperResponse.companies) {
-            this.logger.debug(`Processing result: ${JSON.stringify(dto)}`);
-            const [company] = await this.insertOrUpdate(dto.company as InsertOrUpdateDto);
-            results.push({
-              company: company,
-              confidence: dto.confidence,
-              foundBy: scraperResponse.scraperName ? `Scraper ${scraperResponse.scraperName}` : undefined,
-            });
-          }
+      response = await fetch(this.scraperServiceAddress, {
+        method: 'post',
+        body: JSON.stringify(searchDto),
+        headers: { 'Content-Type': 'application/json' },
+      });
+    } catch (e) {
+      const message = `Cannot contact ScraperService, is the service available? ${e}`;
+      this.logger.error(message);
+      this.findScraperErrorTotal.inc();
+      throw new HttpException(message, HttpStatus.SERVICE_UNAVAILABLE);
+    }
+    let jsonResponse = await response.json();
+    if (!response.ok) {
+      this.logger.debug(`Fetched failed response (status=${response.status}) ${JSON.stringify(jsonResponse)}`);
+      // A failed response is of the form:
+      // {"statusCode":501,"message":"No suitable scrapers for the request"}
+      //
+      // TODO: Don't propagate all problems blindly, for instance, we probably don't want to
+      // propagate HttpStatus.NOT_IMPLEMENTED or NOT_FOUND exceptions.
+      const message = `Request to ScraperService failed: ${jsonResponse.message}`;
+      this.logger.error(message);
+      this.findScraperErrorTotal.inc();
+      throw new HttpException(message, response.status);
+    }
+    const scraperResponse = jsonResponse as ScraperServiceResponse;
+    this.logger.debug(`Fetched response from ScraperService: ${JSON.stringify(scraperResponse)}`);
+    return this.toCompanies(scraperResponse);
+  }
+
+  private async toCompanies(response: ScraperServiceResponse): Promise<CompanyFoundDto[]> {
+    const results = [];
+    this.logger.verbose(`Extracting companies from response: ${JSON.stringify(response)}`);
+    if (!response.companies) {
+      return results;
+    }
+    try {
+      for (const scraperResponse of response.companies) {
+        const scraperName = scraperResponse.scraperName;
+        this.logger.verbose(`Processing response from scraper ${scraperName}: ${JSON.stringify(scraperResponse)}`);
+        for (const dto of scraperResponse.companies) {
+          this.logger.debug(`Processing: ${JSON.stringify(dto)}`);
+          const [company] = await this.insertOrUpdate(dto.company as InsertOrUpdateDto);
+          this.logger.debug(`Added company: ${JSON.stringify(company)}`);
+          results.push({
+            company: company,
+            confidence: dto.confidence,
+            foundBy: scraperName ? `Scraper ${scraperName}` : undefined,
+          });
         }
       }
     } catch (e) {
-      this.logger.error(`Could not get companies from ScraperService: ${e}`);
-      Sentry.captureMessage(`Could not get companies from ScraperService: ${e}`, Sentry.Severity.Error);
+      const message = `Error parsing response from ScraperService: ${e}`;
+      this.logger.error(message);
       this.findScraperErrorTotal.inc();
-      // Throw the error, so that the request fails - otherwise we might miss
-      // the fact that something went wrong.
-      throw e;
+      throw new HttpException(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
     return results;
   }
