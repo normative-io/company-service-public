@@ -12,7 +12,6 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import { Connection } from 'mongoose';
 import { getConnectionToken } from '@nestjs/mongoose';
 import { Company } from './company.model';
-import { SENTRY_TOKEN } from '@ntegral/nestjs-sentry';
 import { CompanyKeyDto } from './dto/company-key.dto';
 
 describe('CompanyService', () => {
@@ -36,10 +35,6 @@ describe('CompanyService', () => {
           useClass: MongoRepositoryService,
         },
         ...TestMetrics,
-        {
-          provide: SENTRY_TOKEN,
-          useValue: { debug: jest.fn() },
-        },
       ],
     }).compile();
 

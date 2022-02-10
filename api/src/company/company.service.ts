@@ -10,8 +10,6 @@ import { AxiosRequestConfig } from 'axios';
 import { firstValueFrom } from 'rxjs';
 import { ConfigService } from '@nestjs/config';
 import { GetCompanyDto } from './dto/get-company.dto';
-import { SentryService } from '@ntegral/nestjs-sentry/dist/sentry.service';
-import { InjectSentry } from '@ntegral/nestjs-sentry/dist/sentry.decorator';
 import * as Sentry from '@sentry/node';
 import { CompanyKeyDto } from './dto/company-key.dto';
 import { SearchDto } from './dto/search.dto';
@@ -48,7 +46,6 @@ export class CompanyService {
     public findNotFoundTotal: Counter<string>,
     @InjectMetric('find_scrapers_error_total')
     public findScraperErrorTotal: Counter<string>,
-    @InjectSentry() private readonly sentryClient: SentryService,
   ) {
     const scraperAddress = this.configService.get<string>('SCRAPER_ADDRESS');
     this.scraperServiceAddress = `http://${scraperAddress}/scraper/lookup`;
@@ -195,9 +192,7 @@ export class CompanyService {
       }
     } catch (e) {
       this.logger.error(`Could not get companies from ScraperService: ${e}`);
-      this.sentryClient
-        .instance()
-        .captureMessage(`Could not get companies from ScraperService: ${e}`, Sentry.Severity.Error);
+      Sentry.captureMessage(`Could not get companies from ScraperService: ${e}`, Sentry.Severity.Error);
       this.findScraperErrorTotal.inc();
       // Throw the error, so that the request fails - otherwise we might miss
       // the fact that something went wrong.
