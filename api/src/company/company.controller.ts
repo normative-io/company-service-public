@@ -49,18 +49,6 @@ export class CompanyController {
     description: 'The fields to look for; companies matching any field will be returned.',
   })
   async search(@Body() searchDto: SearchDto) {
-    // TODO: implement.
-  }
-
-  @Post('v1/find')
-  @ApiOperation({ summary: 'Find companies by metadata.' })
-  @ApiResponse({ description: 'The matching companies.' })
-  @ApiBody({
-    type: SearchDto,
-    description: 'The fields to look for; companies matching any field will be returned.',
-  })
-  async find(@Body() searchDto: SearchDto) {
-    // TODO: remove; superceded by search.
-    return [...(await this.companyService.find(searchDto))];
+    return [...(await this.companyService.search(searchDto))];
   }
 }

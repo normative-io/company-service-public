@@ -102,7 +102,7 @@ export class CompanyService {
     return await this.companyRepo.listAllForTesting();
   }
 
-  async find(searchDto: SearchDto): Promise<CompanyFoundDto[]> {
+  async search(searchDto: SearchDto): Promise<CompanyFoundDto[]> {
     this.findInboundTotal.inc();
     const results = await this.findInRepo(searchDto);
     if (results.length != 0) {

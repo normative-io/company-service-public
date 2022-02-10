@@ -73,13 +73,13 @@ describe('CompanyController', () => {
     ]);
   });
 
-  it('should find a company', async () => {
+  it('should search for a company', async () => {
     // We first need to create a few companies.
     await controller.insertOrUpdate([{ country: 'CH', companyId: '1', companyName: 'name1' }]);
     await controller.insertOrUpdate([{ country: 'CH', companyId: '2', companyName: 'some-name' }]);
     await controller.insertOrUpdate([{ country: 'CH', companyId: '3', companyName: 'some-name' }]);
 
-    expect(await controller.find({ companyName: 'some-name' })).toEqual([
+    expect(await controller.search({ companyName: 'some-name' })).toEqual([
       {
         company: {
           id: expect.any(String),
