@@ -72,11 +72,11 @@ export class ScraperRegistry {
     if (scrapers.length === 0) {
       // Most scrapers use the request's country to determine their applicability, so if a
       // request is not applicable we assume it's because of the country.
-      const message = `No suitable scrapers for request: country ${
+      const message = `Request not sent to any scraper: country ${
         req.country
       } not supported by available scrapers: [${this.scraperNames()}]`;
-      this.logger.warn(message);
-      throw new HttpException(message, HttpStatus.NOT_IMPLEMENTED);
+      this.logger.log(message);
+      return { companies: [], message: message };
     }
 
     // Lookup from each applicable scraper until a value is found.
@@ -86,12 +86,16 @@ export class ScraperRegistry {
       this.logger.debug(`attempting fetch for request ${JSON.stringify(req)} using scraper: ${scraper.name()}`);
       const res = await scraper.lookup(req);
       if (res.companies.length > 0) {
-        return { companies: [{ scraperName: scraper.name(), companies: res.companies }] };
+        return {
+          companies: [{ scraperName: scraper.name(), companies: res.companies }],
+          // TODO: Choose the correct term between company and companies based on the length.
+          message: `${res.companies.length} company/companies found by scraper ${scraper.name()}`,
+        };
       }
     }
-    const message = `No match found in any of the scrapers: [${this.scraperNames()}]`;
-    this.logger.warn(message);
-    throw new HttpException(message, HttpStatus.NOT_FOUND);
+    const message = `No match found in any scraper: [${this.scraperNames()}]`;
+    this.logger.log(message);
+    return { companies: [], message: message };
   }
 
   // Determine the set of scrapers to use.

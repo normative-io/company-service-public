@@ -16,7 +16,8 @@ export class CompanyController {
   @ApiResponse({ description: 'The metadata of the found company. May be multiple if the data had to be scraped.' })
   @ApiBody({ type: GetCompanyDto, description: 'The requested company.' })
   async get(@Body() getCompanyDto: GetCompanyDto) {
-    return { companies: await this.companyService.get(getCompanyDto) };
+    const [companies, message] = await this.companyService.get(getCompanyDto);
+    return { companies, message };
   }
 
   @Post('v1/insertOrUpdate')
@@ -49,6 +50,7 @@ export class CompanyController {
     description: 'The fields to look for; companies matching any field will be returned.',
   })
   async search(@Body() searchDto: SearchDto) {
-    return [...(await this.companyService.search(searchDto))];
+    const [companies, message] = await this.companyService.search(searchDto);
+    return { companies, message };
   }
 }

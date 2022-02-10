@@ -21,6 +21,16 @@ export class CompanyService {
   static readonly confidenceByCompanyIdAndCountry = 0.9;
   static readonly confidenceByName = 0.7;
 
+  // Values of the `message` field for `get` and `search` operations.
+  static readonly messageCompaniesFoundInRepository = 'Companies were found in repository';
+  // If a request reaches the scrapers, the response from the
+  // ScraperService contains a custom message that is directly sent back.
+  // This prefix is used when we did not find companies
+  // and the ScraperService was not contacted. The full message
+  // contains the reason why the ScraperService was not contacted.
+  static readonly messageScrapersNotContactedPrefix =
+    'No companies found; request not sent to the ScraperService because';
+
   private scraperServiceAddress;
 
   constructor(
@@ -51,16 +61,19 @@ export class CompanyService {
   // scraper service to check external data sources for this company.
   // Note: `atTime` represents the database-insertion time of the record and not any
   // business-related timestamp (ex: date which the company was founded or dissolved).
-  async get(getCompanyDto: GetCompanyDto): Promise<CompanyFoundDto[]> {
+  async get(getCompanyDto: GetCompanyDto): Promise<[CompanyFoundDto[], string]> {
     this.logger.verbose(`Looking in repo for company: ${JSON.stringify(getCompanyDto)}`);
     const company = await this.companyRepo.get(getCompanyDto.country, getCompanyDto.companyId, getCompanyDto.atTime);
     if (company) {
       return [
-        {
-          confidence: CompanyService.confidenceByCompanyIdAndCountry,
-          foundBy: 'Repository by companyId and country',
-          company: company,
-        },
+        [
+          {
+            confidence: CompanyService.confidenceByCompanyIdAndCountry,
+            foundBy: 'Repository by companyId and country',
+            company: company,
+          },
+        ],
+        CompanyService.messageCompaniesFoundInRepository,
       ];
     }
     this.logger.debug(`Could not find company in the repo: ${JSON.stringify(getCompanyDto)}`);
@@ -81,7 +94,7 @@ export class CompanyService {
       });
     }
     this.logger.debug(`Could not find company anywhere: ${JSON.stringify(getCompanyDto)}`);
-    return [];
+    return [[], `${CompanyService.messageScrapersNotContactedPrefix} "atTime" was set`];
   }
 
   async insertOrUpdate(insertOrUpdateDto: InsertOrUpdateDto): Promise<[Company, string]> {
@@ -96,14 +109,17 @@ export class CompanyService {
     return await this.companyRepo.listAllForTesting();
   }
 
-  async search(searchDto: SearchDto): Promise<CompanyFoundDto[]> {
+  async search(searchDto: SearchDto): Promise<[CompanyFoundDto[], string]> {
     this.findInboundTotal.inc();
     const results = await this.findInRepo(searchDto);
+    let found;
+    let message;
     if (results.length != 0) {
       this.findFoundInRepoTotal.inc();
+      message = CompanyService.messageCompaniesFoundInRepository;
     } else {
       this.logger.verbose(`Could not find company in the repo; metadata: ${JSON.stringify(searchDto)}`);
-      const found = await this.findInScraperService(searchDto);
+      [found, message] = await this.findInScraperService(searchDto);
       if (found.length != 0) {
         this.findFoundInScrapersTotal.inc();
       }
@@ -114,13 +130,16 @@ export class CompanyService {
       this.logger.verbose(`Could not find company anywhere; metadata: ${JSON.stringify(searchDto)}`);
       this.findNotFoundTotal.inc();
     }
-    return results
-      .sort((a, b) => b.confidence - a.confidence)
-      .filter(
-        (elem, index, self) =>
-          // Keep if this is the first index for this company's id.
-          index === self.findIndex((c) => c.company.id === elem.company.id),
-      );
+    return [
+      results
+        .sort((a, b) => b.confidence - a.confidence)
+        .filter(
+          (elem, index, self) =>
+            // Keep if this is the first index for this company's id.
+            index === self.findIndex((c) => c.company.id === elem.company.id),
+        ),
+      message,
+    ];
   }
 
   private async findInRepo(searchDto: SearchDto): Promise<CompanyFoundDto[]> {
@@ -165,11 +184,10 @@ export class CompanyService {
   // 3. We cannot parse the response
   // Each of these increment `this.findScraperErrorTotal` and throw an HTTPException with
   // a descriptive message.
-  private async findInScraperService(searchDto: SearchDto): Promise<CompanyFoundDto[]> {
+  private async findInScraperService(searchDto: SearchDto): Promise<[CompanyFoundDto[], string]> {
     if (Object.keys(searchDto).length === 0) {
       throw new HttpException(`Search request cannot be empty`, HttpStatus.BAD_REQUEST);
     }
-    const results = [];
     let response;
     try {
       response = await fetch(this.scraperServiceAddress, {
@@ -188,9 +206,6 @@ export class CompanyService {
       this.logger.debug(`Fetched failed response (status=${response.status}) ${JSON.stringify(jsonResponse)}`);
       // A failed response is of the form:
       // {"statusCode":501,"message":"No suitable scrapers for the request"}
-      //
-      // TODO: Don't propagate all problems blindly, for instance, we probably don't want to
-      // propagate HttpStatus.NOT_IMPLEMENTED or NOT_FOUND exceptions.
       const message = `Request to ScraperService failed: ${jsonResponse.message}`;
       this.logger.error(message);
       this.findScraperErrorTotal.inc();
@@ -201,14 +216,16 @@ export class CompanyService {
     return this.toCompanies(scraperResponse);
   }
 
-  private async toCompanies(response: ScraperServiceResponse): Promise<CompanyFoundDto[]> {
+  private async toCompanies(response: ScraperServiceResponse): Promise<[CompanyFoundDto[], string]> {
     const results = [];
     this.logger.verbose(`Extracting companies from response: ${JSON.stringify(response)}`);
-    if (!response.companies) {
-      return results;
+    const companies = response.companies;
+    const message = response.message;
+    if (!companies) {
+      return [results, message];
     }
     try {
-      for (const scraperResponse of response.companies) {
+      for (const scraperResponse of companies) {
         const scraperName = scraperResponse.scraperName;
         this.logger.verbose(`Processing response from scraper ${scraperName}: ${JSON.stringify(scraperResponse)}`);
         for (const dto of scraperResponse.companies) {
@@ -228,6 +245,6 @@ export class CompanyService {
       this.findScraperErrorTotal.inc();
       throw new HttpException(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    return results;
+    return [results, message];
   }
 }
