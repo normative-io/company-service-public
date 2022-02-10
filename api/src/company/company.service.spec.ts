@@ -378,7 +378,7 @@ describe('CompanyService', () => {
   it('should find a company by id', async () => {
     const [company] = await service.insertOrUpdate({ country: 'CH', companyId: '1', companyName: '1' });
 
-    expect(await service.find({ id: company.id })).toEqual([
+    expect(await service.search({ id: company.id })).toEqual([
       {
         company: {
           id: company.id,
@@ -397,7 +397,7 @@ describe('CompanyService', () => {
   it('should find a company by company id and country', async () => {
     await service.insertOrUpdate({ companyName: '1', companyId: '123', country: 'CH' });
 
-    expect(await service.find({ companyId: '123', country: 'CH' })).toEqual([
+    expect(await service.search({ companyId: '123', country: 'CH' })).toEqual([
       {
         company: {
           id: expect.any(String),
@@ -417,7 +417,7 @@ describe('CompanyService', () => {
     await service.insertOrUpdate({ country: 'CH', companyId: '1', companyName: 'some-name' });
     await service.insertOrUpdate({ country: 'DK', companyId: '2', companyName: 'some-name' });
 
-    expect(await service.find({ companyName: 'some-name' })).toEqual([
+    expect(await service.search({ companyName: 'some-name' })).toEqual([
       {
         company: {
           id: expect.any(String),
@@ -448,7 +448,7 @@ describe('CompanyService', () => {
   it('should find a company if one individual field matches', async () => {
     await service.insertOrUpdate({ country: 'CH', companyId: '1', companyName: '1' });
 
-    expect(await service.find({ id: 'non-existent-id', companyName: '1' })).toEqual([
+    expect(await service.search({ id: 'non-existent-id', companyName: '1' })).toEqual([
       {
         company: {
           id: expect.any(String),
@@ -469,7 +469,7 @@ describe('CompanyService', () => {
 
     await service.insertOrUpdate({ country: 'CH', companyId: '1', companyName: '1' });
 
-    expect(await service.find({ id: 'non-existent-id', companyName: '1' })).toEqual([
+    expect(await service.search({ id: 'non-existent-id', companyName: '1' })).toEqual([
       {
         company: {
           id: expect.any(String),
@@ -493,7 +493,7 @@ describe('CompanyService', () => {
     await service.insertOrUpdate({ country: 'CH', companyId: '123', companyName: 'to-find-by-company-id-and-country' });
 
     expect(
-      await service.find({ id: company1.id, companyId: '123', country: 'CH', companyName: 'to-find-by-name' }),
+      await service.search({ id: company1.id, companyId: '123', country: 'CH', companyName: 'to-find-by-name' }),
     ).toEqual([
       // The ranking of confidences are: (1) match by id, (2) match by companyId and country, and (3) match by name.
       {
@@ -538,7 +538,7 @@ describe('CompanyService', () => {
   it('should find and deduplicate companies that match multiple individual fields', async () => {
     const [company] = await service.insertOrUpdate({ country: 'CH', companyId: '123', companyName: '1' });
 
-    expect(await service.find({ id: company.id, companyName: '1', companyId: '123', country: 'CH' })).toEqual([
+    expect(await service.search({ id: company.id, companyName: '1', companyId: '123', country: 'CH' })).toEqual([
       {
         company: {
           id: expect.any(String),
@@ -579,7 +579,7 @@ describe('CompanyService', () => {
         jest.spyOn(httpService, 'post').mockImplementation(() => of(httpResponse));
       });
       it('should create and find a company', async () => {
-        const found = await service.find({ companyName: 'non-existent-name' });
+        const found = await service.search({ companyName: 'non-existent-name' });
         expect(found).toEqual([
           {
             company: {
@@ -635,7 +635,7 @@ describe('CompanyService', () => {
         jest.spyOn(httpService, 'post').mockImplementation(() => of(httpResponse));
       });
       it('should find and create all companies', async () => {
-        const found = await service.find({ companyName: 'irrelevant' });
+        const found = await service.search({ companyName: 'irrelevant' });
         expect(found).toEqual([
           {
             company: {
@@ -712,7 +712,7 @@ describe('CompanyService', () => {
           jest.spyOn(httpService, 'post').mockImplementation(() => of(httpResponse));
         });
         it('results should be sorted by confidence in descending order', async () => {
-          const found = await service.find({ companyName: 'irrelevant' });
+          const found = await service.search({ companyName: 'irrelevant' });
           expect(found).toEqual([
             {
               company: {
@@ -776,15 +776,15 @@ describe('CompanyService', () => {
         jest.spyOn(httpService, 'post').mockImplementation(() => of(httpResponse));
       });
       it('should not find a company if we provide the company name', async () => {
-        expect(await service.find({ companyName: 'non-existent-name' })).toEqual([]);
+        expect(await service.search({ companyName: 'non-existent-name' })).toEqual([]);
       });
 
       it('should not find a company if we provide company id and country', async () => {
-        expect(await service.find({ companyId: '123', country: 'CH' })).toEqual([]);
+        expect(await service.search({ companyId: '123', country: 'CH' })).toEqual([]);
       });
 
       it('should not find a company if we provide the id', async () => {
-        expect(await service.find({ id: 'non-existent-id' })).toEqual([]);
+        expect(await service.search({ id: 'non-existent-id' })).toEqual([]);
       });
     });
 
@@ -794,7 +794,7 @@ describe('CompanyService', () => {
       await service.insertOrUpdate({ country: 'DK', companyId: '45', companyName: '2' });
       await service.insertOrUpdate({ country: 'US', companyId: '60', companyName: '3' });
 
-      expect(await service.find({})).toEqual([]);
+      expect(await service.search({})).toEqual([]);
       expect(httpService.post).not.toHaveBeenCalled();
     });
   });
