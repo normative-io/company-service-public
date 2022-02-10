@@ -1,10 +1,10 @@
+import { enableFetchMocks } from 'jest-fetch-mock';
+enableFetchMocks();
 import { Test, TestingModule } from '@nestjs/testing';
 import { COMPANY_REPOSITORY } from './repository/repository-interface';
 import { CompanyService } from './company.service';
 import { TestMetrics } from './test-utils/company-service-metrics';
-import { HttpModule, HttpService } from '@nestjs/axios';
-import { AxiosResponse } from 'axios';
-import { of } from 'rxjs';
+import { HttpModule } from '@nestjs/axios';
 import { ConfigModule } from '@nestjs/config';
 import { MongoRepositoryModule } from './repository/mongo/mongo.module';
 import { MongoRepositoryService } from './repository/mongo/mongo.service';
@@ -13,10 +13,10 @@ import { Connection } from 'mongoose';
 import { getConnectionToken } from '@nestjs/mongoose';
 import { Company } from './company.model';
 import { CompanyKeyDto } from './dto/company-key.dto';
+import fetch from 'node-fetch';
 
 describe('CompanyService', () => {
   let service: CompanyService;
-  let httpService: HttpService;
   let mongoServer: MongoMemoryServer;
   let mongoConnection: Connection;
 
@@ -39,10 +39,10 @@ describe('CompanyService', () => {
     }).compile();
 
     service = module.get<CompanyService>(CompanyService);
-    httpService = module.get<HttpService>(HttpService);
     mongoConnection = module.get<Connection>(getConnectionToken());
+    fetch.resetMocks();
     // By default, don't return anything.
-    jest.spyOn(httpService, 'post').mockImplementation(() => of(undefined));
+    fetch.mockResponse(JSON.stringify({}));
   });
 
   afterEach(async () => {
@@ -93,11 +93,6 @@ describe('CompanyService', () => {
   });
 
   describe('the get method', () => {
-    beforeEach(() => {
-      const httpResponse: AxiosResponse = { data: {}, status: 200, statusText: 'OK', headers: {}, config: {} };
-      jest.spyOn(httpService, 'post').mockImplementation(() => of(httpResponse));
-    });
-
     it('should return the most recent record when `atTime` is not set', async () => {
       await service.insertOrUpdate({ country: 'CH', companyId: '1', companyName: 'name1' });
       await service.insertOrUpdate({ country: 'CH', companyId: '1', companyName: 'name2' });
@@ -224,7 +219,7 @@ describe('CompanyService', () => {
 
     it('should not contact scraper service for historical queries', async () => {
       expect(await service.get({ country: 'DK', companyId: '42', atTime: new Date('2020') })).toEqual([]);
-      expect(httpService.post).not.toHaveBeenCalled();
+      expect(fetch).not.toHaveBeenCalled();
     });
   });
 
@@ -465,8 +460,6 @@ describe('CompanyService', () => {
   });
 
   it('should not contact the scaper service if there are matches in the repo', async () => {
-    jest.clearAllMocks();
-
     await service.insertOrUpdate({ country: 'CH', companyId: '1', companyName: '1' });
 
     expect(await service.search({ id: 'non-existent-id', companyName: '1' })).toEqual([
@@ -484,7 +477,7 @@ describe('CompanyService', () => {
       },
     ]);
 
-    expect(httpService.post).not.toHaveBeenCalled();
+    expect(fetch).not.toHaveBeenCalled();
   });
 
   it('should find companies that match individual fields, ordered by confidence', async () => {
@@ -557,8 +550,10 @@ describe('CompanyService', () => {
   describe('when the company is not found in the first repo', () => {
     describe('and the company is found by the scraper service', () => {
       beforeEach(() => {
-        const httpResponse: AxiosResponse = {
-          data: {
+        fetch.resetMocks();
+
+        fetch.mockResponseOnce(
+          JSON.stringify({
             companies: [
               {
                 companies: [
@@ -570,13 +565,8 @@ describe('CompanyService', () => {
                 scraperName: 'CH',
               },
             ],
-          },
-          status: 200,
-          statusText: 'OK',
-          headers: {},
-          config: {},
-        };
-        jest.spyOn(httpService, 'post').mockImplementation(() => of(httpResponse));
+          }),
+        );
       });
       it('should create and find a company', async () => {
         const found = await service.search({ companyName: 'non-existent-name' });
@@ -616,8 +606,9 @@ describe('CompanyService', () => {
 
     describe('and multiple companies are found by the scraper service', () => {
       beforeEach(() => {
-        const httpResponse: AxiosResponse = {
-          data: {
+        fetch.resetMocks();
+        fetch.mockResponseOnce(
+          JSON.stringify({
             companies: [
               {
                 companies: [
@@ -626,13 +617,8 @@ describe('CompanyService', () => {
                 ],
               },
             ],
-          },
-          status: 200,
-          statusText: 'OK',
-          headers: {},
-          config: {},
-        };
-        jest.spyOn(httpService, 'post').mockImplementation(() => of(httpResponse));
+          }),
+        );
       });
       it('should find and create all companies', async () => {
         const found = await service.search({ companyName: 'irrelevant' });
@@ -690,8 +676,9 @@ describe('CompanyService', () => {
 
       describe('and results contain a confidence value', () => {
         beforeEach(() => {
-          const httpResponse: AxiosResponse = {
-            data: {
+          fetch.resetMocks();
+          fetch.mockResponseOnce(
+            JSON.stringify({
               companies: [
                 {
                   companies: [
@@ -703,13 +690,8 @@ describe('CompanyService', () => {
                   ],
                 },
               ],
-            },
-            status: 200,
-            statusText: 'OK',
-            headers: {},
-            config: {},
-          };
-          jest.spyOn(httpService, 'post').mockImplementation(() => of(httpResponse));
+            }),
+          );
         });
         it('results should be sorted by confidence in descending order', async () => {
           const found = await service.search({ companyName: 'irrelevant' });
@@ -766,14 +748,8 @@ describe('CompanyService', () => {
 
     describe('and the company is not found by the scraper service', () => {
       beforeEach(() => {
-        const httpResponse: AxiosResponse = {
-          data: {},
-          status: 200,
-          statusText: 'OK',
-          headers: {},
-          config: {},
-        };
-        jest.spyOn(httpService, 'post').mockImplementation(() => of(httpResponse));
+        fetch.resetMocks();
+        fetch.mockResponseOnce(JSON.stringify({}));
       });
       it('should not find a company if we provide the company name', async () => {
         expect(await service.search({ companyName: 'non-existent-name' })).toEqual([]);
@@ -788,14 +764,61 @@ describe('CompanyService', () => {
       });
     });
 
-    it('should not contact the scraper service if we did not ask for any field', async () => {
-      jest.clearAllMocks();
+    describe('and the scraper service cannot be contacted', () => {
+      beforeEach(() => {
+        fetch.resetMocks();
+        // node-fetch's fetch method returns an error if the connection fails.
+        fetch.mockReject(new Error('Ouch!'));
+      });
+      it('should propagate the failure', async () => {
+        await expect(service.search({ country: 'irrelevant', companyId: 'irrelevant' })).rejects.toThrowError(
+          'Cannot contact ScraperService, is the service available? Error: Ouch!',
+        );
+      });
+    });
+
+    describe('and the scraper service returns a failure', () => {
+      beforeEach(() => {
+        fetch.resetMocks();
+        // If the connection succeeds but the operation itself returns an error,
+        // the status of the response will be a failure (see
+        // 'and the scraper service returns a failure').
+        fetch.mockResponseOnce(JSON.stringify({ message: 'Something bad happened' }), {
+          status: 501, // An arbitrary failure status.
+        });
+      });
+      it('should propagate the failure', async () => {
+        await expect(service.search({ country: 'irrelevant', companyId: 'irrelevant' })).rejects.toThrowError(
+          'Request to ScraperService failed: Something bad happened',
+        );
+      });
+    });
+
+    describe('and the scraper service returns a malformed response', () => {
+      beforeEach(() => {
+        fetch.resetMocks();
+        fetch.mockResponseOnce(
+          JSON.stringify({
+            companies: {}, // Malformed because "companies" should be a list.
+          }),
+        );
+      });
+      it('should propagate the failure', async () => {
+        await expect(service.search({ country: 'irrelevant', companyId: 'irrelevant' })).rejects.toThrowError(
+          new RegExp('Error parsing response from ScraperService.*'),
+        );
+        // We don't want to assert on the full string:
+        // `Error parsing response from ScraperService: TypeError: response.companies is not iterable`
+        // in case the way the type error is reported changes.
+      });
+    });
+
+    it('should throw error if we did not ask for any field', async () => {
       await service.insertOrUpdate({ country: 'CH', companyId: '1', companyName: '1' });
       await service.insertOrUpdate({ country: 'DK', companyId: '45', companyName: '2' });
       await service.insertOrUpdate({ country: 'US', companyId: '60', companyName: '3' });
 
-      expect(await service.search({})).toEqual([]);
-      expect(httpService.post).not.toHaveBeenCalled();
+      await expect(service.search({})).rejects.toThrowError('Search request cannot be empty');
     });
   });
 });

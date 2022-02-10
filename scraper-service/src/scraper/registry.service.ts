@@ -70,8 +70,13 @@ export class ScraperRegistry {
     const scrapers = this.applicableScrapers(req);
     this.logger.debug(`Found ${scrapers.length} applicable scrapers`);
     if (scrapers.length === 0) {
-      this.logger.warn('No suitable scrapers for the request');
-      throw new HttpException('No suitable scrapers for the request', HttpStatus.NOT_IMPLEMENTED);
+      // Most scrapers use the request's country to determine their applicability, so if a
+      // request is not applicable we assume it's because of the country.
+      const message = `No suitable scrapers for request: country ${
+        req.country
+      } not supported by available scrapers: [${this.scraperNames()}]`;
+      this.logger.warn(message);
+      throw new HttpException(message, HttpStatus.NOT_IMPLEMENTED);
     }
 
     // Lookup from each applicable scraper until a value is found.
@@ -84,8 +89,9 @@ export class ScraperRegistry {
         return { companies: [{ scraperName: scraper.name(), companies: res.companies }] };
       }
     }
-    this.logger.warn('No match found in any of the scrapers');
-    throw new HttpException('No match found in any of the scrapers', HttpStatus.NOT_IMPLEMENTED);
+    const message = `No match found in any of the scrapers: [${this.scraperNames()}]`;
+    this.logger.warn(message);
+    throw new HttpException(message, HttpStatus.NOT_FOUND);
   }
 
   // Determine the set of scrapers to use.
@@ -93,5 +99,9 @@ export class ScraperRegistry {
     return this.scrapers
       .filter((scraper) => scraper.check(req).isApplicable)
       .sort((a, b) => a.check(req).priority - b.check(req).priority);
+  }
+
+  scraperNames(): string {
+    return this.scrapers.map((s) => s.name()).join(',');
   }
 }
