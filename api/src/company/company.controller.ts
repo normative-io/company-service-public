@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, HttpCode, Post } from '@nestjs/common';
+import { Body, Controller, Delete, HttpCode, HttpException, HttpStatus, Post } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { InsertOrUpdateDto } from './dto/insert-or-update.dto';
 import { GetCompanyDto } from './dto/get-company.dto';
@@ -24,12 +24,26 @@ export class CompanyController {
   @ApiResponse({ description: 'The metadata of the new/updated companies.' })
   @ApiBody({ type: [InsertOrUpdateDto], description: 'The new/updated companies.' })
   async insertOrUpdate(@Body() insertOrUpdateDtos: InsertOrUpdateDto[]) {
-    // Note: this currently requires all insertOrUpdates to succeed for the HTTP request to succeed.
-    // If any operation fails, the request fails fast and the remaining operations will not attempt to finish.
-    // We likely want to change this in the future to return any error messages per-operation.
-    return (await Promise.all(insertOrUpdateDtos.map((dto) => this.companyService.insertOrUpdate(dto)))).map(
-      ([company, message]) => ({ company, message }),
-    );
+    // Attempts to insertOrUpdate every input request.
+    // Return an error containing all the error messages if >0 of the requests failed.
+    const results = [];
+    const errors: string[] = [];
+    const promises = await Promise.allSettled(insertOrUpdateDtos.map((dto) => this.companyService.insertOrUpdate(dto)));
+    for (const [i, promise] of promises.entries()) {
+      if (promise.status == 'fulfilled') {
+        const [company, message] = promise.value;
+        results.push({ company, message });
+      } else {
+        errors.push(`Error in request ${JSON.stringify(insertOrUpdateDtos[i])}: ${promise.reason}`);
+      }
+    }
+    if (errors.length > 0) {
+      throw new HttpException(
+        `${errors.length} requests failed: ${errors.join('\n')}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+    return results;
   }
 
   @Delete('v1/markDeleted')
