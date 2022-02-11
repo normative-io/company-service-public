@@ -6,6 +6,8 @@ import { IScraper } from '../dto/scraper.interface';
 const fg = require('fast-glob');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const pluralize = require('pluralize');
 
 export const SCRAPER_REGISTRY = 'SCRAPER_REGISTRY';
 
@@ -67,13 +69,22 @@ export class ScraperRegistry {
     }
 
     const [scrapers, notApplicableMessages] = this.applicableScrapers(req);
-    const applicableScrapers = `${scrapers.length} applicable scraper(s): [${ScraperRegistry.scraperNames(scrapers)}]`;
-    const notApplicableScrapers = `${
-      notApplicableMessages.length
-    } not applicable scraper(s): [${notApplicableMessages.join(',')}]`;
+    // `applicableScrapers` will be something like:
+    // 1 applicable scraper: [switzerland-scraper]
+    const applicableScrapers = `${scrapers.length} applicable ${pluralize(
+      'scraper',
+      scrapers.length,
+    )}: [${ScraperRegistry.scraperNames(scrapers)}]`;
+
+    // `notApplicableScrapers` will be something like:
+    // 1 not applicable scraper: [denmark-scraper requires a present companyId]
+    const notApplicableScrapers = `${notApplicableMessages.length} not applicable ${pluralize(
+      'scraper',
+      notApplicableMessages.length,
+    )}: [${notApplicableMessages.join(',')}]`;
 
     // We use `applicability` to provide more information to the caller, example:
-    // "Availability of scrapers: 1 applicable scraper(s): [switzerland-scraper]. 1 not applicable scraper(s): [denmark-scraper requires a present companyId]"
+    // "Availability of scrapers: 1 applicable scraper: [switzerland-scraper]. 1 not applicable scraper: [denmark-scraper requires a present companyId]"
     const applicability = `Availability of scrapers: ${applicableScrapers}. ${notApplicableScrapers}`;
     this.logger.debug(applicability);
 
@@ -94,8 +105,12 @@ export class ScraperRegistry {
         if (res.companies.length > 0) {
           return {
             companies: [{ scraperName: scraper.name(), companies: res.companies }],
-            // TODO: Choose the correct term between company and companies based on the length.
-            message: `${res.companies.length} company/companies found by scraper ${scraper.name()}. ${applicability}}`,
+            // `message` will start with something like:
+            // 14 companies found by scraper denmark-scraper.
+            message: `${res.companies.length} ${pluralize(
+              'company',
+              res.companies.length,
+            )} found by scraper ${scraper.name()}. ${applicability}}`,
           };
         }
       } catch (e) {
