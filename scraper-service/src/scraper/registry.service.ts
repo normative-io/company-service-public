@@ -1,7 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { HttpException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { LookupRequest, LookupResponse } from '../dto/lookup.dto';
-import { FoundCompany, IScraper } from '../dto/scraper.interface';
+import { IScraper } from '../dto/scraper.interface';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const fg = require('fast-glob');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -59,7 +59,6 @@ export class ScraperRegistry {
     }
   }
 
-  // TODO: change return data type to include metadata about which scrapers were used.
   async lookup(req: LookupRequest): Promise<LookupResponse> {
     this.logger.debug(`lookup request: ${JSON.stringify(req)}`);
     if (!req.companyId && !req.companyName) {
@@ -67,16 +66,21 @@ export class ScraperRegistry {
       throw new HttpException('Request must contain a companyId or companyName', HttpStatus.BAD_REQUEST);
     }
 
-    const scrapers = this.applicableScrapers(req);
-    this.logger.debug(`Found ${scrapers.length} applicable scrapers`);
+    const [scrapers, notApplicableMessages] = this.applicableScrapers(req);
+    const applicableScrapers = `${scrapers.length} applicable scraper(s): [${ScraperRegistry.scraperNames(scrapers)}]`;
+    const notApplicableScrapers = `${
+      notApplicableMessages.length
+    } not applicable scraper(s): [${notApplicableMessages.join(',')}]`;
+
+    // We use `applicability` to provide more information to the caller, example:
+    // "Availability of scrapers: 1 applicable scraper(s): [switzerland-scraper]. 1 not applicable scraper(s): [denmark-scraper requires a present companyId]"
+    const applicability = `Availability of scrapers: ${applicableScrapers}. ${notApplicableScrapers}`;
+    this.logger.debug(applicability);
+
     if (scrapers.length === 0) {
-      // Most scrapers use the request's country to determine their applicability, so if a
-      // request is not applicable we assume it's because of the country.
-      const message = `Request not sent to any scraper: country ${
-        req.country
-      } not supported by available scrapers: [${this.scraperNames()}]`;
-      this.logger.log(message);
-      return { companies: [], message: message };
+      const requestNotSentMessage = `Request not sent to any scraper. ${notApplicableScrapers}`;
+      this.logger.log(requestNotSentMessage);
+      return { companies: [], message: requestNotSentMessage };
     }
 
     // Lookup from each applicable scraper until a value is found.
@@ -84,28 +88,49 @@ export class ScraperRegistry {
     // applicable scraper and/or run them all in parallel.
     for (const scraper of scrapers) {
       this.logger.debug(`attempting fetch for request ${JSON.stringify(req)} using scraper: ${scraper.name()}`);
-      const res = await scraper.lookup(req);
-      if (res.companies.length > 0) {
-        return {
-          companies: [{ scraperName: scraper.name(), companies: res.companies }],
-          // TODO: Choose the correct term between company and companies based on the length.
-          message: `${res.companies.length} company/companies found by scraper ${scraper.name()}`,
-        };
+
+      try {
+        const res = await scraper.lookup(req);
+        if (res.companies.length > 0) {
+          return {
+            companies: [{ scraperName: scraper.name(), companies: res.companies }],
+            // TODO: Choose the correct term between company and companies based on the length.
+            message: `${res.companies.length} company/companies found by scraper ${scraper.name()}. ${applicability}}`,
+          };
+        }
+      } catch (e) {
+        // TODO: Allow individual scrapers to set a custom HttpStatus.
+        const message = `Lookup in ${scraper.name()} failed: ${e}`;
+        this.logger.error(message);
+        throw new HttpException(message, HttpStatus.INTERNAL_SERVER_ERROR);
       }
     }
-    const message = `No match found in any scraper: [${this.scraperNames()}]`;
-    this.logger.log(message);
-    return { companies: [], message: message };
+    const noMatchFoundMessage = `No match found in any scraper. ${applicability}}`;
+    this.logger.log(noMatchFoundMessage);
+    return { companies: [], message: noMatchFoundMessage };
   }
 
   // Determine the set of scrapers to use.
-  applicableScrapers(req: LookupRequest): IScraper[] {
-    return this.scrapers
-      .filter((scraper) => scraper.check(req).isApplicable)
-      .sort((a, b) => a.check(req).priority - b.check(req).priority);
+  // The list of strings contains information about which scrapers are not applicable.
+  applicableScrapers(req: LookupRequest): [IScraper[], string[]] {
+    const applicable: IScraper[] = [];
+    const notApplicable: string[] = [];
+    for (const scraper of this.scrapers) {
+      const check = scraper.check(req);
+      if (check.isApplicable) {
+        applicable.push(scraper);
+      } else {
+        notApplicable.push(`${scraper.name()} ${check.reason}`);
+      }
+    }
+    return [applicable.sort((a, b) => a.check(req).priority - b.check(req).priority), notApplicable];
   }
 
   scraperNames(): string {
-    return this.scrapers.map((s) => s.name()).join(',');
+    return ScraperRegistry.scraperNames(this.scrapers);
+  }
+
+  static scraperNames(scrapers: IScraper[]): string {
+    return scrapers.map((s) => s.name()).join(',');
   }
 }

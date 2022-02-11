@@ -22,6 +22,10 @@ export class CheckResult {
   // before attempting a fetch from scraperB.
   // Scrapers equal in priority will be fetched from in an undefined order.
   readonly priority?: number;
+
+  // Explanatory text about why this scraper does not apply to the given request.
+  // Use in conjunction with `isApplicable=false`.
+  readonly reason?: string;
 }
 
 export class LookupResponse {
