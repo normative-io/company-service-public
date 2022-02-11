@@ -30,6 +30,11 @@ export class ScraperServiceResponse {
     description: 'The companies found by the ScraperService.',
   })
   readonly companies: IndividualScraperResponse[];
+
+  @ApiProperty({
+    description: 'Explanatory text about the response. If no companies were returned, describes the reason.',
+  })
+  readonly message: string;
 }
 
 export class IndividualScraperResponse {

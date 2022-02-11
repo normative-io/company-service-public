@@ -39,4 +39,9 @@ export class LookupResponse {
     description: 'The companies found.',
   })
   readonly companies: ScraperLookupResponse[];
+
+  @ApiProperty({
+    description: 'Explanatory text about the response. If no companies were returned, describes the reason.',
+  })
+  readonly message: string;
 }

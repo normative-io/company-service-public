@@ -79,31 +79,34 @@ describe('CompanyController', () => {
     await controller.insertOrUpdate([{ country: 'CH', companyId: '2', companyName: 'some-name' }]);
     await controller.insertOrUpdate([{ country: 'CH', companyId: '3', companyName: 'some-name' }]);
 
-    expect(await controller.search({ companyName: 'some-name' })).toEqual([
-      {
-        company: {
-          id: expect.any(String),
-          country: 'CH',
-          companyId: '2',
-          companyName: 'some-name',
-          created: expect.any(Date),
-          lastUpdated: expect.any(Date),
+    expect(await controller.search({ companyName: 'some-name' })).toEqual({
+      companies: [
+        {
+          company: {
+            id: expect.any(String),
+            country: 'CH',
+            companyId: '2',
+            companyName: 'some-name',
+            created: expect.any(Date),
+            lastUpdated: expect.any(Date),
+          },
+          confidence: expect.any(Number),
+          foundBy: expect.any(String),
         },
-        confidence: expect.any(Number),
-        foundBy: expect.any(String),
-      },
-      {
-        company: {
-          id: expect.any(String),
-          country: 'CH',
-          companyId: '3',
-          companyName: 'some-name',
-          created: expect.any(Date),
-          lastUpdated: expect.any(Date),
+        {
+          company: {
+            id: expect.any(String),
+            country: 'CH',
+            companyId: '3',
+            companyName: 'some-name',
+            created: expect.any(Date),
+            lastUpdated: expect.any(Date),
+          },
+          confidence: expect.any(Number),
+          foundBy: expect.any(String),
         },
-        confidence: expect.any(Number),
-        foundBy: expect.any(String),
-      },
-    ]);
+      ],
+      message: expect.any(String),
+    });
   });
 });
