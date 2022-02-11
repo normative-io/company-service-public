@@ -19,15 +19,26 @@ export class DenmarkScraper implements IScraper {
   private naceIsicMapping = new NaceIsicMappingRepository();
   private countryCode = 'DK';
 
+  constructor() {
+    if (!this.username || !this.password) {
+      this.logger.warn(
+        'Missing required DK_VIRK_USERNAME or DK_VIRK_PASSWORD; lookup requests will fail. See denmark-scraper/README.md to configure',
+      );
+    }
+  }
+
   name() {
     return 'denmark-scraper';
   }
 
   check(req: LookupRequest): CheckResult {
-    if (req.country === this.countryCode) {
-      return { isApplicable: true, priority: 10 };
+    if (req.country.toUpperCase() != this.countryCode) {
+      return { isApplicable: false, reason: `only applicable to country=${this.countryCode}` };
     }
-    return { isApplicable: false };
+    if (!req.companyId) {
+      return { isApplicable: false, reason: `requires a present companyId` };
+    }
+    return { isApplicable: true, priority: 10 };
   }
 
   async lookup(req: LookupRequest): Promise<LookupResponse> {
@@ -51,10 +62,13 @@ export class DenmarkScraper implements IScraper {
    Fetch the company data from Virk.
    */
   private async fetchRequest(request: LookupRequest): Promise<FoundCompany[]> {
-    const auth = Buffer.from(`${this.username}:${this.password}`).toString('base64');
-    if (!request.companyId) {
-      this.logger.warn('Got request without companyId; the fetch operation might fail');
+    if (!this.username || !this.password) {
+      const message =
+        'Cannot fetch data; missing required DK_VIRK_USERNAME or DK_VIRK_PASSWORD. See denmark-scraper/README.md to configure';
+      this.logger.error(message);
+      throw new Error(message);
     }
+    const auth = Buffer.from(`${this.username}:${this.password}`).toString('base64');
     const requestBody = this.requestWithCVRNr(request.companyId);
     this.logger.verbose(`Request body: ${requestBody}`);
 
@@ -75,9 +89,10 @@ export class DenmarkScraper implements IScraper {
       this.logger.debug('Fetch response succesfully parsed');
       return this.toCompanies(request, responseBody);
     } catch (e) {
-      this.logger.error(`Error fetching response: ${e}`);
-      this.logger.debug(`Response text: ${text}`);
-      return [];
+      const message = `Error fetching response: ${e}`;
+      this.logger.error(message);
+      this.logger.log(`Response text: ${text}`);
+      throw new Error(message);
     }
   }
 
