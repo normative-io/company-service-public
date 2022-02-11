@@ -143,7 +143,7 @@ export class CompanyService {
   }
 
   private async findInRepo(searchDto: SearchDto): Promise<CompanyFoundDto[]> {
-    const results = [];
+    const results: CompanyFoundDto[] = [];
     if (searchDto.id) {
       const company = await this.companyRepo.findById(searchDto.id);
       if (company) {
@@ -217,7 +217,7 @@ export class CompanyService {
   }
 
   private async toCompanies(response: ScraperServiceResponse): Promise<[CompanyFoundDto[], string]> {
-    const results = [];
+    const results: CompanyFoundDto[] = [];
     this.logger.verbose(`Extracting companies from response: ${JSON.stringify(response)}`);
     const companies = response.companies;
     const message = response.message;
