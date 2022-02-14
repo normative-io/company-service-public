@@ -5,7 +5,6 @@ import { InsertOrUpdateDto } from './dto/insert-or-update.dto';
 import { CompanyFoundDto, ScraperServiceResponse } from './dto/company-found.dto';
 import { Counter } from 'prom-client';
 import { InjectMetric } from '@willsoto/nestjs-prometheus';
-import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { GetCompanyDto } from './dto/get-company.dto';
 import { CompanyKeyDto } from './dto/company-key.dto';
@@ -36,20 +35,19 @@ export class CompanyService {
   constructor(
     @Inject(COMPANY_REPOSITORY)
     private readonly companyRepo: ICompanyRepository,
-    private readonly httpService: HttpService,
     private configService: ConfigService,
-    // Some metrics for the "find" operation are related to each other:
-    // find_inbound_total = find_outbound_found_in_repo_total + find_outbound_found_in_scrapers_total + find_outbound_not_found_total
-    @InjectMetric('find_inbound_total')
-    public findInboundTotal: Counter<string>,
-    @InjectMetric('find_outbound_found_in_repo_total')
-    public findFoundInRepoTotal: Counter<string>,
-    @InjectMetric('find_outbound_found_in_scrapers_total')
-    public findFoundInScrapersTotal: Counter<string>,
-    @InjectMetric('find_outbound_not_found_total')
-    public findNotFoundTotal: Counter<string>,
-    @InjectMetric('find_scrapers_error_total')
-    public findScraperErrorTotal: Counter<string>,
+    // Some metrics for the "search" operation are related to each other:
+    // search_inbound_total = search_outbound_found_in_repo_total + search_outbound_found_in_scrapers_total + search_outbound_not_found_total
+    @InjectMetric('search_inbound_total')
+    public searchInboundTotal: Counter<string>,
+    @InjectMetric('search_outbound_found_in_repo_total')
+    public searchFoundInRepoTotal: Counter<string>,
+    @InjectMetric('search_outbound_found_in_scrapers_total')
+    public searchFoundInScrapersTotal: Counter<string>,
+    @InjectMetric('search_outbound_not_found_total')
+    public searchNotFoundTotal: Counter<string>,
+    @InjectMetric('search_scrapers_error_total')
+    public searchScraperErrorTotal: Counter<string>,
   ) {
     const scraperAddress = this.configService.get<string>('SCRAPER_ADDRESS');
     this.scraperServiceAddress = `http://${scraperAddress}/scraper/lookup`;
@@ -110,25 +108,26 @@ export class CompanyService {
   }
 
   async search(searchDto: SearchDto): Promise<[CompanyFoundDto[], string]> {
-    this.findInboundTotal.inc();
+    const country = searchDto.country;
+    this.searchInboundTotal.inc({ country: country });
     const results = await this.findInRepo(searchDto);
     let found;
     let message;
     if (results.length != 0) {
-      this.findFoundInRepoTotal.inc();
+      this.searchFoundInRepoTotal.inc({ country: country });
       message = CompanyService.messageCompaniesFoundInRepository;
     } else {
       this.logger.verbose(`Could not find company in the repo; metadata: ${JSON.stringify(searchDto)}`);
       [found, message] = await this.findInScraperService(searchDto);
       if (found.length != 0) {
-        this.findFoundInScrapersTotal.inc();
+        this.searchFoundInScrapersTotal.inc({ country: country });
       }
       results.push(...found);
     }
 
     if (results.length === 0) {
       this.logger.verbose(`Could not find company anywhere; metadata: ${JSON.stringify(searchDto)}`);
-      this.findNotFoundTotal.inc();
+      this.searchNotFoundTotal.inc({ country: country });
     }
     return [
       results
@@ -185,6 +184,7 @@ export class CompanyService {
   // Each of these increment `this.findScraperErrorTotal` and throw an HTTPException with
   // a descriptive message.
   private async findInScraperService(searchDto: SearchDto): Promise<[CompanyFoundDto[], string]> {
+    const country = searchDto.country;
     if (Object.keys(searchDto).length === 0) {
       throw new HttpException(`Search request cannot be empty`, HttpStatus.BAD_REQUEST);
     }
@@ -198,7 +198,7 @@ export class CompanyService {
     } catch (e) {
       const message = `Cannot contact ScraperService, is the service available? ${e}`;
       this.logger.error(message);
-      this.findScraperErrorTotal.inc();
+      this.searchScraperErrorTotal.inc({ country: country, statusCode: HttpStatus.SERVICE_UNAVAILABLE });
       throw new HttpException(message, HttpStatus.SERVICE_UNAVAILABLE);
     }
     let jsonResponse = await response.json();
@@ -208,15 +208,15 @@ export class CompanyService {
       // {"statusCode":501,"message":"No suitable scrapers for the request"}
       const message = `Request to ScraperService failed: ${jsonResponse.message}`;
       this.logger.error(message);
-      this.findScraperErrorTotal.inc();
+      this.searchScraperErrorTotal.inc({ country: country, statusCode: response.status });
       throw new HttpException(message, response.status);
     }
     const scraperResponse = jsonResponse as ScraperServiceResponse;
     this.logger.debug(`Fetched response from ScraperService: ${JSON.stringify(scraperResponse)}`);
-    return this.toCompanies(scraperResponse);
+    return this.toCompanies(scraperResponse, country);
   }
 
-  private async toCompanies(response: ScraperServiceResponse): Promise<[CompanyFoundDto[], string]> {
+  private async toCompanies(response: ScraperServiceResponse, country: string): Promise<[CompanyFoundDto[], string]> {
     const results: CompanyFoundDto[] = [];
     this.logger.verbose(`Extracting companies from response: ${JSON.stringify(response)}`);
     const companies = response.companies;
@@ -242,7 +242,7 @@ export class CompanyService {
     } catch (e) {
       const message = `Error parsing response from ScraperService: ${e}`;
       this.logger.error(message);
-      this.findScraperErrorTotal.inc();
+      this.searchScraperErrorTotal.inc({ country: country, statusCode: HttpStatus.INTERNAL_SERVER_ERROR });
       throw new HttpException(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
     return [results, message];

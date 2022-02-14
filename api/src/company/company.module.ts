@@ -18,22 +18,30 @@ import { MongoRepositoryService } from './repository/mongo/mongo.service';
       useClass: MongoRepositoryService,
     },
 
-    makeCounterProvider({ name: 'find_inbound_total', help: 'The number of find inbound requests' }),
     makeCounterProvider({
-      name: 'find_outbound_found_in_repo_total',
-      help: 'The number of find requests that are answered by the repo',
+      name: 'search_inbound_total',
+      help: 'The number of search inbound requests',
+      labelNames: ['country'],
     }),
     makeCounterProvider({
-      name: 'find_outbound_found_in_scrapers_total',
-      help: 'The number of find requests that are answered by the Scrapers Service',
+      name: 'search_outbound_found_in_repo_total',
+      help: 'The number of search requests that are answered by the repository',
+      labelNames: ['country'],
     }),
     makeCounterProvider({
-      name: 'find_outbound_not_found_total',
-      help: 'The number of find requests for which no results are found',
+      name: 'search_outbound_found_in_scrapers_total',
+      help: 'The number of search requests that are answered by the Scraper Service',
+      labelNames: ['country'],
     }),
     makeCounterProvider({
-      name: 'find_scrapers_error_total',
-      help: 'The number of find requests for which the Scrapers Service throws an error',
+      name: 'search_outbound_not_found_total',
+      help: 'The number of search requests for which no results are found',
+      labelNames: ['country'],
+    }),
+    makeCounterProvider({
+      name: 'search_scrapers_error_total',
+      help: 'The number of search requests for which the Scraper Service throws an error',
+      labelNames: ['country', 'statusCode'],
     }),
   ],
 })
