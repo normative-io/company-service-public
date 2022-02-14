@@ -2,6 +2,8 @@ import { ConfigService } from '@nestjs/config';
 import { HttpException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { LookupRequest, LookupResponse } from '../dto/lookup.dto';
 import { IScraper } from '../dto/scraper.interface';
+import { Counter } from 'prom-client';
+import { InjectMetric } from '@willsoto/nestjs-prometheus';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const fg = require('fast-glob');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -23,7 +25,21 @@ export class ScraperRegistry {
   logger = new Logger(ScraperRegistry.name);
   scrapers: IScraper[];
 
-  constructor(private configService: ConfigService) {
+  constructor(
+    private configService: ConfigService,
+    // Some metrics for the "lookup" operation are related to each other:
+    // lookup_inbound_total = lookup_outbound_found_total + lookup_outbound_not_found_total + lookup_error_total
+    @InjectMetric('lookup_inbound_total')
+    public lookupInboundTotal: Counter<string>,
+    @InjectMetric('lookup_inbound_by_scraper_total')
+    public lookupInboundByScraperTotal: Counter<string>,
+    @InjectMetric('lookup_outbound_found_total')
+    public lookupFoundTotal: Counter<string>,
+    @InjectMetric('lookup_outbound_not_found_total')
+    public lookupNotFoundTotal: Counter<string>,
+    @InjectMetric('lookup_error_total')
+    public lookupErrorTotal: Counter<string>,
+  ) {
     const scraperGlobs = this.configService.get<string>(SCRAPER_GLOBS, DEFAULT_SCRAPER_GLOBS).split(',');
     this.logger.log(`Searching for scrapers in: ${scraperGlobs}`);
 
@@ -63,8 +79,11 @@ export class ScraperRegistry {
 
   async lookup(req: LookupRequest): Promise<LookupResponse> {
     this.logger.debug(`lookup request: ${JSON.stringify(req)}`);
+    const country = req.country;
+    this.lookupInboundTotal.inc({ country: country });
     if (!req.companyId && !req.companyName) {
       this.logger.warn('Bad request: request must contain a companyId or companyName');
+      this.lookupErrorTotal.inc({ country: country, statusCode: HttpStatus.BAD_REQUEST });
       throw new HttpException('Request must contain a companyId or companyName', HttpStatus.BAD_REQUEST);
     }
 
@@ -91,6 +110,7 @@ export class ScraperRegistry {
     if (scrapers.length === 0) {
       const requestNotSentMessage = `Request not sent to any scraper. ${notApplicableScrapers}`;
       this.logger.log(requestNotSentMessage);
+      this.lookupNotFoundTotal.inc({ country: country });
       return { companies: [], message: requestNotSentMessage };
     }
 
@@ -98,30 +118,39 @@ export class ScraperRegistry {
     // Note: in the future, we may want to execute every
     // applicable scraper and/or run them all in parallel.
     for (const scraper of scrapers) {
-      this.logger.debug(`attempting fetch for request ${JSON.stringify(req)} using scraper: ${scraper.name()}`);
+      const scraperName = scraper.name();
+      this.logger.debug(`attempting fetch for request ${JSON.stringify(req)} using scraper: ${scraperName}`);
+      this.lookupInboundByScraperTotal.inc({ country: country, scraper: scraperName });
 
       try {
         const res = await scraper.lookup(req);
         if (res.companies.length > 0) {
+          this.lookupFoundTotal.inc({ country: country, scraperName: scraperName });
           return {
-            companies: [{ scraperName: scraper.name(), companies: res.companies }],
+            companies: [{ scraperName: scraperName, companies: res.companies }],
             // `message` will start with something like:
             // 14 companies found by scraper denmark-scraper.
             message: `${res.companies.length} ${pluralize(
               'company',
               res.companies.length,
-            )} found by scraper ${scraper.name()}. ${applicability}}`,
+            )} found by scraper ${scraperName}. ${applicability}}`,
           };
         }
       } catch (e) {
         // TODO: Allow individual scrapers to set a custom HttpStatus.
-        const message = `Lookup in ${scraper.name()} failed: ${e}`;
+        const message = `Lookup in ${scraperName} failed: ${e}`;
         this.logger.error(message);
+        this.lookupErrorTotal.inc({
+          country: country,
+          scraperName: scraperName,
+          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        });
         throw new HttpException(message, HttpStatus.INTERNAL_SERVER_ERROR);
       }
     }
     const noMatchFoundMessage = `No match found in any scraper. ${applicability}}`;
     this.logger.log(noMatchFoundMessage);
+    this.lookupNotFoundTotal.inc({ country: country });
     return { companies: [], message: noMatchFoundMessage };
   }
 
