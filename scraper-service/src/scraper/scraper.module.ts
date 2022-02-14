@@ -40,7 +40,7 @@ import { PrometheusModule, makeCounterProvider } from '@willsoto/nestjs-promethe
     makeCounterProvider({
       name: 'lookup_outbound_not_found_total',
       help: 'The number of lookup requests for which no results are found',
-      labelNames: ['country'],
+      labelNames: ['country', 'reason'],
     }),
     makeCounterProvider({
       name: 'lookup_error_total',

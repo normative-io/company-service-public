@@ -110,7 +110,7 @@ export class ScraperRegistry {
     if (scrapers.length === 0) {
       const requestNotSentMessage = `Request not sent to any scraper. ${notApplicableScrapers}`;
       this.logger.log(requestNotSentMessage);
-      this.lookupNotFoundTotal.inc({ country: country });
+      this.lookupNotFoundTotal.inc({ country: country, reason: 'no_applicable_scraper' });
       return { companies: [], message: requestNotSentMessage };
     }
 
@@ -120,7 +120,7 @@ export class ScraperRegistry {
     for (const scraper of scrapers) {
       const scraperName = scraper.name();
       this.logger.debug(`attempting fetch for request ${JSON.stringify(req)} using scraper: ${scraperName}`);
-      this.lookupInboundByScraperTotal.inc({ country: country, scraper: scraperName });
+      this.lookupInboundByScraperTotal.inc({ country: country, scraperName: scraperName });
 
       try {
         const res = await scraper.lookup(req);
@@ -150,7 +150,7 @@ export class ScraperRegistry {
     }
     const noMatchFoundMessage = `No match found in any scraper. ${applicability}}`;
     this.logger.log(noMatchFoundMessage);
-    this.lookupNotFoundTotal.inc({ country: country });
+    this.lookupNotFoundTotal.inc({ country: country, reason: 'no_match' });
     return { companies: [], message: noMatchFoundMessage };
   }
 
