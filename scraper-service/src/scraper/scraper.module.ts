@@ -30,15 +30,15 @@ import { PrometheusModule, makeCounterProvider } from '@willsoto/nestjs-promethe
       // Also, we could care only about `lookup_inbound_by_scraper_total`, but we would
       // miss requests that are rejected because they are invalid, or request
       // that don't apply to any scraper.
-      labelNames: ['country', 'scraperName'],
+      labelNames: ['country', 'scraper_name'],
     }),
     makeCounterProvider({
-      name: 'lookup_outbound_found_total',
+      name: 'lookup_found_total',
       help: 'The number of lookup requests that are answered',
-      labelNames: ['country', 'scraperName'],
+      labelNames: ['country', 'scraper_name'],
     }),
     makeCounterProvider({
-      name: 'lookup_outbound_not_found_total',
+      name: 'lookup_not_found_total',
       help: 'The number of lookup requests for which no results are found',
       labelNames: ['country', 'reason'],
     }),
@@ -46,7 +46,7 @@ import { PrometheusModule, makeCounterProvider } from '@willsoto/nestjs-promethe
       name: 'lookup_error_total',
       help: 'The number of lookup requests for which the Scraper Service throws an error',
       // Note, 'scraperName' might not be present if the error happened outside a scraper.
-      labelNames: ['country', 'statusCode', 'scraperName'],
+      labelNames: ['country', 'status_code', 'scraper_name'],
     }),
   ],
 })

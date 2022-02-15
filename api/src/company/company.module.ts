@@ -24,24 +24,19 @@ import { MongoRepositoryService } from './repository/mongo/mongo.service';
       labelNames: ['country'],
     }),
     makeCounterProvider({
-      name: 'search_outbound_found_in_repo_total',
-      help: 'The number of search requests that are answered by the repository',
-      labelNames: ['country'],
+      name: 'search_found_total',
+      help: 'The number of search requests that are answered',
+      labelNames: ['country', 'answered_by'],
     }),
     makeCounterProvider({
-      name: 'search_outbound_found_in_scrapers_total',
-      help: 'The number of search requests that are answered by the Scraper Service',
-      labelNames: ['country'],
-    }),
-    makeCounterProvider({
-      name: 'search_outbound_not_found_total',
+      name: 'search_not_found_total',
       help: 'The number of search requests for which no results are found',
       labelNames: ['country'],
     }),
     makeCounterProvider({
-      name: 'search_scrapers_error_total',
-      help: 'The number of search requests for which the Scraper Service throws an error',
-      labelNames: ['country', 'statusCode'],
+      name: 'search_error_total',
+      help: 'The number of search requests for which there is an error',
+      labelNames: ['country', 'status_code', 'component'],
     }),
   ],
 })
