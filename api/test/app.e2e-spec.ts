@@ -21,7 +21,7 @@ describe('AppController (e2e)', () => {
   });
 
   beforeEach(async () => {
-    await companyModel.deleteMany({});
+    await companyModel.deleteMany({}); // Each test starts with an empty db.
   });
 
   afterAll(async () => {

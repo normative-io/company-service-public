@@ -9,11 +9,12 @@ import { ConfigModule } from '@nestjs/config';
 import { MongoRepositoryModule } from './repository/mongo/mongo.module';
 import { MongoRepositoryService } from './repository/mongo/mongo.service';
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import { Connection } from 'mongoose';
-import { getConnectionToken } from '@nestjs/mongoose';
+import * as mongoose from 'mongoose';
+import { getModelToken } from '@nestjs/mongoose';
 import { Company } from './company.model';
 import { CompanyKeyDto } from './dto/company-key.dto';
 import fetch from 'node-fetch';
+import { CompanyDbObject, CompanyDocument } from './repository/mongo/company.schema';
 
 describe('CompanyService', () => {
   const messageCompaniesFoundInRepository = 'Companies were found in repository';
@@ -21,14 +22,12 @@ describe('CompanyService', () => {
 
   let service: CompanyService;
   let mongoServer: MongoMemoryServer;
-  let mongoConnection: Connection;
+  let companyModel: mongoose.Model<CompanyDocument>;
 
   beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
     process.env.MONGO_URI = mongoServer.getUri();
-  });
 
-  beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [HttpModule, ConfigModule.forRoot(), MongoRepositoryModule],
       providers: [
@@ -40,21 +39,20 @@ describe('CompanyService', () => {
         ...TestMetrics,
       ],
     }).compile();
-
     service = module.get<CompanyService>(CompanyService);
-    mongoConnection = module.get<Connection>(getConnectionToken());
-    fetch.resetMocks();
-    // By default, don't return anything.
-    fetch.mockResponse(JSON.stringify({}));
+    companyModel = module.get(getModelToken(CompanyDbObject.name));
   });
 
-  afterEach(async () => {
-    await mongoConnection.dropCollection('companydbobjects');
-    await mongoConnection.close(/*force=*/ true);
+  beforeEach(async () => {
+    await companyModel.deleteMany({}); // Each test starts with an empty db.
+
+    fetch.resetMocks();
+    fetch.mockResponse(JSON.stringify({})); // By default, don't return anything.
   });
 
   afterAll(async () => {
     await mongoServer.stop();
+    await mongoose.disconnect();
   });
 
   it('should be defined', () => {
