@@ -37,17 +37,15 @@ export class CompanyService {
     private readonly companyRepo: ICompanyRepository,
     private configService: ConfigService,
     // Some metrics for the "search" operation are related to each other:
-    // search_inbound_total = search_outbound_found_in_repo_total + search_outbound_found_in_scrapers_total + search_outbound_not_found_total
+    // search_inbound_total = search_found_total + search_not_found_total + search_error_total
     @InjectMetric('search_inbound_total')
     public searchInboundTotal: Counter<string>,
-    @InjectMetric('search_outbound_found_in_repo_total')
-    public searchFoundInRepoTotal: Counter<string>,
-    @InjectMetric('search_outbound_found_in_scrapers_total')
-    public searchFoundInScrapersTotal: Counter<string>,
-    @InjectMetric('search_outbound_not_found_total')
+    @InjectMetric('search_found_total')
+    public searchFoundTotal: Counter<string>,
+    @InjectMetric('search_not_found_total')
     public searchNotFoundTotal: Counter<string>,
-    @InjectMetric('search_scrapers_error_total')
-    public searchScraperErrorTotal: Counter<string>,
+    @InjectMetric('search_error_total')
+    public searchErrorTotal: Counter<string>,
   ) {
     const scraperAddress = this.configService.get<string>('SCRAPER_ADDRESS');
     this.scraperServiceAddress = `http://${scraperAddress}/scraper/lookup`;
@@ -114,13 +112,13 @@ export class CompanyService {
     let found;
     let message;
     if (results.length != 0) {
-      this.searchFoundInRepoTotal.inc({ country: country });
+      this.searchFoundTotal.inc({ country: country, answered_by: 'repo' });
       message = CompanyService.messageCompaniesFoundInRepository;
     } else {
       this.logger.verbose(`Could not find company in the repo; metadata: ${JSON.stringify(searchDto)}`);
       [found, message] = await this.findInScraperService(searchDto);
       if (found.length != 0) {
-        this.searchFoundInScrapersTotal.inc({ country: country });
+        this.searchFoundTotal.inc({ country: country, answered_by: 'scrapers' });
       }
       results.push(...found);
     }
@@ -198,7 +196,11 @@ export class CompanyService {
     } catch (e) {
       const message = `Cannot contact ScraperService, is the service available? ${e}`;
       this.logger.error(message);
-      this.searchScraperErrorTotal.inc({ country: country, statusCode: HttpStatus.SERVICE_UNAVAILABLE });
+      this.searchErrorTotal.inc({
+        country: country,
+        status_code: HttpStatus.SERVICE_UNAVAILABLE,
+        component: 'scraper_service',
+      });
       throw new HttpException(message, HttpStatus.SERVICE_UNAVAILABLE);
     }
     let jsonResponse = await response.json();
@@ -208,7 +210,7 @@ export class CompanyService {
       // {"statusCode":501,"message":"No suitable scrapers for the request"}
       const message = `Request to ScraperService failed: ${jsonResponse.message}`;
       this.logger.error(message);
-      this.searchScraperErrorTotal.inc({ country: country, statusCode: response.status });
+      this.searchErrorTotal.inc({ country: country, status_code: response.status, component: 'scraper_service' });
       throw new HttpException(message, response.status);
     }
     const scraperResponse = jsonResponse as ScraperServiceResponse;
@@ -242,7 +244,11 @@ export class CompanyService {
     } catch (e) {
       const message = `Error parsing response from ScraperService: ${e}`;
       this.logger.error(message);
-      this.searchScraperErrorTotal.inc({ country: country, statusCode: HttpStatus.INTERNAL_SERVER_ERROR });
+      this.searchErrorTotal.inc({
+        country: country,
+        status_code: HttpStatus.INTERNAL_SERVER_ERROR,
+        component: 'scraper_service',
+      });
       throw new HttpException(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
     return [results, message];

@@ -5,19 +5,15 @@ export const TestMetrics = [
     useValue: { inc: jest.fn() },
   },
   {
-    provide: 'PROM_METRIC_SEARCH_OUTBOUND_FOUND_IN_REPO_TOTAL',
+    provide: 'PROM_METRIC_SEARCH_FOUND_TOTAL',
     useValue: { inc: jest.fn() },
   },
   {
-    provide: 'PROM_METRIC_SEARCH_OUTBOUND_FOUND_IN_SCRAPERS_TOTAL',
+    provide: 'PROM_METRIC_SEARCH_NOT_FOUND_TOTAL',
     useValue: { inc: jest.fn() },
   },
   {
-    provide: 'PROM_METRIC_SEARCH_OUTBOUND_NOT_FOUND_TOTAL',
-    useValue: { inc: jest.fn() },
-  },
-  {
-    provide: 'PROM_METRIC_SEARCH_SCRAPERS_ERROR_TOTAL',
+    provide: 'PROM_METRIC_SEARCH_ERROR_TOTAL',
     useValue: { inc: jest.fn() },
   },
 ];

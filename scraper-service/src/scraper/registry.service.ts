@@ -28,14 +28,14 @@ export class ScraperRegistry {
   constructor(
     private configService: ConfigService,
     // Some metrics for the "lookup" operation are related to each other:
-    // lookup_inbound_total = lookup_outbound_found_total + lookup_outbound_not_found_total + lookup_error_total
+    // lookup_inbound_total = lookup_found_total + lookup_not_found_total + lookup_error_total
     @InjectMetric('lookup_inbound_total')
     public lookupInboundTotal: Counter<string>,
     @InjectMetric('lookup_inbound_by_scraper_total')
     public lookupInboundByScraperTotal: Counter<string>,
-    @InjectMetric('lookup_outbound_found_total')
+    @InjectMetric('lookup_found_total')
     public lookupFoundTotal: Counter<string>,
-    @InjectMetric('lookup_outbound_not_found_total')
+    @InjectMetric('lookup_not_found_total')
     public lookupNotFoundTotal: Counter<string>,
     @InjectMetric('lookup_error_total')
     public lookupErrorTotal: Counter<string>,
@@ -83,7 +83,7 @@ export class ScraperRegistry {
     this.lookupInboundTotal.inc({ country: country });
     if (!req.companyId && !req.companyName) {
       this.logger.warn('Bad request: request must contain a companyId or companyName');
-      this.lookupErrorTotal.inc({ country: country, statusCode: HttpStatus.BAD_REQUEST });
+      this.lookupErrorTotal.inc({ country: country, status_code: HttpStatus.BAD_REQUEST });
       throw new HttpException('Request must contain a companyId or companyName', HttpStatus.BAD_REQUEST);
     }
 
@@ -120,12 +120,12 @@ export class ScraperRegistry {
     for (const scraper of scrapers) {
       const scraperName = scraper.name();
       this.logger.debug(`attempting fetch for request ${JSON.stringify(req)} using scraper: ${scraperName}`);
-      this.lookupInboundByScraperTotal.inc({ country: country, scraperName: scraperName });
+      this.lookupInboundByScraperTotal.inc({ country: country, scraper_name: scraperName });
 
       try {
         const res = await scraper.lookup(req);
         if (res.companies.length > 0) {
-          this.lookupFoundTotal.inc({ country: country, scraperName: scraperName });
+          this.lookupFoundTotal.inc({ country: country, scraper_name: scraperName });
           return {
             companies: [{ scraperName: scraperName, companies: res.companies }],
             // `message` will start with something like:
@@ -142,8 +142,8 @@ export class ScraperRegistry {
         this.logger.error(message);
         this.lookupErrorTotal.inc({
           country: country,
-          scraperName: scraperName,
-          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+          scraper_name: scraperName,
+          status_code: HttpStatus.INTERNAL_SERVER_ERROR,
         });
         throw new HttpException(message, HttpStatus.INTERNAL_SERVER_ERROR);
       }

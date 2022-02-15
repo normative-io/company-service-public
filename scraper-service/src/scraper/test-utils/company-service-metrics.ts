@@ -9,11 +9,11 @@ export const TestMetrics = [
     useValue: { inc: jest.fn() },
   },
   {
-    provide: 'PROM_METRIC_LOOKUP_OUTBOUND_FOUND_TOTAL',
+    provide: 'PROM_METRIC_LOOKUP_FOUND_TOTAL',
     useValue: { inc: jest.fn() },
   },
   {
-    provide: 'PROM_METRIC_LOOKUP_OUTBOUND_NOT_FOUND_TOTAL',
+    provide: 'PROM_METRIC_LOOKUP_NOT_FOUND_TOTAL',
     useValue: { inc: jest.fn() },
   },
   {
