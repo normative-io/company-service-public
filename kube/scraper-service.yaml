@@ -17,8 +17,9 @@ spec:
     spec:
       containers:
         - name: scraper-service
-          # Before running, replace ECR_REGISTRY with your registry in the next line.
-          image: $ECR_REGISTRY/company-service/scraper-service:latest
+          # To apply with variable substitution, set the ECR_REGISTRY bash variable, and run:
+          # envsubst < PATH_TO_THIS_FILE.yaml | kubectl apply -f -
+          image: ${ECR_REGISTRY}/company-service/scraper-service:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 3001
