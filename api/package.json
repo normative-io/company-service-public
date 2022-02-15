@@ -12,7 +12,7 @@
     "format:check": "prettier --config .prettierrc --check \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "npm run start:db && nest start",
     "start:db": "docker start `docker ps --format={{.ID}} -f name=company_service_dev` 2>/dev/null || docker run -d -p 27017:27017 --name company_service_dev mongo:latest",
-    "start:db:e2e": "docker run -d -p 27018:27018 --name company_service_e2e mongo:latest",
+    "start:db:e2e": "docker run -d -p 27018:27017 --name company_service_e2e mongo:latest",
     "start:dev": "npm run start:db && nest start --watch",
     "start:debug": "npm run start:db && npm run start:debug:no-db",
     "start:debug:no-db": "nest start --debug --watch",
@@ -24,7 +24,7 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "trap 'npm run stop:db:e2e' EXIT && npm run start:db:e2e && MONGO_URI=mongodb://localhost/company-service:27018 && jest --config ./test/jest-e2e.json"
+    "test:e2e": "trap 'npm run stop:db:e2e' EXIT && npm run start:db:e2e && export MONGO_URI=mongodb://localhost:27018/company-service && jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
     "@nestjs/axios": "^0.0.3",
