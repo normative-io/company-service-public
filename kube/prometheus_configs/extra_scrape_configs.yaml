@@ -1,0 +1,8 @@
+- job_name: 'company-api'
+  static_configs:
+    - targets:
+      - company-service.company-service.svc.cluster.local:3000
+- job_name: 'scraper-service'
+  static_configs:
+    - targets:
+      - scraper-service.company-service.svc.cluster.local:3001
