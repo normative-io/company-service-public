@@ -8,8 +8,8 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
-    "format": "prettier --config ../.prettierrc --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "format:check": "prettier --config ../.prettierrc --check \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format": "prettier --config .prettierrc --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format:check": "prettier --config .prettierrc --check \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "npm run start:db && nest start",
     "start:db": "docker start `docker ps --format={{.ID}} -f ancestor=mongo:latest` 2>/dev/null || docker run -d -p 27017:27017 --name mongodb_dev mongo:latest",
     "start:dev": "npm run start:db && nest start --watch",
