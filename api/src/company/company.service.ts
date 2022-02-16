@@ -203,7 +203,7 @@ export class CompanyService {
       });
       throw new HttpException(message, HttpStatus.SERVICE_UNAVAILABLE);
     }
-    let jsonResponse = await response.json();
+    const jsonResponse = await response.json();
     if (!response.ok) {
       this.logger.debug(`Fetched failed response (status=${response.status}) ${JSON.stringify(jsonResponse)}`);
       // A failed response is of the form:
