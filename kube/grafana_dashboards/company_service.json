@@ -21,8 +21,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 21,
-  "iteration": 1644879729700,
+  "id": 19,
+  "iteration": 1645006096909,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -36,8 +36,61 @@
       },
       "id": 15,
       "panels": [],
-      "title": "Search Requests ($search_countries)",
+      "title": "Search Requests ($search_countries), Totals",
       "type": "row"
+    },
+    {
+      "description": "",
+      "gridPos": {
+        "h": 2,
+        "w": 23,
+        "x": 0,
+        "y": 1
+      },
+      "id": 29,
+      "options": {
+        "content": "Note: These graphs display Total values in the context of the current execution of each component (API and ScraperService). If components restart, the values clear and start over.\n",
+        "mode": "markdown"
+      },
+      "pluginVersion": "8.3.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "sum(search_found_total{country=~\"$search_countries\"})",
+          "interval": "",
+          "legendFormat": "Found",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "sum(search_not_found_total{country=~\"$search_countries\"})",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Not Found",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "sum(search_error_total{country=~\"$search_countries\"})",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Error",
+          "refId": "C"
+        }
+      ],
+      "type": "text"
     },
     {
       "fieldConfig": {
@@ -66,7 +119,7 @@
         "h": 8,
         "w": 3,
         "x": 0,
-        "y": 1
+        "y": 3
       },
       "id": 18,
       "options": {
@@ -109,7 +162,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "red",
+                "color": "green",
                 "value": null
               },
               {
@@ -125,7 +178,66 @@
         "h": 8,
         "w": 3,
         "x": 3,
-        "y": 1
+        "y": 3
+      },
+      "id": 26,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "sum(search_found_total{country=~\"$search_countries\"})",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "API Answers found ($search_countries)",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 3,
+        "x": 6,
+        "y": 3
       },
       "id": 5,
       "options": {
@@ -148,7 +260,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sum(search_scrapers_error_total{country=~\"$search_countries\"})",
+          "expr": "sum(search_error_total{country=~\"$search_countries\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -166,6 +278,7 @@
           "custom": {
             "axisLabel": "",
             "axisPlacement": "auto",
+            "axisSoftMin": 0,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
@@ -211,14 +324,14 @@
       "gridPos": {
         "h": 8,
         "w": 4,
-        "x": 6,
-        "y": 1
+        "x": 9,
+        "y": 3
       },
       "id": 13,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": ["lastNotNull"],
+          "displayMode": "table",
           "placement": "bottom"
         },
         "tooltip": {
@@ -234,7 +347,7 @@
           "exemplar": true,
           "expr": "search_inbound_total{country=~\"$search_countries\"}",
           "interval": "",
-          "legendFormat": "API Inbound ({{country}})",
+          "legendFormat": "{{country}}",
           "refId": "A"
         }
       ],
@@ -250,6 +363,7 @@
           "custom": {
             "axisLabel": "",
             "axisPlacement": "auto",
+            "axisSoftMin": 0,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
@@ -294,15 +408,15 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 4,
-        "x": 10,
-        "y": 1
+        "w": 5,
+        "x": 13,
+        "y": 3
       },
       "id": 20,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": ["lastNotNull"],
+          "displayMode": "table",
           "placement": "bottom"
         },
         "tooltip": {
@@ -316,10 +430,10 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "search_outbound_found_in_repo_total{country=~\"$search_countries\"}",
+          "expr": "search_found_total{country=~\"$search_countries\"}",
           "hide": false,
           "interval": "",
-          "legendFormat": "Results found in repo ({{country}})",
+          "legendFormat": "{{country}}: Results found in {{answered_by}}",
           "refId": "C"
         },
         {
@@ -328,22 +442,10 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "search_found_in_scrapers_total{country=~\"$search_countries\"}",
+          "expr": "search_not_found_total{country=~\"$search_countries\"}",
           "hide": false,
           "interval": "",
-          "legendFormat": "Results found in Scrapers ({{country}})",
-          "refId": "E"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "exemplar": true,
-          "expr": "search_outbound_not_found_total{country=~\"$search_countries\"}",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "Results not found ({{country}})",
+          "legendFormat": "{{country}}: Results not found",
           "refId": "D"
         }
       ],
@@ -360,6 +462,7 @@
           "custom": {
             "axisLabel": "",
             "axisPlacement": "auto",
+            "axisSoftMin": 0,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
@@ -432,15 +535,15 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 4,
-        "x": 14,
-        "y": 1
+        "w": 5,
+        "x": 18,
+        "y": 3
       },
       "id": 17,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": ["lastNotNull"],
+          "displayMode": "table",
           "placement": "bottom"
         },
         "tooltip": {
@@ -454,7 +557,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "sum(search_scrapers_error_total{country=~\"$search_countries\"})",
+          "expr": "sum(search_error_total{country=~\"$search_countries\"})",
           "hide": false,
           "instant": false,
           "interval": "",
@@ -467,11 +570,47 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "search_scrapers_error_total{country=~\"$search_countries\"}",
+          "expr": "search_error_total{country=~\"$search_countries\"}",
+          "hide": true,
+          "interval": "",
+          "legendFormat": "Error ({{country}}, status_code: {{status_code}}) in {{component}}",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "search_error_total{country=~\"$search_countries\", status_code=\"400\"}",
           "hide": false,
           "interval": "",
-          "legendFormat": "Error ({{country}}, statusCode: {{statusCode}})",
-          "refId": "B"
+          "legendFormat": "{{country}}: BAD_REQUEST ({{status_code}}) in {{component}}",
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "search_error_total{country=~\"$search_countries\", status_code=\"500\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "{{country}}: INTERNAL_SERVER_ERROR ({{status_code}}) in {{component}}",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "search_error_total{country=~\"$search_countries\", status_code!=\"500\", status_code != \"400\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "{{country}}: Error code {{status_code}} in {{component}}",
+          "refId": "E"
         }
       ],
       "title": "API errors ($search_countries)",
@@ -504,7 +643,7 @@
         "h": 8,
         "w": 3,
         "x": 0,
-        "y": 9
+        "y": 11
       },
       "id": 22,
       "options": {
@@ -547,7 +686,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "red",
+                "color": "green",
                 "value": null
               },
               {
@@ -563,7 +702,66 @@
         "h": 8,
         "w": 3,
         "x": 3,
-        "y": 9
+        "y": 11
+      },
+      "id": 27,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "sum(lookup_found_total{country=~\"$search_countries\"})",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "ScraperService Answers found ($search_countries)",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 3,
+        "x": 6,
+        "y": 11
       },
       "id": 23,
       "options": {
@@ -604,6 +802,7 @@
           "custom": {
             "axisLabel": "",
             "axisPlacement": "auto",
+            "axisSoftMin": 0,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
@@ -649,14 +848,14 @@
       "gridPos": {
         "h": 8,
         "w": 4,
-        "x": 6,
-        "y": 9
+        "x": 9,
+        "y": 11
       },
       "id": 21,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": ["lastNotNull"],
+          "displayMode": "table",
           "placement": "bottom"
         },
         "tooltip": {
@@ -672,7 +871,7 @@
           "exemplar": true,
           "expr": "lookup_inbound_total{country=~\"$search_countries\"}",
           "interval": "",
-          "legendFormat": "ScraperService Inbound ({{country}})",
+          "legendFormat": "{{country}}",
           "refId": "A"
         }
       ],
@@ -688,6 +887,7 @@
           "custom": {
             "axisLabel": "",
             "axisPlacement": "auto",
+            "axisSoftMin": 0,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
@@ -732,15 +932,15 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 4,
-        "x": 10,
-        "y": 9
+        "w": 5,
+        "x": 13,
+        "y": 11
       },
       "id": 24,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": ["lastNotNull"],
+          "displayMode": "table",
           "placement": "bottom"
         },
         "tooltip": {
@@ -754,10 +954,10 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "lookup_outbound_found_total{country=~\"$search_countries\", reason != \"\"}",
+          "expr": "lookup_found_total{country=~\"$search_countries\"}",
           "hide": false,
           "interval": "",
-          "legendFormat": "Results found ({{country}}, scraper {{scraperName}})",
+          "legendFormat": "{{country}}: Results found (scraper {{scraper_name}})",
           "refId": "C"
         },
         {
@@ -766,10 +966,10 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "lookup_outbound_not_found_total{country=~\"$search_countries\", reason != \"\"}",
+          "expr": "lookup_not_found_total{country=~\"$search_countries\"}",
           "hide": false,
           "interval": "",
-          "legendFormat": "Results not found ({{country}}, {{reason}})",
+          "legendFormat": "{{country}}: Results not found ({{reason}})",
           "refId": "E"
         }
       ],
@@ -786,6 +986,7 @@
           "custom": {
             "axisLabel": "",
             "axisPlacement": "auto",
+            "axisSoftMin": 0,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
@@ -858,15 +1059,15 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 4,
-        "x": 14,
-        "y": 9
+        "w": 5,
+        "x": 18,
+        "y": 11
       },
       "id": 25,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": ["lastNotNull"],
+          "displayMode": "table",
           "placement": "bottom"
         },
         "tooltip": {
@@ -893,10 +1094,10 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "lookup_error_total{country=~\"$search_countries\", scraperName != \"\"}",
+          "expr": "lookup_error_total{country=~\"$search_countries\", status_code=\"400\"}",
           "hide": false,
           "interval": "",
-          "legendFormat": "Error ({{country}}, statusCode: {{statusCode}}, scraper {{scraperName}})",
+          "legendFormat": "{{country}}: BAD_REQUEST ({{status_code}})",
           "refId": "B"
         },
         {
@@ -905,11 +1106,23 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "lookup_error_total{country=~\"$search_countries\", scraperName = \"\"}",
+          "expr": "lookup_error_total{country=~\"$search_countries\", status_code=\"500\"}",
           "hide": false,
           "interval": "",
-          "legendFormat": "Error ({{country}}, statusCode: {{statusCode}})",
+          "legendFormat": "{{country}}: INTERNAL_SERVER_ERROR ({{status_code}}) in scraper {{scraper_name}}",
           "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "exemplar": true,
+          "expr": "lookup_error_total{country=~\"$search_countries\", status_code!=\"500\", status_code != \"400\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "{{country}}: Error code {{status_code}} in scraper {{scraper_name}}",
+          "refId": "D"
         }
       ],
       "title": "ScraperService errors ($search_countries)",
@@ -948,13 +1161,13 @@
     ]
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Company Service",
   "uid": "71RPt6-8k",
-  "version": 13,
+  "version": 2,
   "weekStart": ""
 }
