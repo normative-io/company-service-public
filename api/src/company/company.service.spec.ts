@@ -436,7 +436,7 @@ describe('CompanyService', () => {
     await service.insertOrUpdate({ country: 'CH', companyId: '1', companyName: 'some-name' });
     await service.insertOrUpdate({ country: 'DK', companyId: '2', companyName: 'some-name' });
 
-    const [found, _] = await service.search({ companyName: 'some-name' });
+    const [found] = await service.search({ companyName: 'some-name' });
     expect(found).toEqual([
       {
         company: {
@@ -468,7 +468,7 @@ describe('CompanyService', () => {
   it('should find a company if one individual field matches', async () => {
     await service.insertOrUpdate({ country: 'CH', companyId: '1', companyName: '1' });
 
-    const [found, _] = await service.search({ id: 'non-existent-id', companyName: '1' });
+    const [found] = await service.search({ id: 'non-existent-id', companyName: '1' });
     expect(found).toEqual([
       {
         company: {
@@ -488,7 +488,7 @@ describe('CompanyService', () => {
   it('should not contact the scaper service if there are matches in the repo', async () => {
     await service.insertOrUpdate({ country: 'CH', companyId: '1', companyName: '1' });
 
-    const [found, _] = await service.search({ id: 'non-existent-id', companyName: '1' });
+    const [found] = await service.search({ id: 'non-existent-id', companyName: '1' });
     expect(found).toEqual([
       {
         company: {
@@ -512,7 +512,7 @@ describe('CompanyService', () => {
     await service.insertOrUpdate({ country: 'DK', companyId: '1', companyName: 'to-find-by-name' });
     await service.insertOrUpdate({ country: 'CH', companyId: '123', companyName: 'to-find-by-company-id-and-country' });
 
-    const [found, _] = await service.search({
+    const [found] = await service.search({
       id: company1.id,
       companyId: '123',
       country: 'CH',
@@ -562,7 +562,7 @@ describe('CompanyService', () => {
   it('should find and deduplicate companies that match multiple individual fields', async () => {
     const [company] = await service.insertOrUpdate({ country: 'CH', companyId: '123', companyName: '1' });
 
-    const [found, _] = await service.search({ id: company.id, companyName: '1', companyId: '123', country: 'CH' });
+    const [found] = await service.search({ id: company.id, companyName: '1', companyId: '123', country: 'CH' });
     expect(found).toEqual([
       {
         company: {
@@ -749,7 +749,7 @@ describe('CompanyService', () => {
           );
         });
         it('results should be sorted by confidence in descending order', async () => {
-          const [found, _] = await service.search({ companyName: 'irrelevant' });
+          const [found] = await service.search({ companyName: 'irrelevant' });
           expect(found).toEqual([
             {
               company: {
