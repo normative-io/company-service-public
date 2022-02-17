@@ -51,7 +51,7 @@ describe('CompanyService', () => {
   });
 
   afterAll(async () => {
-    await mongoServer.stop();
+    await mongoServer.stop(/* runCleanup= */ true);
     await mongoose.disconnect();
   });
 
