@@ -51,8 +51,8 @@ describe('CompanyService', () => {
   });
 
   afterAll(async () => {
-    await mongoServer.stop(/* runCleanup= */ true);
     await mongoose.disconnect();
+    await mongoServer.stop(/* runCleanup= */ true);
   });
 
   it('should be defined', () => {
