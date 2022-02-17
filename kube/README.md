@@ -2,7 +2,8 @@
 
 Follow these instructions to run the API and ScraperService using Kubernetes.
 
-This runs the Docker images in a location of the form _YOUR_ECR_REGISTRY/company-service/api_ and _YOUR_ECR_REGISTRY/company-service/scraper-service_.
+These instructions assume that the images of the components are in an AWS Docker registry of the form
+_YOUR_ECR_REGISTRY/company-service/api_ and _YOUR_ECR_REGISTRY/company-service/scraper-service_.
 
 NOTE: These instructions use [minikube](https://minikube.sigs.k8s.io/docs/start/) and a Mac (they use `brew`), but they might work with a different setup.
 
