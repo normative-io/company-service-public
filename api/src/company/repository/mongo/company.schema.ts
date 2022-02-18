@@ -30,6 +30,9 @@ export class CompanyDbObject {
 
   @Prop()
   lastUpdated: Date;
+
+  @Prop()
+  dataSource: string;
 }
 
 export const CompanySchema = SchemaFactory.createForClass(CompanyDbObject);

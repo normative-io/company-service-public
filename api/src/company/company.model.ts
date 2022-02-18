@@ -54,12 +54,19 @@ export class Company {
   })
   public lastUpdated: Date;
 
-  constructor(createCompanyDto: InsertOrUpdateDto) {
+  @ApiProperty({
+    type: String,
+    description: 'Where this company metadata was sourced from.',
+  })
+  readonly dataSource?: string;
+
+  constructor(insertOrUpdateDto: InsertOrUpdateDto) {
     this.id = uuid();
-    this.companyName = createCompanyDto.companyName;
-    this.country = createCompanyDto.country;
-    this.companyId = createCompanyDto.companyId;
-    this.isic = createCompanyDto.isic;
+    this.companyName = insertOrUpdateDto.companyName;
+    this.country = insertOrUpdateDto.country;
+    this.companyId = insertOrUpdateDto.companyId;
+    this.isic = insertOrUpdateDto.isic;
+    this.dataSource = insertOrUpdateDto.dataSource;
     const now = new Date();
     this.created = now;
     this.lastUpdated = now;

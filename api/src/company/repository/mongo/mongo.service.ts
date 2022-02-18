@@ -132,6 +132,7 @@ function modelToDbObject(company: Company): CompanyDbObject {
     isic: company.isic,
     created: company.created,
     lastUpdated: company.lastUpdated,
+    dataSource: company.dataSource,
   };
   if (company.isDeleted) {
     dbObject.isDeleted = true;
@@ -148,6 +149,7 @@ function dbObjectToModel(dbObject: CompanyDbObject): Company {
     country: dbObject.country,
     companyName: dbObject.companyName,
     isic: dbObject.isic,
+    dataSource: dbObject.dataSource,
   });
   company.id = dbObject._id;
   company.created = dbObject.created;

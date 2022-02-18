@@ -232,7 +232,7 @@ export class CompanyService {
         this.logger.verbose(`Processing response from scraper ${scraperName}: ${JSON.stringify(scraperResponse)}`);
         for (const dto of scraperResponse.companies) {
           this.logger.debug(`Processing: ${JSON.stringify(dto)}`);
-          const [company] = await this.insertOrUpdate(dto.company as InsertOrUpdateDto);
+          const [company] = await this.insertOrUpdate({ dataSource: scraperName, ...dto.company } as InsertOrUpdateDto);
           this.logger.debug(`Added company: ${JSON.stringify(company)}`);
           results.push({
             company: company,

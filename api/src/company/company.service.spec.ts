@@ -241,7 +241,7 @@ describe('CompanyService', () => {
 
   describe('the insertOrUpdate method', () => {
     it('should insert a new record for a non-existent company', async () => {
-      const company = { country: 'CH', companyId: '1', companyName: 'name1' };
+      const company = { country: 'CH', companyId: '1', companyName: 'name1', dataSource: 'Unit-Test' };
 
       const wantInDb = {
         id: expect.any(String),
@@ -250,6 +250,7 @@ describe('CompanyService', () => {
         companyName: company.companyName,
         created: expect.any(Date),
         lastUpdated: expect.any(Date),
+        dataSource: 'Unit-Test',
       };
       expect(await service.insertOrUpdate(company)).toEqual([wantInDb, expect.stringContaining('Inserted')]);
       expect(await service.listAllForTesting()).toEqual([wantInDb]);
@@ -590,7 +591,7 @@ describe('CompanyService', () => {
               {
                 companies: [
                   {
-                    company: { companyName: 'company found', country: 'CH', companyId: '456' },
+                    company: { companyName: 'company found', country: 'CH', companyId: '456', dataSource: 'Unit-Test' },
                     confidence: 1,
                   },
                 ],
@@ -613,6 +614,7 @@ describe('CompanyService', () => {
                 lastUpdated: expect.any(Date),
                 country: 'CH',
                 companyId: '456',
+                dataSource: 'Unit-Test',
               },
               confidence: 1,
               foundBy: 'Scraper CH',
@@ -635,6 +637,7 @@ describe('CompanyService', () => {
                 country: 'CH',
                 companyId: '456',
                 companyName: 'company found',
+                dataSource: 'Unit-Test',
               },
               confidence: expect.any(Number),
               foundBy: expect.any(String),
