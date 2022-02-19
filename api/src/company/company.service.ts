@@ -6,7 +6,6 @@ import { CompanyFoundDto, ScraperServiceResponse } from './dto/company-found.dto
 import { Counter } from 'prom-client';
 import { InjectMetric } from '@willsoto/nestjs-prometheus';
 import { ConfigService } from '@nestjs/config';
-import { GetCompanyDto } from './dto/get-company.dto';
 import { CompanyKeyDto } from './dto/company-key.dto';
 import { SearchDto } from './dto/search.dto';
 import fetch from 'node-fetch';
@@ -16,9 +15,12 @@ export class CompanyService {
   private readonly logger = new Logger(CompanyService.name);
 
   // These confidence values have been chosen intuitively.
-  static readonly confidenceById = 1;
   static readonly confidenceByCompanyIdAndCountry = 0.9;
   static readonly confidenceByName = 0.7;
+
+  // Values of the component field for searchErrorTotal.
+  static readonly componentScrapers = 'scraper_service';
+  static readonly componentApi = 'company_api';
 
   // Values of the `message` field for `get` and `search` operations.
   static readonly messageCompaniesFoundInRepository = 'Companies were found in repository';
@@ -52,47 +54,6 @@ export class CompanyService {
     this.logger.log(`Will use Scraper Service on address: ${this.scraperServiceAddress}`);
   }
 
-  // Fetches the metadata of the requested company. First checks the repository if
-  // the company is already known. If not found in the repository, contacts the
-  // scraper service to check external data sources for this company.
-  // Note: `atTime` represents the database-insertion time of the record and not any
-  // business-related timestamp (ex: date which the company was founded or dissolved).
-  async get(getCompanyDto: GetCompanyDto): Promise<[CompanyFoundDto[], string]> {
-    this.logger.verbose(`Looking in repo for company: ${JSON.stringify(getCompanyDto)}`);
-    const company = await this.companyRepo.get(getCompanyDto.country, getCompanyDto.companyId, getCompanyDto.atTime);
-    if (company) {
-      return [
-        [
-          {
-            confidence: CompanyService.confidenceByCompanyIdAndCountry,
-            foundBy: 'Repository by companyId and country',
-            company: company,
-          },
-        ],
-        CompanyService.messageCompaniesFoundInRepository,
-      ];
-    }
-    this.logger.debug(`Could not find company in the repo: ${JSON.stringify(getCompanyDto)}`);
-
-    // If the requested company was not found in the local repository,
-    // this may be the first time we are encountering this company.
-    // The scraper service should be contacted to perform an on-demand
-    // search of external data sources in order to find the company.
-    // If successful, the next request for this company should be
-    // found in the local repository right away.
-    // Note: if `atTime` is specified, the scraping portion is skipped
-    // because the client is requesting data from the past anyways.
-    if (!getCompanyDto.atTime) {
-      this.logger.verbose(`Requesting scraper lookup for company: ${JSON.stringify(getCompanyDto)}`);
-      return await this.findInScraperService({
-        country: getCompanyDto.country,
-        companyId: getCompanyDto.companyId,
-      });
-    }
-    this.logger.debug(`Could not find company anywhere: ${JSON.stringify(getCompanyDto)}`);
-    return [[], `${CompanyService.messageScrapersNotContactedPrefix} "atTime" was set`];
-  }
-
   async insertOrUpdate(insertOrUpdateDto: InsertOrUpdateDto): Promise<[Company, string]> {
     return await this.companyRepo.insertOrUpdate(insertOrUpdateDto);
   }
@@ -105,24 +66,23 @@ export class CompanyService {
     return await this.companyRepo.listAllForTesting();
   }
 
+  // Search for a company based on the metadata.
+  // We first search inside the repo. If matches are found, return those.
+  // If the requested company was not found in the local repository,
+  // this may be the first time we are encountering this company.
+  // The scraper service is contacted to perform an on-demand
+  // search of external data sources in order to find the company.
+  // If successful, the next request for this company should be
+  // found in the local repository right away.
+  //
+  // TODO: This is simple to understand, but it does not take into account the
+  // confidence of the results found in the repo: if the actual results in
+  // the repo are of low confidence (e.g., partial matches of the name),
+  // should we see if the scrapers find something better?
   async search(searchDto: SearchDto): Promise<[CompanyFoundDto[], string]> {
     const country = searchDto.country;
     this.searchInboundTotal.inc({ country: country });
-    const results = await this.findInRepo(searchDto);
-    let found;
-    let message;
-    if (results.length != 0) {
-      this.searchFoundTotal.inc({ country: country, answered_by: 'repo' });
-      message = CompanyService.messageCompaniesFoundInRepository;
-    } else {
-      this.logger.verbose(`Could not find company in the repo; metadata: ${JSON.stringify(searchDto)}`);
-      [found, message] = await this.findInScraperService(searchDto);
-      if (found.length != 0) {
-        this.searchFoundTotal.inc({ country: country, answered_by: 'scrapers' });
-      }
-      results.push(...found);
-    }
-
+    const [results, message] = await this.searchEverywhere(searchDto);
     if (results.length === 0) {
       this.logger.verbose(`Could not find company anywhere; metadata: ${JSON.stringify(searchDto)}`);
       this.searchNotFoundTotal.inc({ country: country });
@@ -139,20 +99,42 @@ export class CompanyService {
     ];
   }
 
+  async searchEverywhere(searchDto: SearchDto): Promise<[CompanyFoundDto[], string]> {
+    const country = searchDto.country;
+    const results = await this.findInRepo(searchDto);
+
+    if (results.length != 0) {
+      this.searchFoundTotal.inc({ country: country, answered_by: 'repo' });
+      return [results, CompanyService.messageCompaniesFoundInRepository];
+    }
+    this.logger.verbose(`Could not find company in the repo; metadata: ${JSON.stringify(searchDto)}`);
+    // Note: if `atTime` is specified, the scraping portion is skipped
+    // because the client is requesting data from the past anyways.
+    if (searchDto.atTime) {
+      const message = `${CompanyService.messageScrapersNotContactedPrefix} "atTime" was set`;
+      this.logger.debug(message);
+      return [results, message];
+    }
+    const [found, message] = await this.findInScraperService(searchDto);
+    if (found.length != 0) {
+      this.searchFoundTotal.inc({ country: country, answered_by: 'scrapers' });
+      results.push(...found);
+    }
+    return [results, message];
+  }
+
+  // findInRepo searches for a company in the repo.
+  // The search is based on the following fields:
+  // 1. Country and CompanyId
+  // 2. Name
+  // The search is performed by all applicable fields, i.e., if a request
+  // contains both CompanyId and Name, both searches will be performed, and
+  // all results are concatenated in the final return value.
+  // Callers should not assume that results are ordered by CompanyFoundDto.confidence.
   private async findInRepo(searchDto: SearchDto): Promise<CompanyFoundDto[]> {
     const results: CompanyFoundDto[] = [];
-    if (searchDto.id) {
-      const company = await this.companyRepo.findById(searchDto.id);
-      if (company) {
-        results.push({
-          confidence: CompanyService.confidenceById,
-          foundBy: 'Repository by id',
-          company: company,
-        });
-      }
-    }
     if (searchDto.companyId && searchDto.country) {
-      const company = await this.companyRepo.get(searchDto.country, searchDto.companyId);
+      const company = await this.companyRepo.get(searchDto.country, searchDto.companyId, searchDto.atTime);
       if (company) {
         results.push({
           confidence: CompanyService.confidenceByCompanyIdAndCountry,
@@ -163,7 +145,7 @@ export class CompanyService {
     }
     if (searchDto.companyName) {
       results.push(
-        ...(await this.companyRepo.findByName(searchDto.companyName)).map(function (company) {
+        ...(await this.companyRepo.findByName(searchDto.companyName, searchDto.atTime)).map(function (company) {
           return {
             confidence: CompanyService.confidenceByName,
             foundBy: 'Repository by name',
@@ -199,7 +181,7 @@ export class CompanyService {
       this.searchErrorTotal.inc({
         country: country,
         status_code: HttpStatus.SERVICE_UNAVAILABLE,
-        component: 'scraper_service',
+        component: CompanyService.componentScrapers,
       });
       throw new HttpException(message, HttpStatus.SERVICE_UNAVAILABLE);
     }
@@ -210,7 +192,11 @@ export class CompanyService {
       // {"statusCode":501,"message":"No suitable scrapers for the request"}
       const message = `Request to ScraperService failed: ${jsonResponse.message}`;
       this.logger.error(message);
-      this.searchErrorTotal.inc({ country: country, status_code: response.status, component: 'scraper_service' });
+      this.searchErrorTotal.inc({
+        country: country,
+        status_code: response.status,
+        component: CompanyService.componentScrapers,
+      });
       throw new HttpException(message, response.status);
     }
     const scraperResponse = jsonResponse as ScraperServiceResponse;
@@ -234,6 +220,16 @@ export class CompanyService {
           this.logger.debug(`Processing: ${JSON.stringify(dto)}`);
           const [company] = await this.insertOrUpdate({ dataSource: scraperName, ...dto.company } as InsertOrUpdateDto);
           this.logger.debug(`Added company: ${JSON.stringify(company)}`);
+          // Note that if the scraper returns multiple records for one company (multiple items with the same
+          // country and companyId), we add all of them here.
+          // The caller later deduplicates based on the record's internal id, which is based on the content of the record.
+          // Thus, if the ScraperService returns two or more items with exactly the same content, they are properly
+          // deduped later, but if they contain slightly different content (e.g., different populated fields), all of them will be
+          // returned by the search. This might be problematic: it will be almost impossible to retrieve them separately since
+          // they are created at the same time.
+          // TODO: Think of how to handle this, especially if the content is different. Should we dedup here (or later)
+          // based on <country, companyId>, and if so, how do we choose what record to keep? Should we simply accept this and send
+          // a warning with the results so that we can have a look later?
           results.push({
             company: company,
             confidence: dto.confidence,
@@ -247,7 +243,7 @@ export class CompanyService {
       this.searchErrorTotal.inc({
         country: country,
         status_code: HttpStatus.INTERNAL_SERVER_ERROR,
-        component: 'scraper_service',
+        component: CompanyService.componentScrapers,
       });
       throw new HttpException(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }

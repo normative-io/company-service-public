@@ -103,18 +103,17 @@ export class MongoRepositoryService implements ICompanyRepository {
     return [...companies];
   }
 
-  async findById(id: string): Promise<Company | undefined> {
-    const dbObject = await this.companyModel.findById(id);
-    if (!dbObject) {
-      return;
-    }
-    return dbObjectToModel(dbObject);
-  }
-
-  async findByName(name: string): Promise<Company[]> {
+  async findByName(name: string, atTime?: Date): Promise<Company[]> {
     const companies: Company[] = [];
     for (const dbObject of await this.companyModel.find({ companyName: name })) {
-      companies.push(dbObjectToModel(dbObject));
+      const recordAtTime = await this.get(dbObject.country, dbObject.companyId, atTime);
+
+      // Duplicates can occur if a company has multiple records that match the previous `find`
+      // operation, because the state of the company at a given time (which is what `get`
+      // returns) will be the same for all of those records.
+      if (recordAtTime && companies.findIndex((c) => c.id === recordAtTime.id) === -1) {
+        companies.push(recordAtTime);
+      }
     }
     return [...companies];
   }

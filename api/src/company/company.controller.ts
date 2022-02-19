@@ -1,7 +1,6 @@
 import { Body, Controller, Delete, HttpCode, HttpException, HttpStatus, Post } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { InsertOrUpdateDto } from './dto/insert-or-update.dto';
-import { GetCompanyDto } from './dto/get-company.dto';
 import { MarkDeletedDto } from './dto/mark-deleted.dto';
 import { SearchDto } from './dto/search.dto';
 import { CompanyService } from './company.service';
@@ -10,15 +9,6 @@ import { CompanyService } from './company.service';
 @Controller('company')
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
-
-  @Post('v1/get')
-  @ApiOperation({ summary: 'Get the historical metadata of the requested company.' })
-  @ApiResponse({ description: 'The metadata of the found company. May be multiple if the data had to be scraped.' })
-  @ApiBody({ type: GetCompanyDto, description: 'The requested company.' })
-  async get(@Body() getCompanyDto: GetCompanyDto) {
-    const [companies, message] = await this.companyService.get(getCompanyDto);
-    return { companies, message };
-  }
 
   @Post('v1/insertOrUpdate')
   @ApiOperation({ summary: 'Add/update metadata of the specified companies.' })

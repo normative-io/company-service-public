@@ -16,8 +16,10 @@ export class SearchDto {
   })
   readonly companyId?: string;
 
+  // Note: `atTime` represents the database-insertion time of the record and not any
+  // business-related timestamp (ex: date which the company was founded or dissolved).
   @ApiProperty({
-    description: 'Timestamp version of the company. If null, will get the latest version.',
+    description: 'Timestamp version of the company in the database. If null, will get the latest version.',
     example: Date.now(),
     required: false,
   })
@@ -36,12 +38,4 @@ export class SearchDto {
     required: false,
   })
   readonly isic?: string;
-
-  // TODO: Do not allow searching by id; this is an internal identifier.
-  @ApiProperty({
-    description: 'The identifier of the company',
-    example: '123456',
-    required: false,
-  })
-  readonly id?: string;
 }
