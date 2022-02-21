@@ -35,6 +35,8 @@ export interface ICompanyRepository {
   // The production database will be too large to serve all the data in a single request.
   listAllForTesting(): Promise<Company[]>;
 
-  findById(id: string): Promise<Company | undefined>;
-  findByName(name: string): Promise<Company[]>;
+  // Fetch the metadata for companies with the given name.
+  // If `atTime` is set, return the metadata at that particular time.
+  // If unset, return the most recent metadata for each company.
+  findByName(name: string, atTime?: Date): Promise<Company[]>;
 }
