@@ -33,15 +33,15 @@ describe('AppController (e2e)', () => {
   });
 
   it('Insert - Modify - Search', async () => {
-    const response = await request(app.getHttpServer())
+    const insertCompany = await request(app.getHttpServer())
       .post('/company/v1/insertOrUpdate')
-      .send([{ country: 'CH', companyId: '1', companyName: 'Nonexisting INC' }])
+      .send([{ country: 'CH', companyId: '1', companyName: 'Original Name Inc.' }])
       .expect(HttpStatus.CREATED);
-    expect(response.body).toStrictEqual([
+    expect(insertCompany.body).toStrictEqual([
       {
         company: {
           id: expect.any(String),
-          companyName: 'Nonexisting INC',
+          companyName: 'Original Name Inc.',
           country: 'CH',
           companyId: '1',
           created: expect.any(String),
@@ -50,15 +50,16 @@ describe('AppController (e2e)', () => {
         message: expect.stringContaining('Inserted'),
       },
     ]);
-    const response2 = await request(app.getHttpServer())
+
+    const updateCompany = await request(app.getHttpServer())
       .post('/company/v1/insertOrUpdate')
-      .send([{ country: 'CH', companyId: '1', companyName: 'Nowexisting INC' }])
+      .send([{ country: 'CH', companyId: '1', companyName: 'New Name Inc.' }])
       .expect(HttpStatus.CREATED);
-    expect(response2.body).toStrictEqual([
+    expect(updateCompany.body).toStrictEqual([
       {
         company: {
           id: expect.any(String),
-          companyName: 'Nowexisting INC',
+          companyName: 'New Name Inc.',
           country: 'CH',
           companyId: '1',
           created: expect.any(String),
@@ -68,18 +69,18 @@ describe('AppController (e2e)', () => {
       },
     ]);
 
-    const response3 = await request(app.getHttpServer())
+    const search = await request(app.getHttpServer())
       .post('/company/v1/search')
-      .send({ companyName: 'Nowexisting INC' })
+      .send({ companyName: 'New Name Inc.' })
       .expect(HttpStatus.CREATED);
-    expect(response3.body).toStrictEqual({
+    expect(search.body).toStrictEqual({
       companies: [
         {
           company: {
             id: expect.any(String),
             country: 'CH',
             companyId: '1',
-            companyName: 'Nowexisting INC',
+            companyName: 'New Name Inc.',
             created: expect.any(String),
             lastUpdated: expect.any(String),
           },
@@ -92,26 +93,14 @@ describe('AppController (e2e)', () => {
   });
 
   it('Insert - Search - Delete - Search', async () => {
-    console.log(`Companies: ${await companyModel.find({})}`);
-    const response = await request(app.getHttpServer())
+    const insertOrUpdate = await request(app.getHttpServer())
       .post('/company/v1/insertOrUpdate')
       .send([
         { country: 'DE', companyId: '1', companyName: 'Dynamic Systems Inc' },
         { country: 'US', companyId: '11', companyName: 'Dynamic Systems Inc' },
       ])
       .expect(HttpStatus.CREATED);
-    expect((response.body as any[]).sort()).toStrictEqual([
-      {
-        company: {
-          id: expect.any(String),
-          companyName: 'Dynamic Systems Inc',
-          country: 'US',
-          companyId: '11',
-          created: expect.any(String),
-          lastUpdated: expect.any(String),
-        },
-        message: expect.stringContaining('Inserted'),
-      },
+    expect(insertOrUpdate.body).toStrictEqual([
       {
         company: {
           id: expect.any(String),
@@ -123,14 +112,24 @@ describe('AppController (e2e)', () => {
         },
         message: expect.stringContaining('Inserted'),
       },
+      {
+        company: {
+          id: expect.any(String),
+          companyName: 'Dynamic Systems Inc',
+          country: 'US',
+          companyId: '11',
+          created: expect.any(String),
+          lastUpdated: expect.any(String),
+        },
+        message: expect.stringContaining('Inserted'),
+      },
     ]);
-    console.log(`Companies: ${await companyModel.find({})}`);
-    const response2 = await request(app.getHttpServer())
+
+    const search = await request(app.getHttpServer())
       .post('/company/v1/search')
       .send({ companyName: 'Dynamic Systems Inc' })
       .expect(HttpStatus.CREATED);
-    (response2.body.companies as any[]).sort();
-    expect(response2.body).toStrictEqual({
+    expect(search.body).toStrictEqual({
       companies: [
         {
           company: {
@@ -159,18 +158,18 @@ describe('AppController (e2e)', () => {
       ],
       message: expect.stringContaining('found'),
     });
-    console.log(`Companies: ${await companyModel.find({})}`);
-    const response3 = await request(app.getHttpServer())
+
+    const markDeleted = await request(app.getHttpServer())
       .delete('/company/v1/markDeleted')
       .send({ country: 'US', companyId: '11' })
       .expect(HttpStatus.NO_CONTENT);
-    expect(response3.body).toStrictEqual({});
-    console.log(`Companies: ${await companyModel.find({})}`);
-    const response4 = await request(app.getHttpServer())
+    expect(markDeleted.body).toStrictEqual({});
+
+    const searchAfterDelete = await request(app.getHttpServer())
       .post('/company/v1/search')
       .send({ companyName: 'Dynamic Systems Inc' })
       .expect(HttpStatus.CREATED);
-    expect(response4.body).toStrictEqual({
+    expect(searchAfterDelete.body).toStrictEqual({
       companies: [
         {
           company: {
