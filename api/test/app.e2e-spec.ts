@@ -28,11 +28,11 @@ describe('AppController (e2e)', () => {
     await mongoose.disconnect();
   });
 
-  it('TEST 0: / (GET)', () => {
+  it('/ (GET)', () => {
     return request(app.getHttpServer()).get('/').expect(200).expect('Company Service');
   });
 
-  it('TEST 1: Insert - Modify - Search', async () => {
+  it('Insert - Modify - Search', async () => {
     const response = await request(app.getHttpServer())
       .post('/company/v1/insertOrUpdate')
       .send([{ country: 'CH', companyId: '1', companyName: 'Nonexisting INC' }])
@@ -91,56 +91,93 @@ describe('AppController (e2e)', () => {
     });
   });
 
-  it('TEST 2: Insert - Delete - Search', async () => {
+  it('Insert - Search - Delete - Search', async () => {
+    console.log(`Companies: ${await companyModel.find({})}`);
     const response = await request(app.getHttpServer())
       .post('/company/v1/insertOrUpdate')
       .send([
-        { country: 'CH', companyId: '1', companyName: 'Nonexisting INC' },
-        { country: 'IT', companyId: '11', companyName: 'Nuova SPA' },
+        { country: 'DE', companyId: '1', companyName: 'Dynamic Systems Inc' },
+        { country: 'US', companyId: '11', companyName: 'Dynamic Systems Inc' },
       ])
       .expect(HttpStatus.CREATED);
-    expect(response.body).toStrictEqual([
+    expect((response.body as any[]).sort()).toStrictEqual([
       {
         company: {
           id: expect.any(String),
-          companyName: 'Nonexisting INC',
-          country: 'CH',
-          companyId: '1',
-          created: expect.any(String),
-          lastUpdated: expect.any(String),
-        },
-        message: expect.stringContaining('Inserted'),
-      },
-      {
-        company: {
-          id: expect.any(String),
-          companyName: 'Nuova SPA',
-          country: 'IT',
+          companyName: 'Dynamic Systems Inc',
+          country: 'US',
           companyId: '11',
           created: expect.any(String),
           lastUpdated: expect.any(String),
         },
         message: expect.stringContaining('Inserted'),
       },
+      {
+        company: {
+          id: expect.any(String),
+          companyName: 'Dynamic Systems Inc',
+          country: 'DE',
+          companyId: '1',
+          created: expect.any(String),
+          lastUpdated: expect.any(String),
+        },
+        message: expect.stringContaining('Inserted'),
+      },
     ]);
+    console.log(`Companies: ${await companyModel.find({})}`);
     const response2 = await request(app.getHttpServer())
-      .delete('/company/v1/markDeleted')
-      .send({ country: 'IT', companyId: '11' })
-      .expect(HttpStatus.NO_CONTENT);
-    expect(response2.body).toStrictEqual({});
-
-    const response3 = await request(app.getHttpServer())
       .post('/company/v1/search')
-      .send({ companyId: '11' })
+      .send({ companyName: 'Dynamic Systems Inc' })
       .expect(HttpStatus.CREATED);
-    expect(response3.body).toStrictEqual({
+    (response2.body.companies as any[]).sort();
+    expect(response2.body).toStrictEqual({
       companies: [
         {
           company: {
             id: expect.any(String),
-            country: 'IT',
+            country: 'DE',
+            companyId: '1',
+            companyName: 'Dynamic Systems Inc',
+            created: expect.any(String),
+            lastUpdated: expect.any(String),
+          },
+          confidence: expect.any(Number),
+          foundBy: expect.any(String),
+        },
+        {
+          company: {
+            id: expect.any(String),
+            country: 'US',
             companyId: '11',
-            companyName: 'Nuova SPA',
+            companyName: 'Dynamic Systems Inc',
+            created: expect.any(String),
+            lastUpdated: expect.any(String),
+          },
+          confidence: expect.any(Number),
+          foundBy: expect.any(String),
+        },
+      ],
+      message: expect.stringContaining('found'),
+    });
+    console.log(`Companies: ${await companyModel.find({})}`);
+    const response3 = await request(app.getHttpServer())
+      .delete('/company/v1/markDeleted')
+      .send({ country: 'US', companyId: '11' })
+      .expect(HttpStatus.NO_CONTENT);
+    expect(response3.body).toStrictEqual({});
+    console.log(`Companies: ${await companyModel.find({})}`);
+    const response4 = await request(app.getHttpServer())
+      .post('/company/v1/search')
+      .send({ companyName: 'Dynamic Systems Inc' })
+      .expect(HttpStatus.CREATED);
+    expect(response4.body).toStrictEqual({
+      companies: [
+        {
+          company: {
+            id: expect.any(String),
+            country: 'DE',
+            companyId: '1',
+            companyName: 'Dynamic Systems Inc',
             created: expect.any(String),
             lastUpdated: expect.any(String),
           },
