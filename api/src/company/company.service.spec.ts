@@ -16,16 +16,21 @@ import { CompanyKeyDto } from './dto/company-key.dto';
 import fetch from 'node-fetch';
 import { CompanyDbObject, CompanyDocument } from './repository/mongo/company.schema';
 import { SearchDto } from './dto/search.dto';
+import { IncomingRequestDbObject, IncomingRequestDocument } from './repository/mongo/incoming-request.schema';
+import { RequestType } from './repository/mongo/incoming-request.model';
 
 describe('CompanyService', () => {
   const messageCompaniesFoundInRepository = 'Companies were found in repository';
   const messageAtTimeWasSet = 'No companies found; request not sent to the ScraperService because "atTime" was set';
   const foundByRepoByCompanyId = 'Repository by companyId and country';
   const foundByRepoByName = 'Repository by name';
+  const requestTypeInsertOrUpdate = RequestType.InsertOrUpdate;
+  const requestTypeMarkDeleted = RequestType.MarkDeleted;
 
   let service: CompanyService;
   let mongoServer: MongoMemoryServer;
   let companyModel: mongoose.Model<CompanyDocument>;
+  let incomingRequestModel: mongoose.Model<IncomingRequestDocument>;
 
   beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
@@ -44,10 +49,13 @@ describe('CompanyService', () => {
     }).compile();
     service = module.get<CompanyService>(CompanyService);
     companyModel = module.get(getModelToken(CompanyDbObject.name));
+    incomingRequestModel = module.get(getModelToken(IncomingRequestDbObject.name));
   });
 
   beforeEach(async () => {
-    await companyModel.deleteMany({}); // Each test starts with an empty db.
+    // Each test starts with an empty db.
+    await companyModel.deleteMany({});
+    await incomingRequestModel.deleteMany({});
 
     fetch.resetMocks();
     fetch.mockResponse(JSON.stringify({})); // By default, don't return anything.
@@ -98,7 +106,7 @@ describe('CompanyService', () => {
 
   describe('the insertOrUpdate method', () => {
     it('should insert a new record for a non-existent company', async () => {
-      const company = { country: 'CH', companyId: '1', companyName: 'name1', dataSource: 'Unit-Test' };
+      const company = { country: 'CH', companyId: '1', companyName: 'name1', dataSource: 'Unit-Test', isic: 'isic' };
 
       const wantInDb = {
         id: expect.any(String),
@@ -108,9 +116,22 @@ describe('CompanyService', () => {
         created: expect.any(Date),
         lastUpdated: expect.any(Date),
         dataSource: 'Unit-Test',
+        isic: 'isic',
       };
       expect(await service.insertOrUpdate(company)).toEqual([wantInDb, expect.stringContaining('Inserted')]);
       expect(await service.listAllForTesting()).toEqual([wantInDb]);
+
+      // Check that the incoming request was persisted.
+      const wantIncomingRequestInDb = {
+        country: company.country,
+        companyId: company.companyId,
+        companyName: company.companyName,
+        created: expect.any(Date),
+        dataSource: 'Unit-Test',
+        isic: 'isic',
+        requestType: requestTypeInsertOrUpdate,
+      };
+      expect(await service.listAllIncomingRequestsForTesting()).toEqual([wantIncomingRequestInDb]);
     });
 
     it('should not insert a new record if metadata did not change', async () => {
@@ -138,6 +159,19 @@ describe('CompanyService', () => {
       dbContents = await service.listAllForTesting();
       expect(dbContents).toEqual([want]);
       expect(dbContents[0].lastUpdated.getTime()).toBeGreaterThan(dbContents[0].created.getTime());
+
+      // Check that all incoming requests were persisted.
+      const wantIncomingRequestInDb = {
+        country: company.country,
+        companyId: company.companyId,
+        companyName: company.companyName,
+        created: expect.any(Date),
+        requestType: requestTypeInsertOrUpdate,
+      };
+      expect(await service.listAllIncomingRequestsForTesting()).toEqual([
+        wantIncomingRequestInDb,
+        wantIncomingRequestInDb,
+      ]);
     });
 
     it('should insert a new record for updates to the same company', async () => {
@@ -166,6 +200,27 @@ describe('CompanyService', () => {
       expect(await service.listAllForTesting()).toEqual([want1, want2]);
       expect(await service.insertOrUpdate(metadata2)).toEqual([want2, expect.stringContaining('Marked as up-to-date')]);
       expect(await service.listAllForTesting()).toEqual([want1, want2]);
+
+      // Check that all incoming requests were persisted.
+      const wantIncomingRequest1 = {
+        country: metadata1.country,
+        companyId: metadata1.companyId,
+        companyName: metadata1.companyName,
+        created: expect.any(Date),
+        requestType: requestTypeInsertOrUpdate,
+      };
+      const wantIncomingRequest2 = {
+        country: metadata2.country,
+        companyId: metadata2.companyId,
+        companyName: metadata2.companyName,
+        created: expect.any(Date),
+        requestType: requestTypeInsertOrUpdate,
+      };
+      expect(await service.listAllIncomingRequestsForTesting()).toEqual([
+        wantIncomingRequest1,
+        wantIncomingRequest2,
+        wantIncomingRequest2,
+      ]);
     });
   });
 
@@ -186,6 +241,14 @@ describe('CompanyService', () => {
         expect.stringContaining('Marked as deleted'),
       ]);
       expect(await service.listAllForTesting()).toEqual([wantDelete]);
+
+      // Check that the incoming request was persisted.
+      const wantIncomingRequest = {
+        companyId: nonExistent.companyId,
+        created: expect.any(Date),
+        requestType: requestTypeMarkDeleted,
+      };
+      expect(await service.listAllIncomingRequestsForTesting()).toEqual([wantIncomingRequest]);
     });
 
     it('should insert a delete record for an active company', async () => {
@@ -210,6 +273,22 @@ describe('CompanyService', () => {
       };
       expect(await service.markDeleted(company)).toEqual([wantDelete, expect.stringContaining('Marked as deleted')]);
       expect(await service.listAllForTesting()).toEqual([wantInitial, wantDelete]);
+
+      // Check that all incoming requests were persisted.
+      const wantIncomingRequest1 = {
+        country: company.country,
+        companyId: company.companyId,
+        companyName: company.companyName,
+        created: expect.any(Date),
+        requestType: requestTypeInsertOrUpdate,
+      };
+
+      const wantIncomingRequest2 = {
+        companyId: company.companyId,
+        created: expect.any(Date),
+        requestType: requestTypeMarkDeleted,
+      };
+      expect(await service.listAllIncomingRequestsForTesting()).toEqual([wantIncomingRequest1, wantIncomingRequest2]);
     });
 
     it('should update the latest delete record for an already-deleted company', async () => {
@@ -241,6 +320,26 @@ describe('CompanyService', () => {
       const dbContents = await service.listAllForTesting();
       expect(dbContents).toEqual([wantInitial, wantDelete]);
       expect(dbContents[1].lastUpdated.getTime()).toBeGreaterThan(dbContents[1].created.getTime());
+
+      // Check that all incoming requests were persisted.
+      const wantIncomingRequest1 = {
+        country: company.country,
+        companyId: company.companyId,
+        companyName: company.companyName,
+        created: expect.any(Date),
+        requestType: requestTypeInsertOrUpdate,
+      };
+
+      const wantIncomingRequest2 = {
+        companyId: company.companyId,
+        created: expect.any(Date),
+        requestType: requestTypeMarkDeleted,
+      };
+      expect(await service.listAllIncomingRequestsForTesting()).toEqual([
+        wantIncomingRequest1,
+        wantIncomingRequest2,
+        wantIncomingRequest2,
+      ]);
     });
   });
 

@@ -41,6 +41,7 @@ describe('CompanyController', () => {
 
   afterEach(async () => {
     await mongoConnection.dropCollection('companydbobjects');
+    await mongoConnection.dropCollection('incomingrequestdbobjects');
     await mongoConnection.close(/*force=*/ true);
   });
 
