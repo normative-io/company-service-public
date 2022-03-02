@@ -1,6 +1,7 @@
 import { Company } from '../company.model';
 import { CompanyKeyDto } from '../dto/company-key.dto';
 import { InsertOrUpdateDto } from '../dto/insert-or-update.dto';
+import { IncomingRequest } from './mongo/incoming-request.model';
 
 export const COMPANY_REPOSITORY = 'COMPANY_REPOSITORY';
 
@@ -34,6 +35,13 @@ export interface ICompanyRepository {
   // This should only be used for testing purposes and not exposed to external clients.
   // The production database will be too large to serve all the data in a single request.
   listAllForTesting(): Promise<Company[]>;
+
+  // Returns all of the incoming requests in the repository.
+  // This should only be used for testing purposes and not exposed to external clients, because:
+  // (1) The production database will be too large to serve all the data in a single request.
+  // (2) The fact that we store incoming requests is an internal detail; clients interact
+  //     with companies.
+  listAllIncomingRequestsForTesting(): Promise<IncomingRequest[]>;
 
   // Fetch the metadata for companies with the given name.
   // If `atTime` is set, return the metadata at that particular time.

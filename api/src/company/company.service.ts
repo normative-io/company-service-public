@@ -9,6 +9,7 @@ import { ConfigService } from '@nestjs/config';
 import { CompanyKeyDto } from './dto/company-key.dto';
 import { SearchDto } from './dto/search.dto';
 import fetch from 'node-fetch';
+import { IncomingRequest } from './repository/mongo/incoming-request.model';
 
 @Injectable()
 export class CompanyService {
@@ -64,6 +65,10 @@ export class CompanyService {
 
   async listAllForTesting(): Promise<Company[]> {
     return await this.companyRepo.listAllForTesting();
+  }
+
+  async listAllIncomingRequestsForTesting(): Promise<IncomingRequest[]> {
+    return await this.companyRepo.listAllIncomingRequestsForTesting();
   }
 
   // Search for a company based on the metadata.

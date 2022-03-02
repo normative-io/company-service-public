@@ -4,15 +4,20 @@ import { Company } from '../../company.model';
 import { ICompanyRepository } from '../repository-interface';
 import { Model } from 'mongoose';
 import { CompanyDbObject, CompanyDocument } from './company.schema';
+import { IncomingRequestDbObject, IncomingRequestDocument } from './incoming-request.schema';
 import { InsertOrUpdateDto } from 'src/company/dto/insert-or-update.dto';
 import { CompanyKeyDto } from 'src/company/dto/company-key.dto';
+import { IncomingRequest, RequestType } from './incoming-request.model';
 
 // A MongoDB-based repository for storing company data.
 @Injectable()
 export class MongoRepositoryService implements ICompanyRepository {
   logger = new Logger(MongoRepositoryService.name);
 
-  constructor(@InjectModel(CompanyDbObject.name) private readonly companyModel: Model<CompanyDocument>) {}
+  constructor(
+    @InjectModel(CompanyDbObject.name) private readonly companyModel: Model<CompanyDocument>,
+    @InjectModel(IncomingRequestDbObject.name) private readonly incomingRequestModel: Model<IncomingRequestDocument>,
+  ) {}
 
   async get(country: string, companyId: string, atTime?: Date): Promise<Company | undefined> {
     if (!atTime) {
@@ -20,7 +25,7 @@ export class MongoRepositoryService implements ICompanyRepository {
       if (!mostRecent || mostRecent.isDeleted) {
         return; // Deleted records should not be returned.
       }
-      return dbObjectToModel(mostRecent);
+      return companyDbObjectToModel(mostRecent);
     }
     const dbObjects = await this.companyModel.find({ country, companyId }).sort('-created');
     // The first item in this descending-creation-time-ordered
@@ -31,7 +36,7 @@ export class MongoRepositoryService implements ICompanyRepository {
         if (dbObject.isDeleted) {
           return; // Deleted records should not be returned.
         }
-        return dbObjectToModel(dbObject);
+        return companyDbObjectToModel(dbObject);
       }
     }
   }
@@ -40,20 +45,21 @@ export class MongoRepositoryService implements ICompanyRepository {
     // Operation is performed in a transaction to avoid race conditions
     // between checking the most recent record and inserting a new one.
     const session = await this.companyModel.startSession();
-    let dbObject: CompanyDbObject;
+    let companyDbObject: CompanyDbObject;
     let msg: string;
     await session.withTransaction(async () => {
-      const newRecord = new Company(insertOrUpdateDto);
-      const mostRecent = dbObjectToModel(await this.getMostRecentRecord(insertOrUpdateDto));
-      if (newRecord.isMetadataEqual(mostRecent)) {
-        dbObject = await this.companyModel.findByIdAndUpdate(
+      this.incomingRequestModel.create(insertOrUpdateDtoToDbObject(insertOrUpdateDto));
+      const newCompany = new Company(insertOrUpdateDto);
+      const mostRecent = companyDbObjectToModel(await this.getMostRecentRecord(insertOrUpdateDto));
+      if (newCompany.isMetadataEqual(mostRecent)) {
+        companyDbObject = await this.companyModel.findByIdAndUpdate(
           mostRecent.id,
           { lastUpdated: new Date() },
           { returnDocument: 'after' },
         );
         msg = `Marked as up-to-date; metadata is equal to the most recent record: ${JSON.stringify(insertOrUpdateDto)}`;
       } else {
-        dbObject = await this.companyModel.create(modelToDbObject(newRecord));
+        companyDbObject = await this.companyModel.create(companyModelToDbObject(newCompany));
         if (mostRecent) {
           msg = `Updated metadata for company: ${JSON.stringify(insertOrUpdateDto)}`;
         } else {
@@ -63,7 +69,7 @@ export class MongoRepositoryService implements ICompanyRepository {
     });
     session.endSession();
     this.logger.debug(msg);
-    return [dbObjectToModel(dbObject), msg];
+    return [companyDbObjectToModel(companyDbObject), msg];
   }
 
   async markDeleted(key: CompanyKeyDto): Promise<[Company, string]> {
@@ -71,11 +77,12 @@ export class MongoRepositoryService implements ICompanyRepository {
     let dbObject: CompanyDbObject;
     let msg: string;
     await session.withTransaction(async () => {
+      this.incomingRequestModel.create(markDeletedDtoToDbObject(key));
       const mostRecent = await this.getMostRecentRecord(key);
       if (!mostRecent || !mostRecent.isDeleted) {
         const deleteRecord = new Company({ country: key.country, companyId: key.companyId });
         deleteRecord.isDeleted = true;
-        dbObject = await this.companyModel.create(modelToDbObject(deleteRecord));
+        dbObject = await this.companyModel.create(companyModelToDbObject(deleteRecord));
         msg = `Marked as deleted: ${JSON.stringify(key)}`;
       } else {
         dbObject = await this.companyModel.findByIdAndUpdate(
@@ -88,7 +95,7 @@ export class MongoRepositoryService implements ICompanyRepository {
     });
     session.endSession();
     this.logger.debug(msg);
-    return [dbObjectToModel(dbObject), msg];
+    return [companyDbObjectToModel(dbObject), msg];
   }
 
   private async getMostRecentRecord(key: CompanyKeyDto): Promise<CompanyDbObject> {
@@ -98,9 +105,17 @@ export class MongoRepositoryService implements ICompanyRepository {
   async listAllForTesting(): Promise<Company[]> {
     const companies: Company[] = [];
     for (const dbObject of await this.companyModel.find()) {
-      companies.push(dbObjectToModel(dbObject));
+      companies.push(companyDbObjectToModel(dbObject));
     }
     return [...companies];
+  }
+
+  async listAllIncomingRequestsForTesting(): Promise<IncomingRequest[]> {
+    const requests: IncomingRequest[] = [];
+    for (const dbObject of await this.incomingRequestModel.find()) {
+      requests.push(incomingRequestDbObjectToModel(dbObject));
+    }
+    return [...requests];
   }
 
   async findByName(name: string, atTime?: Date): Promise<Company[]> {
@@ -119,7 +134,33 @@ export class MongoRepositoryService implements ICompanyRepository {
   }
 }
 
-function modelToDbObject(company: Company): CompanyDbObject {
+function insertOrUpdateDtoToDbObject(insertOrUpdate: InsertOrUpdateDto): IncomingRequestDbObject {
+  if (!insertOrUpdate) {
+    return;
+  }
+  return {
+    companyId: insertOrUpdate.companyId,
+    country: insertOrUpdate.country,
+    companyName: insertOrUpdate.companyName,
+    dataSource: insertOrUpdate.dataSource,
+    isic: insertOrUpdate.isic,
+    created: new Date(),
+    requestType: RequestType.InsertOrUpdate,
+  };
+}
+
+function markDeletedDtoToDbObject(markDeleted: CompanyKeyDto): IncomingRequestDbObject {
+  if (!markDeleted) {
+    return;
+  }
+  return {
+    companyId: markDeleted.companyId,
+    created: new Date(),
+    requestType: RequestType.MarkDeleted,
+  };
+}
+
+function companyModelToDbObject(company: Company): CompanyDbObject {
   if (!company) {
     return;
   }
@@ -139,7 +180,23 @@ function modelToDbObject(company: Company): CompanyDbObject {
   return dbObject;
 }
 
-function dbObjectToModel(dbObject: CompanyDbObject): Company {
+function incomingRequestDbObjectToModel(dbObject: IncomingRequestDbObject): IncomingRequest {
+  if (!dbObject) {
+    return;
+  }
+
+  return {
+    requestType: <RequestType>dbObject.requestType,
+    created: dbObject.created,
+    companyId: dbObject.companyId,
+    country: dbObject.country,
+    companyName: dbObject.companyName,
+    isic: dbObject.isic,
+    dataSource: dbObject.dataSource,
+  };
+}
+
+function companyDbObjectToModel(dbObject: CompanyDbObject): Company {
   if (!dbObject) {
     return;
   }
