@@ -164,7 +164,7 @@ function companyModelToDbObject(company: Company): CompanyDbObject {
   if (!company) {
     return;
   }
-  const dbObject: CompanyDbObject = {
+  return {
     _id: company.id,
     companyId: company.companyId,
     country: company.country,
@@ -173,11 +173,8 @@ function companyModelToDbObject(company: Company): CompanyDbObject {
     created: company.created,
     lastUpdated: company.lastUpdated,
     dataSource: company.dataSource,
+    isDeleted: company.isDeleted,
   };
-  if (company.isDeleted) {
-    dbObject.isDeleted = true;
-  }
-  return dbObject;
 }
 
 function incomingRequestDbObjectToModel(dbObject: IncomingRequestDbObject): IncomingRequest {
@@ -210,6 +207,8 @@ function companyDbObjectToModel(dbObject: CompanyDbObject): Company {
   company.id = dbObject._id;
   company.created = dbObject.created;
   company.lastUpdated = dbObject.lastUpdated;
+  // The code assumes that `company.isDeleted` is only populated if it is true,
+  // and equality checks would fail if we put a value of `false`.
   if (dbObject.isDeleted) {
     company.isDeleted = true;
   }
