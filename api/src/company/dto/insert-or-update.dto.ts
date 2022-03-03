@@ -1,7 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CompanyKeyDto } from './company-key.dto';
 
-export class InsertOrUpdateDto extends CompanyKeyDto {
+export class InsertOrUpdateDto {
+  @ApiProperty({
+    description: 'The country code that this company is registered in.',
+    example: 'CH',
+    required: true,
+  })
+  readonly country: string;
+
   @ApiProperty({
     description: 'The name of the company',
     example: 'An awesome company',
@@ -22,4 +28,11 @@ export class InsertOrUpdateDto extends CompanyKeyDto {
     required: false,
   })
   readonly isic?: string;
+
+  @ApiProperty({
+    description: 'The Tax ID for the company',
+    example: '123',
+    required: false,
+  })
+  public taxId?: string;
 }

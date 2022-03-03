@@ -9,10 +9,10 @@ export class LookupRequest {
   readonly country: string;
 
   @ApiProperty({
-    description: 'The identifier for the company (ex: VAT, EIN, etc..)',
+    description: 'The tax id of the company',
     example: '123',
   })
-  readonly companyId?: string;
+  readonly taxId?: string;
 
   @ApiProperty({
     description: 'The name of the company.',

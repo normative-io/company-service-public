@@ -50,13 +50,14 @@ describe('CompanyController', () => {
   });
 
   it('should create many companies', async () => {
-    const company1 = { country: 'CH', companyId: '456', companyName: 'Fantastic Company' };
-    const company2 = { country: 'PL', companyId: '789', companyName: 'Mediocre Company' };
+    const company1 = { country: 'CH', taxId: '456', companyName: 'Fantastic Company' };
+    const company2 = { country: 'PL', taxId: '789', companyName: 'Mediocre Company' };
     expect(await controller.insertOrUpdate([company1, company2])).toEqual([
       {
         company: {
           ...company1,
           id: expect.any(String),
+          companyId: expect.any(String),
           created: expect.any(Date),
           lastUpdated: expect.any(Date),
         },
@@ -66,6 +67,7 @@ describe('CompanyController', () => {
         company: {
           ...company2,
           id: expect.any(String),
+          companyId: expect.any(String),
           created: expect.any(Date),
           lastUpdated: expect.any(Date),
         },
@@ -76,17 +78,18 @@ describe('CompanyController', () => {
 
   it('should search for a company', async () => {
     // We first need to create a few companies.
-    await controller.insertOrUpdate([{ country: 'CH', companyId: '1', companyName: 'name1' }]);
-    await controller.insertOrUpdate([{ country: 'CH', companyId: '2', companyName: 'some-name' }]);
-    await controller.insertOrUpdate([{ country: 'CH', companyId: '3', companyName: 'some-name' }]);
+    await controller.insertOrUpdate([{ country: 'CH', taxId: '1', companyName: 'name1' }]);
+    await controller.insertOrUpdate([{ country: 'CH', taxId: '2', companyName: 'some-name' }]);
+    await controller.insertOrUpdate([{ country: 'CH', taxId: '3', companyName: 'some-name' }]);
 
     expect(await controller.search({ companyName: 'some-name' })).toEqual({
       companies: [
         {
           company: {
             id: expect.any(String),
+            companyId: expect.any(String),
             country: 'CH',
-            companyId: '2',
+            taxId: '2',
             companyName: 'some-name',
             created: expect.any(Date),
             lastUpdated: expect.any(Date),
@@ -97,8 +100,9 @@ describe('CompanyController', () => {
         {
           company: {
             id: expect.any(String),
+            companyId: expect.any(String),
             country: 'CH',
-            companyId: '3',
+            taxId: '3',
             companyName: 'some-name',
             created: expect.any(Date),
             lastUpdated: expect.any(Date),

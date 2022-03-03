@@ -19,11 +19,11 @@ describe('ScraperRegistry', () => {
   });
 
   it('should use denmark-scraper to find a Danish company ', () => {
-    expect(registry.applicableScrapers({ country: 'DK', companyId: '123' })).toEqual([[new DenmarkScraper()], []]);
+    expect(registry.applicableScrapers({ country: 'DK', taxId: '123' })).toEqual([[new DenmarkScraper()], []]);
   });
 
   it('should not use denmark-scraper to find a Swiss company', () => {
-    expect(registry.applicableScrapers({ country: 'CH', companyId: '456' })).toEqual([
+    expect(registry.applicableScrapers({ country: 'CH', taxId: '456' })).toEqual([
       [],
       ['denmark-scraper only applicable to country=DK'],
     ]);

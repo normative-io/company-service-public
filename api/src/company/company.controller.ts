@@ -38,7 +38,7 @@ export class CompanyController {
   }
 
   @Delete('v1/markDeleted')
-  @ApiOperation({ summary: 'Mark a company as deleted.' })
+  @ApiOperation({ summary: 'Mark a company as deleted. Deleted companies do not show up in searches' })
   @ApiBody({ type: MarkDeletedDto, description: 'The company to delete.' })
   @HttpCode(204)
   async markDeleted(@Body() markDeletedDto: MarkDeletedDto) {

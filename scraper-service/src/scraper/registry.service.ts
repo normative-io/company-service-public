@@ -81,10 +81,10 @@ export class ScraperRegistry {
     this.logger.debug(`lookup request: ${JSON.stringify(req)}`);
     const country = req.country;
     this.lookupInboundTotal.inc({ country: country });
-    if (!req.companyId && !req.companyName) {
-      this.logger.warn('Bad request: request must contain a companyId or companyName');
+    if (!req.taxId && !req.companyName) {
+      this.logger.warn('Bad request: request must contain a taxId or companyName');
       this.lookupErrorTotal.inc({ country: country, status_code: HttpStatus.BAD_REQUEST });
-      throw new HttpException('Request must contain a companyId or companyName', HttpStatus.BAD_REQUEST);
+      throw new HttpException('Request must contain a taxId or companyName', HttpStatus.BAD_REQUEST);
     }
 
     const [scrapers, notApplicableMessages] = this.applicableScrapers(req);
@@ -96,14 +96,14 @@ export class ScraperRegistry {
     )}: [${ScraperRegistry.scraperNames(scrapers)}]`;
 
     // `notApplicableScrapers` will be something like:
-    // 1 not applicable scraper: [denmark-scraper requires a present companyId]
+    // 1 not applicable scraper: [denmark-scraper requires a present taxId]
     const notApplicableScrapers = `${notApplicableMessages.length} not applicable ${pluralize(
       'scraper',
       notApplicableMessages.length,
     )}: [${notApplicableMessages.join(',')}]`;
 
     // We use `applicability` to provide more information to the caller, example:
-    // "Availability of scrapers: 1 applicable scraper: [switzerland-scraper]. 1 not applicable scraper: [denmark-scraper requires a present companyId]"
+    // "Availability of scrapers: 1 applicable scraper: [switzerland-scraper]. 1 not applicable scraper: [denmark-scraper requires a present taxId]"
     const applicability = `Availability of scrapers: ${applicableScrapers}. ${notApplicableScrapers}`;
     this.logger.debug(applicability);
 

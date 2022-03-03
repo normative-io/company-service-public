@@ -12,7 +12,6 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import * as mongoose from 'mongoose';
 import { getModelToken } from '@nestjs/mongoose';
 import { Company } from './company.model';
-import { CompanyKeyDto } from './dto/company-key.dto';
 import fetch from 'node-fetch';
 import { CompanyDbObject, CompanyDocument } from './repository/mongo/company.schema';
 import { SearchDto } from './dto/search.dto';
@@ -22,7 +21,7 @@ import { RequestType } from './repository/mongo/incoming-request.model';
 describe('CompanyService', () => {
   const messageCompaniesFoundInRepository = 'Companies were found in repository';
   const messageAtTimeWasSet = 'No companies found; request not sent to the ScraperService because "atTime" was set';
-  const foundByRepoByCompanyId = 'Repository by companyId and country';
+  const foundByRepoByTaxId = 'Repository by taxId';
   const foundByRepoByName = 'Repository by name';
   const requestTypeInsertOrUpdate = RequestType.InsertOrUpdate;
   const requestTypeMarkDeleted = RequestType.MarkDeleted;
@@ -72,31 +71,34 @@ describe('CompanyService', () => {
 
   it('should list all companies', async () => {
     // We first need to create a few companies.
-    await service.insertOrUpdate({ country: 'CH', companyId: '1', companyName: '1' });
-    await service.insertOrUpdate({ country: 'CH', companyId: '2', companyName: '2' });
-    await service.insertOrUpdate({ country: 'CH', companyId: '3', companyName: '3' });
+    await service.insertOrUpdate({ country: 'CH', taxId: '1', companyName: '1' });
+    await service.insertOrUpdate({ country: 'CH', taxId: '2', companyName: '2' });
+    await service.insertOrUpdate({ country: 'CH', taxId: '3', companyName: '3' });
 
     expect(await service.listAllForTesting()).toEqual([
       {
         id: expect.any(String),
+        companyId: expect.any(String),
         country: 'CH',
-        companyId: '1',
+        taxId: '1',
         companyName: '1',
         created: expect.any(Date),
         lastUpdated: expect.any(Date),
       },
       {
         id: expect.any(String),
+        companyId: expect.any(String),
         country: 'CH',
-        companyId: '2',
+        taxId: '2',
         companyName: '2',
         created: expect.any(Date),
         lastUpdated: expect.any(Date),
       },
       {
         id: expect.any(String),
+        companyId: expect.any(String),
         country: 'CH',
-        companyId: '3',
+        taxId: '3',
         companyName: '3',
         created: expect.any(Date),
         lastUpdated: expect.any(Date),
@@ -106,12 +108,13 @@ describe('CompanyService', () => {
 
   describe('the insertOrUpdate method', () => {
     it('should insert a new record for a non-existent company', async () => {
-      const company = { country: 'CH', companyId: '1', companyName: 'name1', dataSource: 'Unit-Test', isic: 'isic' };
+      const company = { country: 'CH', taxId: '1', companyName: 'name1', dataSource: 'Unit-Test', isic: 'isic' };
 
       const wantInDb = {
         id: expect.any(String),
+        companyId: expect.any(String),
         country: company.country,
-        companyId: company.companyId,
+        taxId: company.taxId,
         companyName: company.companyName,
         created: expect.any(Date),
         lastUpdated: expect.any(Date),
@@ -124,7 +127,7 @@ describe('CompanyService', () => {
       // Check that the incoming request was persisted.
       const wantIncomingRequestInDb = {
         country: company.country,
-        companyId: company.companyId,
+        taxId: company.taxId,
         companyName: company.companyName,
         created: expect.any(Date),
         dataSource: 'Unit-Test',
@@ -135,12 +138,13 @@ describe('CompanyService', () => {
     });
 
     it('should not insert a new record if metadata did not change', async () => {
-      const company = { country: 'CH', companyId: '1', companyName: 'name1' };
+      const company = { country: 'CH', taxId: '1', companyName: 'name1' };
 
       const want = {
         id: expect.any(String),
+        companyId: expect.any(String),
         country: company.country,
-        companyId: company.companyId,
+        taxId: company.taxId,
         companyName: company.companyName,
         created: expect.any(Date),
         lastUpdated: expect.any(Date),
@@ -163,7 +167,7 @@ describe('CompanyService', () => {
       // Check that all incoming requests were persisted.
       const wantIncomingRequestInDb = {
         country: company.country,
-        companyId: company.companyId,
+        taxId: company.taxId,
         companyName: company.companyName,
         created: expect.any(Date),
         requestType: requestTypeInsertOrUpdate,
@@ -175,21 +179,23 @@ describe('CompanyService', () => {
     });
 
     it('should insert a new record for updates to the same company', async () => {
-      const metadata1 = { country: 'CH', companyId: '1', companyName: 'Old Name LLC' };
-      const metadata2 = { country: 'CH', companyId: '1', companyName: 'New Name Inc' };
+      const metadata1 = { country: 'CH', taxId: '1', companyName: 'Old Name LLC' };
+      const metadata2 = { country: 'CH', taxId: '1', companyName: 'New Name Inc' };
 
       const want1 = {
         id: expect.any(String),
+        companyId: expect.any(String),
         country: metadata1.country,
-        companyId: metadata1.companyId,
+        taxId: metadata1.taxId,
         companyName: metadata1.companyName,
         created: expect.any(Date),
         lastUpdated: expect.any(Date),
       };
       const want2 = {
         id: expect.any(String),
+        companyId: expect.any(String),
         country: metadata2.country,
-        companyId: metadata2.companyId,
+        taxId: metadata2.taxId,
         companyName: metadata2.companyName,
         created: expect.any(Date),
         lastUpdated: expect.any(Date),
@@ -204,14 +210,14 @@ describe('CompanyService', () => {
       // Check that all incoming requests were persisted.
       const wantIncomingRequest1 = {
         country: metadata1.country,
-        companyId: metadata1.companyId,
+        taxId: metadata1.taxId,
         companyName: metadata1.companyName,
         created: expect.any(Date),
         requestType: requestTypeInsertOrUpdate,
       };
       const wantIncomingRequest2 = {
         country: metadata2.country,
-        companyId: metadata2.companyId,
+        taxId: metadata2.taxId,
         companyName: metadata2.companyName,
         created: expect.any(Date),
         requestType: requestTypeInsertOrUpdate,
@@ -225,66 +231,50 @@ describe('CompanyService', () => {
   });
 
   describe('the markDeleted method', () => {
-    it('should insert a delete record for a non-existent company', async () => {
-      const nonExistent: CompanyKeyDto = { country: 'YZ', companyId: '123' };
-
-      const wantDelete = {
-        id: expect.any(String),
-        created: expect.any(Date),
-        lastUpdated: expect.any(Date),
-        country: nonExistent.country,
-        companyId: nonExistent.companyId,
-        isDeleted: true,
-      };
-      expect(await service.markDeleted(nonExistent)).toEqual([
-        wantDelete,
-        expect.stringContaining('Marked as deleted'),
-      ]);
-      expect(await service.listAllForTesting()).toEqual([wantDelete]);
-
-      // Check that the incoming request was persisted.
-      const wantIncomingRequest = {
-        companyId: nonExistent.companyId,
-        created: expect.any(Date),
-        requestType: requestTypeMarkDeleted,
-      };
-      expect(await service.listAllIncomingRequestsForTesting()).toEqual([wantIncomingRequest]);
+    it('should throw an error if we try to delete a non-existent company', async () => {
+      await expect(service.markDeleted({ companyId: 'non-existent-id' })).rejects.toThrowError(
+        'Cannot find company to delete, unknown company: {"companyId":"non-existent-id"}',
+      );
     });
 
-    it('should insert a delete record for an active company', async () => {
-      const company = { country: 'CH', companyId: '1', companyName: 'name1' };
-      await service.insertOrUpdate(company);
+    it('should delete an active company', async () => {
+      const insertOrUpdateInput = { country: 'CH', taxId: '1', companyName: 'name1' };
+      const [insertedCompany] = await service.insertOrUpdate(insertOrUpdateInput);
 
       const wantInitial = {
         id: expect.any(String),
+        companyId: insertedCompany.companyId,
         created: expect.any(Date),
         lastUpdated: expect.any(Date),
-        country: company.country,
-        companyId: company.companyId,
-        companyName: company.companyName,
+        country: insertOrUpdateInput.country,
+        taxId: insertOrUpdateInput.taxId,
+        companyName: insertOrUpdateInput.companyName,
       };
       const wantDelete = {
         id: expect.any(String),
+        companyId: insertedCompany.companyId,
         created: expect.any(Date),
         lastUpdated: expect.any(Date),
-        country: company.country,
-        companyId: company.companyId,
         isDeleted: true,
+        country: expect.any(String),
       };
-      expect(await service.markDeleted(company)).toEqual([wantDelete, expect.stringContaining('Marked as deleted')]);
+      expect(await service.markDeleted({ companyId: insertedCompany.companyId })).toEqual([
+        wantDelete,
+        expect.stringContaining('Marked as deleted'),
+      ]);
       expect(await service.listAllForTesting()).toEqual([wantInitial, wantDelete]);
 
       // Check that all incoming requests were persisted.
       const wantIncomingRequest1 = {
-        country: company.country,
-        companyId: company.companyId,
-        companyName: company.companyName,
+        country: insertOrUpdateInput.country,
+        taxId: insertOrUpdateInput.taxId,
+        companyName: insertOrUpdateInput.companyName,
         created: expect.any(Date),
         requestType: requestTypeInsertOrUpdate,
       };
 
       const wantIncomingRequest2 = {
-        companyId: company.companyId,
+        companyId: insertedCompany.companyId,
         created: expect.any(Date),
         requestType: requestTypeMarkDeleted,
       };
@@ -292,29 +282,30 @@ describe('CompanyService', () => {
     });
 
     it('should update the latest delete record for an already-deleted company', async () => {
-      const company = { country: 'CH', companyId: '1', companyName: 'name1' };
-      await service.insertOrUpdate(company);
-      await service.markDeleted(company);
+      const insertOrUpdateInput = { country: 'CH', taxId: '1', companyName: 'name1' };
+      const [insertedCompany] = await service.insertOrUpdate(insertOrUpdateInput);
+      await service.markDeleted({ companyId: insertedCompany.companyId });
 
       const wantInitial = {
         id: expect.any(String),
+        companyId: insertedCompany.companyId,
         created: expect.any(Date),
         lastUpdated: expect.any(Date),
-        country: company.country,
-        companyId: company.companyId,
-        companyName: company.companyName,
+        country: insertOrUpdateInput.country,
+        taxId: insertOrUpdateInput.taxId,
+        companyName: insertOrUpdateInput.companyName,
       };
       const wantDelete = {
         id: expect.any(String),
+        companyId: insertedCompany.companyId,
         created: expect.any(Date),
         lastUpdated: expect.any(Date),
-        country: company.country,
-        companyId: company.companyId,
         isDeleted: true,
+        country: expect.any(String),
       };
 
       // The return value and the db contents should reflect a change in `lastUpdated` time.
-      const result = await service.markDeleted(company);
+      const result = await service.markDeleted({ companyId: insertedCompany.companyId });
       expect(result).toEqual([wantDelete, expect.stringContaining('Marked as up-to-date')]);
       expect(result[0].lastUpdated.getTime()).toBeGreaterThan(result[0].created.getTime());
       const dbContents = await service.listAllForTesting();
@@ -323,15 +314,15 @@ describe('CompanyService', () => {
 
       // Check that all incoming requests were persisted.
       const wantIncomingRequest1 = {
-        country: company.country,
-        companyId: company.companyId,
-        companyName: company.companyName,
+        country: insertOrUpdateInput.country,
+        taxId: insertOrUpdateInput.taxId,
+        companyName: insertOrUpdateInput.companyName,
         created: expect.any(Date),
         requestType: requestTypeInsertOrUpdate,
       };
 
       const wantIncomingRequest2 = {
-        companyId: company.companyId,
+        companyId: insertedCompany.companyId,
         created: expect.any(Date),
         requestType: requestTypeMarkDeleted,
       };
@@ -346,11 +337,11 @@ describe('CompanyService', () => {
   describe('the search method', () => {
     describe('when there is a single record of a company', () => {
       beforeEach(async () => {
-        await service.insertOrUpdate({ companyName: 'name1', companyId: '123', country: 'CH' });
+        await service.insertOrUpdate({ companyName: 'name1', taxId: '123', country: 'CH' });
       });
 
       const expectations: [string, SearchDto][] = [
-        ['company id and country', { country: 'CH', companyId: '123' }],
+        ['tax id', { country: 'CH', taxId: '123' }],
         ['company name', { companyName: 'name1' }],
       ];
       for (const [title, searchDto] of expectations) {
@@ -361,8 +352,9 @@ describe('CompanyService', () => {
               {
                 company: {
                   id: expect.any(String),
+                  companyId: expect.any(String),
                   companyName: 'name1',
-                  companyId: '123',
+                  taxId: '123',
                   country: 'CH',
                   created: expect.any(Date),
                   lastUpdated: expect.any(Date),
@@ -383,13 +375,13 @@ describe('CompanyService', () => {
       let mostRecent: Company;
 
       beforeEach(async () => {
-        [firstRecord] = await service.insertOrUpdate({ companyName: '1', companyId: '123', country: 'CH' });
-        [secondRecord] = await service.insertOrUpdate({ companyName: '2', companyId: '123', country: 'CH' });
-        [mostRecent] = await service.insertOrUpdate({ companyName: '3', companyId: '123', country: 'CH' });
+        [firstRecord] = await service.insertOrUpdate({ companyName: '1', taxId: '123', country: 'CH' });
+        [secondRecord] = await service.insertOrUpdate({ companyName: '2', taxId: '123', country: 'CH' });
+        [mostRecent] = await service.insertOrUpdate({ companyName: '3', taxId: '123', country: 'CH' });
       });
 
       const expectations: [string, SearchDto, string][] = [
-        ['company id and country', { country: 'CH', companyId: '123' }, foundByRepoByCompanyId],
+        ['tax id', { country: 'CH', taxId: '123' }, foundByRepoByTaxId],
         ['first company name', { companyName: '1' }, foundByRepoByName],
         ['second company name', { companyName: '2' }, foundByRepoByName],
         ['most recent company name', { companyName: '3' }, foundByRepoByName],
@@ -423,7 +415,7 @@ describe('CompanyService', () => {
             expect(
               await service.search({
                 country: searchDto.country,
-                companyId: searchDto.companyId,
+                taxId: searchDto.taxId,
                 companyName: searchDto.companyName,
                 atTime: atTime,
               }),
@@ -442,64 +434,46 @@ describe('CompanyService', () => {
       }
     });
 
-    describe('when the only record is deleted', () => {
-      beforeEach(async () => {
-        await service.markDeleted({ country: 'CH', companyId: '1' });
-        const wantInDb = {
-          id: expect.any(String),
-          created: expect.any(Date),
-          lastUpdated: expect.any(Date),
-          isDeleted: true,
-          country: 'CH',
-          companyId: '1',
-        };
-        expect(await service.listAllForTesting()).toEqual([wantInDb]);
-      });
-
-      const expectations: [string, SearchDto][] = [
-        ['company id and country', { country: 'CH', companyId: '1' }],
-        ['company name', { companyName: '1' }],
-      ];
-
-      for (const [title, searchDto] of expectations) {
-        it(`and we search by ${title}, should not return deleted records`, async () => {
-          expect(await service.search(searchDto)).toEqual([[], undefined]);
-        });
-      }
-    });
-
     describe('when there are historical deleted records', () => {
       let dbContents: Company[];
-      let wantInserted;
+      let wantInserted1;
+      let wantInserted2;
 
       beforeEach(async () => {
-        const company = { country: 'CH', companyId: '1', companyName: 'name1' };
-        await service.insertOrUpdate(company);
-        await service.markDeleted(company);
-        await service.insertOrUpdate(company);
+        const insertOrUpdateInput = { country: 'CH', taxId: '1', companyName: 'name1' };
+        const [insertedCompany1] = await service.insertOrUpdate(insertOrUpdateInput);
+        await service.markDeleted({ companyId: insertedCompany1.companyId });
+        const [insertedCompany2] = await service.insertOrUpdate(insertOrUpdateInput);
 
-        wantInserted = {
+        wantInserted1 = {
           id: expect.any(String),
+          companyId: insertedCompany1.companyId,
           created: expect.any(Date),
           lastUpdated: expect.any(Date),
-          country: company.country,
-          companyId: company.companyId,
-          companyName: company.companyName,
+          country: insertOrUpdateInput.country,
+          taxId: insertOrUpdateInput.taxId,
+          companyName: insertOrUpdateInput.companyName,
         };
+        // The second insertOrUpdate operation creates a new company because the first
+        // one is deleted (and thus it's ignored). We've used the same request, so the
+        // only difference is the generated id.
+        expect(insertedCompany1.companyId).not.toEqual(insertedCompany2.companyId);
+        wantInserted2 = { ...wantInserted1, companyId: insertedCompany2.companyId };
+
         const wantDeleted = {
           id: expect.any(String),
+          companyId: insertedCompany1.companyId,
           created: expect.any(Date),
           lastUpdated: expect.any(Date),
           isDeleted: true,
-          country: company.country,
-          companyId: company.companyId,
+          country: expect.any(String),
         };
         dbContents = await service.listAllForTesting();
-        expect(dbContents).toEqual([wantInserted, wantDeleted, wantInserted]);
+        expect(dbContents).toEqual([wantInserted1, wantDeleted, wantInserted2]);
       });
 
       const expectations: [string, SearchDto, string][] = [
-        ['company id and country', { country: 'CH', companyId: '1' }, foundByRepoByCompanyId],
+        ['tax id', { country: 'CH', taxId: '1' }, foundByRepoByTaxId],
         ['company name', { companyName: 'name1' }, foundByRepoByName],
       ];
 
@@ -521,7 +495,7 @@ describe('CompanyService', () => {
               {
                 confidence: expect.any(Number),
                 foundBy: wantFoundBy,
-                company: wantInserted,
+                company: wantInserted1,
               },
             ],
             messageCompaniesFoundInRepository,
@@ -542,7 +516,7 @@ describe('CompanyService', () => {
               {
                 confidence: expect.any(Number),
                 foundBy: wantFoundBy,
-                company: wantInserted,
+                company: wantInserted2,
               },
             ],
             messageCompaniesFoundInRepository,
@@ -552,7 +526,7 @@ describe('CompanyService', () => {
     });
 
     it('should not contact scraper service for historical queries', async () => {
-      expect(await service.search({ country: 'DK', companyId: '42', atTime: new Date('2020') })).toEqual([
+      expect(await service.search({ country: 'DK', taxId: '42', atTime: new Date('2020') })).toEqual([
         [],
         messageAtTimeWasSet,
       ]);
@@ -561,13 +535,13 @@ describe('CompanyService', () => {
 
     describe('when there are multiple companies with multiple records each', () => {
       beforeEach(async () => {
-        // These records correspond to the same company because country and companyId are the same.
+        // These records correspond to the same company because country and taxId are the same.
         // In order to create a new record we need the company metadata to change.
         // We cannot change companyName because we want to search by that, so we use a different arbitrary field (isic).
-        await service.insertOrUpdate({ country: 'CH', companyId: '1', companyName: 'name', isic: 'original' });
-        await service.insertOrUpdate({ country: 'CH', companyId: '1', companyName: 'name', isic: 'updated' });
-        await service.insertOrUpdate({ country: 'CH', companyId: '2', companyName: 'name', isic: 'original' });
-        await service.insertOrUpdate({ country: 'CH', companyId: '2', companyName: 'name', isic: 'updated' });
+        await service.insertOrUpdate({ country: 'CH', taxId: '1', companyName: 'name', isic: 'original' });
+        await service.insertOrUpdate({ country: 'CH', taxId: '1', companyName: 'name', isic: 'updated' });
+        await service.insertOrUpdate({ country: 'CH', taxId: '2', companyName: 'name', isic: 'original' });
+        await service.insertOrUpdate({ country: 'CH', taxId: '2', companyName: 'name', isic: 'updated' });
       });
 
       const expectations: [string, SearchDto, string][] = [
@@ -581,8 +555,9 @@ describe('CompanyService', () => {
             {
               company: {
                 id: expect.any(String),
+                companyId: expect.any(String),
                 country: 'CH',
-                companyId: '1',
+                taxId: '1',
                 companyName: 'name',
                 isic: 'updated',
                 created: expect.any(Date),
@@ -594,8 +569,9 @@ describe('CompanyService', () => {
             {
               company: {
                 id: expect.any(String),
+                companyId: expect.any(String),
                 country: 'CH',
-                companyId: '2',
+                taxId: '2',
                 companyName: 'name',
                 isic: 'updated',
                 created: expect.any(Date),
@@ -610,19 +586,20 @@ describe('CompanyService', () => {
     });
 
     it('should find a company even if only individual search fields match', async () => {
-      await service.insertOrUpdate({ country: 'CH', companyId: '1', companyName: '1' });
+      await service.insertOrUpdate({ country: 'CH', taxId: '1', companyName: '1' });
 
       const [found] = await service.search({
         country: 'CH',
-        companyId: 'something-different-from-1',
+        taxId: 'something-different-from-1',
         companyName: '1',
       });
       expect(found).toEqual([
         {
           company: {
             id: expect.any(String),
+            companyId: expect.any(String),
             country: 'CH',
-            companyId: '1',
+            taxId: '1',
             companyName: '1',
             created: expect.any(Date),
             lastUpdated: expect.any(Date),
@@ -634,15 +611,16 @@ describe('CompanyService', () => {
     });
 
     it('should not contact the scraper service if there are matches in the repo', async () => {
-      await service.insertOrUpdate({ country: 'CH', companyId: '1', companyName: '1' });
+      await service.insertOrUpdate({ country: 'CH', taxId: '1', companyName: '1' });
 
-      const [found] = await service.search({ country: 'CH', companyId: '1' });
+      const [found] = await service.search({ country: 'CH', taxId: '1' });
       expect(found).toEqual([
         {
           company: {
             id: expect.any(String),
+            companyId: expect.any(String),
             country: 'CH',
-            companyId: '1',
+            taxId: '1',
             companyName: '1',
             created: expect.any(Date),
             lastUpdated: expect.any(Date),
@@ -656,21 +634,22 @@ describe('CompanyService', () => {
     });
 
     it('should find companies that match individual fields, ordered by confidence', async () => {
-      await service.insertOrUpdate({ country: 'CH', companyId: '2', companyName: 'name-to-search-for' });
-      await service.insertOrUpdate({ country: 'CH', companyId: 'id-to-search-for', companyName: '1' });
+      await service.insertOrUpdate({ country: 'CH', taxId: '2', companyName: 'name-to-search-for' });
+      await service.insertOrUpdate({ country: 'CH', taxId: 'id-to-search-for', companyName: '1' });
 
       const [found] = await service.search({
-        companyId: 'id-to-search-for',
+        taxId: 'id-to-search-for',
         country: 'CH',
         companyName: 'name-to-search-for',
       });
       expect(found).toEqual([
-        // The ranking of confidences are: (1) match by companyId and country, and (2) match by name.
+        // The ranking of confidences are: (1) match by taxId and country, and (2) match by name.
         {
           company: {
             id: expect.any(String),
+            companyId: expect.any(String),
             country: 'CH',
-            companyId: 'id-to-search-for',
+            taxId: 'id-to-search-for',
             companyName: '1',
             created: expect.any(Date),
             lastUpdated: expect.any(Date),
@@ -681,8 +660,9 @@ describe('CompanyService', () => {
         {
           company: {
             id: expect.any(String),
+            companyId: expect.any(String),
             country: 'CH',
-            companyId: '2',
+            taxId: '2',
             companyName: 'name-to-search-for',
             created: expect.any(Date),
             lastUpdated: expect.any(Date),
@@ -694,23 +674,24 @@ describe('CompanyService', () => {
     });
 
     it('should find and deduplicate companies that match multiple search methods', async () => {
-      await service.insertOrUpdate({ country: 'CH', companyId: '123', companyName: '1' });
+      await service.insertOrUpdate({ country: 'CH', taxId: '123', companyName: '1' });
 
-      // This request matches the data by name AND companyId. Make sure only one item is returned, and
+      // This request matches the data by name AND taxId. Make sure only one item is returned, and
       // it has the highest confidence of both methods.
-      const [found] = await service.search({ companyName: '1', companyId: '123', country: 'CH' });
+      const [found] = await service.search({ companyName: '1', taxId: '123', country: 'CH' });
       expect(found).toEqual([
         {
           company: {
             id: expect.any(String),
+            companyId: expect.any(String),
             companyName: '1',
-            companyId: '123',
+            taxId: '123',
             country: 'CH',
             created: expect.any(Date),
             lastUpdated: expect.any(Date),
           },
           confidence: expect.any(Number),
-          foundBy: foundByRepoByCompanyId,
+          foundBy: foundByRepoByTaxId,
         },
       ]);
     });
@@ -727,7 +708,7 @@ describe('CompanyService', () => {
               {
                 companies: [
                   {
-                    company: { companyName: 'company found', country: 'CH', companyId: '456', dataSource: 'Unit-Test' },
+                    company: { companyName: 'company found', country: 'CH', taxId: '456', dataSource: 'Unit-Test' },
                     confidence: 1,
                   },
                 ],
@@ -745,11 +726,12 @@ describe('CompanyService', () => {
             {
               company: {
                 id: expect.any(String),
+                companyId: expect.any(String),
                 companyName: 'company found',
                 created: expect.any(Date),
                 lastUpdated: expect.any(Date),
                 country: 'CH',
-                companyId: '456',
+                taxId: '456',
                 dataSource: 'Unit-Test',
               },
               confidence: 1,
@@ -761,17 +743,18 @@ describe('CompanyService', () => {
 
         found = await service.search({
           country: found[0][0].company.country,
-          companyId: found[0][0].company.companyId,
+          taxId: found[0][0].company.taxId,
         });
         expect(found).toEqual([
           [
             {
               company: {
                 id: expect.any(String),
+                companyId: expect.any(String),
                 created: expect.any(Date),
                 lastUpdated: expect.any(Date),
                 country: 'CH',
-                companyId: '456',
+                taxId: '456',
                 companyName: 'company found',
                 dataSource: 'Unit-Test',
               },
@@ -792,8 +775,8 @@ describe('CompanyService', () => {
             companies: [
               {
                 companies: [
-                  { company: { companyName: 'company found', country: 'CH', companyId: '123' } },
-                  { company: { companyName: 'another company found', country: 'CH', companyId: '456' } },
+                  { company: { companyName: 'company found', country: 'CH', taxId: '123' } },
+                  { company: { companyName: 'another company found', country: 'CH', taxId: '456' } },
                 ],
               },
             ],
@@ -808,21 +791,23 @@ describe('CompanyService', () => {
             {
               company: {
                 id: expect.any(String),
+                companyId: expect.any(String),
                 companyName: 'company found',
                 created: expect.any(Date),
                 lastUpdated: expect.any(Date),
                 country: 'CH',
-                companyId: '123',
+                taxId: '123',
               },
             },
             {
               company: {
                 id: expect.any(String),
+                companyId: expect.any(String),
                 companyName: 'another company found',
                 created: expect.any(Date),
                 lastUpdated: expect.any(Date),
                 country: 'CH',
-                companyId: '456',
+                taxId: '456',
               },
             },
           ],
@@ -830,16 +815,17 @@ describe('CompanyService', () => {
         ]);
         let found2 = await service.search({
           country: found[0][0].company.country,
-          companyId: found[0][0].company.companyId,
+          taxId: found[0][0].company.taxId,
         });
         expect(found2).toEqual([
           [
             {
               company: {
                 id: expect.any(String),
+                companyId: expect.any(String),
                 companyName: 'company found',
                 country: 'CH',
-                companyId: '123',
+                taxId: '123',
                 created: expect.any(Date),
                 lastUpdated: expect.any(Date),
               },
@@ -851,18 +837,19 @@ describe('CompanyService', () => {
         ]);
         found2 = await service.search({
           country: found[0][1].company.country,
-          companyId: found[0][1].company.companyId,
+          taxId: found[0][1].company.taxId,
         });
         expect(found2).toEqual([
           [
             {
               company: {
                 id: expect.any(String),
+                companyId: expect.any(String),
                 companyName: 'another company found',
                 created: expect.any(Date),
                 lastUpdated: expect.any(Date),
                 country: 'CH',
-                companyId: '456',
+                taxId: '456',
               },
               confidence: expect.any(Number),
               foundBy: expect.any(String),
@@ -880,10 +867,10 @@ describe('CompanyService', () => {
               companies: [
                 {
                   companies: [
-                    { company: { companyName: 'company 123', country: 'CH', companyId: '123' } },
-                    { company: { companyName: 'company 123', country: 'CH', companyId: '123', isic: 'isic' } },
-                    { company: { companyName: 'company 456', country: 'CH', companyId: '456' } },
-                    { company: { companyName: 'company 456', country: 'CH', companyId: '456' } },
+                    { company: { companyName: 'company 123', country: 'CH', taxId: '123' } },
+                    { company: { companyName: 'company 123', country: 'CH', taxId: '123', isic: 'isic' } },
+                    { company: { companyName: 'company 456', country: 'CH', taxId: '456' } },
+                    { company: { companyName: 'company 456', country: 'CH', taxId: '456' } },
                   ],
                 },
               ],
@@ -893,36 +880,39 @@ describe('CompanyService', () => {
         });
 
         // TODO: Fix the code so that this test returns just one record (the most recent one)
-        // per <country, companyId>. It can be unexpected behaviour that in this test we return 3 records,
+        // per <country, taxId>. It can be unexpected behaviour that in this test we return 3 records,
         // but we are only able to find two afterwards.
         it('should find and create one record per company', async () => {
           const wantFirstCompanyOldRecord = {
             id: expect.any(String),
+            companyId: expect.any(String),
             companyName: 'company 123',
             created: expect.any(Date),
             lastUpdated: expect.any(Date),
             country: 'CH',
-            companyId: '123',
+            taxId: '123',
           };
           // Same company, but it is a different record because of the different isic.
           const wantFirstCompanyMostRecentRecord = {
             id: expect.any(String),
+            companyId: expect.any(String),
             companyName: 'company 123',
             created: expect.any(Date),
             lastUpdated: expect.any(Date),
             country: 'CH',
-            companyId: '123',
+            taxId: '123',
             isic: 'isic',
           };
           // The ScraperService returns two records for this company, but we are able
           // to deduplicate them because they contain the same content, so we are able to dedup them.
           const wantSecondCompanyOnlyRecord = {
             id: expect.any(String),
+            companyId: expect.any(String),
             companyName: 'company 456',
             created: expect.any(Date),
             lastUpdated: expect.any(Date),
             country: 'CH',
-            companyId: '456',
+            taxId: '456',
           };
 
           const found = await service.search({ companyName: 'irrelevant' });
@@ -943,21 +933,21 @@ describe('CompanyService', () => {
             [
               {
                 country: firstReturnedRecord.company.country,
-                companyId: firstReturnedRecord.company.companyId,
+                taxId: firstReturnedRecord.company.taxId,
               },
               wantFirstCompanyMostRecentRecord,
             ],
             [
               {
                 country: secondReturnedRecord.company.country,
-                companyId: secondReturnedRecord.company.companyId,
+                taxId: secondReturnedRecord.company.taxId,
               },
               wantFirstCompanyMostRecentRecord,
             ],
             [
               {
                 country: thirdReturnedRecord.company.country,
-                companyId: thirdReturnedRecord.company.companyId,
+                taxId: thirdReturnedRecord.company.taxId,
               },
               wantSecondCompanyOnlyRecord,
             ],
@@ -987,11 +977,11 @@ describe('CompanyService', () => {
               companies: [
                 {
                   companies: [
-                    { company: { companyName: '1', companyId: '1', country: 'CH' }, confidence: 0.5 },
-                    { company: { companyName: '2', companyId: '2', country: 'CH' }, confidence: 0.7 },
-                    { company: { companyName: '3', companyId: '3', country: 'CH' }, confidence: 0.9 },
-                    { company: { companyName: '4', companyId: '4', country: 'CH' }, confidence: 0.6 },
-                    { company: { companyName: '5', companyId: '5', country: 'CH' } },
+                    { company: { companyName: '1', taxId: '1', country: 'CH' }, confidence: 0.5 },
+                    { company: { companyName: '2', taxId: '2', country: 'CH' }, confidence: 0.7 },
+                    { company: { companyName: '3', taxId: '3', country: 'CH' }, confidence: 0.9 },
+                    { company: { companyName: '4', taxId: '4', country: 'CH' }, confidence: 0.6 },
+                    { company: { companyName: '5', taxId: '5', country: 'CH' } },
                   ],
                 },
               ],
@@ -1004,9 +994,10 @@ describe('CompanyService', () => {
             {
               company: {
                 companyName: '3',
-                companyId: '3',
+                taxId: '3',
                 country: 'CH',
                 id: expect.any(String),
+                companyId: expect.any(String),
                 created: expect.any(Date),
                 lastUpdated: expect.any(Date),
               },
@@ -1015,9 +1006,10 @@ describe('CompanyService', () => {
             {
               company: {
                 companyName: '2',
-                companyId: '2',
+                taxId: '2',
                 country: 'CH',
                 id: expect.any(String),
+                companyId: expect.any(String),
                 created: expect.any(Date),
                 lastUpdated: expect.any(Date),
               },
@@ -1026,9 +1018,10 @@ describe('CompanyService', () => {
             {
               company: {
                 companyName: '4',
-                companyId: '4',
+                taxId: '4',
                 country: 'CH',
                 id: expect.any(String),
+                companyId: expect.any(String),
                 created: expect.any(Date),
                 lastUpdated: expect.any(Date),
               },
@@ -1037,9 +1030,10 @@ describe('CompanyService', () => {
             {
               company: {
                 companyName: '1',
-                companyId: '1',
+                taxId: '1',
                 country: 'CH',
                 id: expect.any(String),
+                companyId: expect.any(String),
                 created: expect.any(Date),
                 lastUpdated: expect.any(Date),
               },
@@ -1049,9 +1043,10 @@ describe('CompanyService', () => {
             {
               company: {
                 companyName: '5',
-                companyId: '5',
+                taxId: '5',
                 country: 'CH',
                 id: expect.any(String),
+                companyId: expect.any(String),
                 created: expect.any(Date),
                 lastUpdated: expect.any(Date),
               },
@@ -1066,7 +1061,7 @@ describe('CompanyService', () => {
         fetch.resetMocks();
         fetch.mockResponseOnce(JSON.stringify({ message: 'Message from ScraperService' }));
       });
-      const inputSearchDtos = [{ country: 'CH', companyId: '1' }, { companyName: '1' }];
+      const inputSearchDtos = [{ country: 'CH', taxId: '1' }, { companyName: '1' }];
       for (const searchDto of inputSearchDtos) {
         it(`and we search for ${JSON.stringify(searchDto)}, should not find a company`, async () => {
           expect(await service.search(searchDto)).toEqual([[], 'Message from ScraperService']);
@@ -1081,7 +1076,7 @@ describe('CompanyService', () => {
         fetch.mockReject(new Error('Ouch!'));
       });
       it('should propagate the failure', async () => {
-        await expect(service.search({ country: 'irrelevant', companyId: 'irrelevant' })).rejects.toThrowError(
+        await expect(service.search({ country: 'irrelevant', taxId: 'irrelevant' })).rejects.toThrowError(
           'Cannot contact ScraperService, is the service available? Error: Ouch!',
         );
       });
@@ -1098,7 +1093,7 @@ describe('CompanyService', () => {
         });
       });
       it('should propagate the failure', async () => {
-        await expect(service.search({ country: 'irrelevant', companyId: 'irrelevant' })).rejects.toThrowError(
+        await expect(service.search({ country: 'irrelevant', taxId: 'irrelevant' })).rejects.toThrowError(
           'Request to ScraperService failed: Something bad happened',
         );
       });
@@ -1110,7 +1105,7 @@ describe('CompanyService', () => {
         fetch.mockResponseOnce(JSON.stringify({ companies: [], message: 'Could not find an answer' }));
       });
       it('should return the message', async () => {
-        expect(await service.search({ country: 'irrelevant', companyId: 'irrelevant' })).toEqual([
+        expect(await service.search({ country: 'irrelevant', taxId: 'irrelevant' })).toEqual([
           [],
           'Could not find an answer',
         ]);
@@ -1122,22 +1117,21 @@ describe('CompanyService', () => {
         fetch.resetMocks();
         fetch.mockResponseOnce(
           JSON.stringify({
-            companies: [
-              { companies: [{ company: { companyName: 'company found', country: 'CH', companyId: '123' } }] },
-            ],
+            companies: [{ companies: [{ company: { companyName: 'company found', country: 'CH', taxId: '123' } }] }],
             message: 'Some message',
           }),
         );
       });
       it('should return the message  and the companies', async () => {
-        expect(await service.search({ country: 'irrelevant', companyId: 'irrelevant' })).toEqual([
+        expect(await service.search({ country: 'irrelevant', taxId: 'irrelevant' })).toEqual([
           [
             {
               company: {
                 id: expect.any(String),
+                companyId: expect.any(String),
                 companyName: 'company found',
                 country: 'CH',
-                companyId: '123',
+                taxId: '123',
                 created: expect.any(Date),
                 lastUpdated: expect.any(Date),
               },
@@ -1158,7 +1152,7 @@ describe('CompanyService', () => {
         );
       });
       it('should propagate the failure', async () => {
-        await expect(service.search({ country: 'irrelevant', companyId: 'irrelevant' })).rejects.toThrowError(
+        await expect(service.search({ country: 'irrelevant', taxId: 'irrelevant' })).rejects.toThrowError(
           new RegExp('Error parsing response from ScraperService.*'),
         );
         // We don't want to assert on the full string:
@@ -1168,9 +1162,9 @@ describe('CompanyService', () => {
     });
 
     it('should throw error if we did not ask for any field', async () => {
-      await service.insertOrUpdate({ country: 'CH', companyId: '1', companyName: '1' });
-      await service.insertOrUpdate({ country: 'DK', companyId: '45', companyName: '2' });
-      await service.insertOrUpdate({ country: 'US', companyId: '60', companyName: '3' });
+      await service.insertOrUpdate({ country: 'CH', taxId: '1', companyName: '1' });
+      await service.insertOrUpdate({ country: 'DK', taxId: '45', companyName: '2' });
+      await service.insertOrUpdate({ country: 'US', taxId: '60', companyName: '3' });
 
       await expect(service.search({})).rejects.toThrowError('Search request cannot be empty');
     });

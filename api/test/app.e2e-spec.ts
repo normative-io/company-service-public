@@ -35,7 +35,7 @@ describe('AppController (e2e)', () => {
   it('Insert - Modify - Search', async () => {
     const insertCompany = await request(app.getHttpServer())
       .post('/company/v1/insertOrUpdate')
-      .send([{ country: 'CH', companyId: '1', companyName: 'Original Name Inc.' }])
+      .send([{ country: 'CH', taxId: '1', companyName: 'Original Name Inc.' }])
       .expect(HttpStatus.CREATED);
     expect(insertCompany.body).toStrictEqual([
       {
@@ -43,7 +43,8 @@ describe('AppController (e2e)', () => {
           id: expect.any(String),
           companyName: 'Original Name Inc.',
           country: 'CH',
-          companyId: '1',
+          companyId: expect.any(String),
+          taxId: '1',
           created: expect.any(String),
           lastUpdated: expect.any(String),
         },
@@ -53,7 +54,7 @@ describe('AppController (e2e)', () => {
 
     const updateCompany = await request(app.getHttpServer())
       .post('/company/v1/insertOrUpdate')
-      .send([{ country: 'CH', companyId: '1', companyName: 'New Name Inc.' }])
+      .send([{ country: 'CH', taxId: '1', companyName: 'New Name Inc.' }])
       .expect(HttpStatus.CREATED);
     expect(updateCompany.body).toStrictEqual([
       {
@@ -61,7 +62,8 @@ describe('AppController (e2e)', () => {
           id: expect.any(String),
           companyName: 'New Name Inc.',
           country: 'CH',
-          companyId: '1',
+          companyId: expect.any(String),
+          taxId: '1',
           created: expect.any(String),
           lastUpdated: expect.any(String),
         },
@@ -79,7 +81,8 @@ describe('AppController (e2e)', () => {
           company: {
             id: expect.any(String),
             country: 'CH',
-            companyId: '1',
+            companyId: expect.any(String),
+            taxId: '1',
             companyName: 'New Name Inc.',
             created: expect.any(String),
             lastUpdated: expect.any(String),
@@ -96,8 +99,8 @@ describe('AppController (e2e)', () => {
     const insertOrUpdate = await request(app.getHttpServer())
       .post('/company/v1/insertOrUpdate')
       .send([
-        { country: 'DE', companyId: '1', companyName: 'Dynamic Systems Inc' },
-        { country: 'US', companyId: '11', companyName: 'Dynamic Systems Inc' },
+        { country: 'DE', taxId: '1', companyName: 'Dynamic Systems Inc' },
+        { country: 'US', taxId: '11', companyName: 'Dynamic Systems Inc' },
       ])
       .expect(HttpStatus.CREATED);
     expect(insertOrUpdate.body).toStrictEqual([
@@ -106,7 +109,8 @@ describe('AppController (e2e)', () => {
           id: expect.any(String),
           companyName: 'Dynamic Systems Inc',
           country: 'DE',
-          companyId: '1',
+          companyId: expect.any(String),
+          taxId: '1',
           created: expect.any(String),
           lastUpdated: expect.any(String),
         },
@@ -117,7 +121,8 @@ describe('AppController (e2e)', () => {
           id: expect.any(String),
           companyName: 'Dynamic Systems Inc',
           country: 'US',
-          companyId: '11',
+          companyId: expect.any(String),
+          taxId: '11',
           created: expect.any(String),
           lastUpdated: expect.any(String),
         },
@@ -135,7 +140,8 @@ describe('AppController (e2e)', () => {
           company: {
             id: expect.any(String),
             country: 'DE',
-            companyId: '1',
+            companyId: expect.any(String),
+            taxId: '1',
             companyName: 'Dynamic Systems Inc',
             created: expect.any(String),
             lastUpdated: expect.any(String),
@@ -147,7 +153,8 @@ describe('AppController (e2e)', () => {
           company: {
             id: expect.any(String),
             country: 'US',
-            companyId: '11',
+            companyId: expect.any(String),
+            taxId: '11',
             companyName: 'Dynamic Systems Inc',
             created: expect.any(String),
             lastUpdated: expect.any(String),
@@ -159,9 +166,11 @@ describe('AppController (e2e)', () => {
       message: expect.stringContaining('found'),
     });
 
+    const secondCompanyId = search.body.companies[1].company.companyId;
+
     const markDeleted = await request(app.getHttpServer())
       .delete('/company/v1/markDeleted')
-      .send({ country: 'US', companyId: '11' })
+      .send({ companyId: secondCompanyId })
       .expect(HttpStatus.NO_CONTENT);
     expect(markDeleted.body).toStrictEqual({});
 
@@ -175,7 +184,8 @@ describe('AppController (e2e)', () => {
           company: {
             id: expect.any(String),
             country: 'DE',
-            companyId: '1',
+            companyId: expect.any(String),
+            taxId: '1',
             companyName: 'Dynamic Systems Inc',
             created: expect.any(String),
             lastUpdated: expect.any(String),

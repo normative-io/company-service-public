@@ -35,8 +35,8 @@ export class DenmarkScraper implements IScraper {
     if (req.country.toUpperCase() != this.countryCode) {
       return { isApplicable: false, reason: `only applicable to country=${this.countryCode}` };
     }
-    if (!req.companyId) {
-      return { isApplicable: false, reason: `requires a present companyId` };
+    if (!req.taxId) {
+      return { isApplicable: false, reason: `requires a present taxId` };
     }
     return { isApplicable: true, priority: 10 };
   }
@@ -69,7 +69,7 @@ export class DenmarkScraper implements IScraper {
       throw new Error(message);
     }
     const auth = Buffer.from(`${this.username}:${this.password}`).toString('base64');
-    const requestBody = this.requestWithCVRNr(request.companyId);
+    const requestBody = this.requestWithCVRNr(request.taxId);
     this.logger.verbose(`Request body: ${requestBody}`);
 
     this.logger.debug(`Authorization: Basic ${auth}`);
