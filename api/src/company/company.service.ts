@@ -6,18 +6,14 @@ import { CompanyFoundDto, ScraperServiceResponse } from './dto/company-found.dto
 import { Counter } from 'prom-client';
 import { InjectMetric } from '@willsoto/nestjs-prometheus';
 import { ConfigService } from '@nestjs/config';
-import { CompanyKeyDto } from './dto/company-key.dto';
 import { SearchDto } from './dto/search.dto';
 import fetch from 'node-fetch';
 import { IncomingRequest } from './repository/mongo/incoming-request.model';
+import { MarkDeletedDto } from './dto/mark-deleted.dto';
 
 @Injectable()
 export class CompanyService {
   private readonly logger = new Logger(CompanyService.name);
-
-  // These confidence values have been chosen intuitively.
-  static readonly confidenceByCompanyIdAndCountry = 0.9;
-  static readonly confidenceByName = 0.7;
 
   // Values of the component field for searchErrorTotal.
   static readonly componentScrapers = 'scraper_service';
@@ -59,8 +55,8 @@ export class CompanyService {
     return await this.companyRepo.insertOrUpdate(insertOrUpdateDto);
   }
 
-  async markDeleted(key: CompanyKeyDto): Promise<[Company, string]> {
-    return await this.companyRepo.markDeleted(key);
+  async markDeleted(markDeletedDto: MarkDeletedDto): Promise<[Company, string]> {
+    return await this.companyRepo.markDeleted(markDeletedDto);
   }
 
   async listAllForTesting(): Promise<Company[]> {
@@ -106,7 +102,7 @@ export class CompanyService {
 
   async searchEverywhere(searchDto: SearchDto): Promise<[CompanyFoundDto[], string]> {
     const country = searchDto.country;
-    const results = await this.findInRepo(searchDto);
+    const results = await this.companyRepo.find(searchDto);
 
     if (results.length != 0) {
       this.searchFoundTotal.inc({ country: country, answered_by: 'repo' });
@@ -126,40 +122,6 @@ export class CompanyService {
       results.push(...found);
     }
     return [results, message];
-  }
-
-  // findInRepo searches for a company in the repo.
-  // The search is based on the following fields:
-  // 1. Country and CompanyId
-  // 2. Name
-  // The search is performed by all applicable fields, i.e., if a request
-  // contains both CompanyId and Name, both searches will be performed, and
-  // all results are concatenated in the final return value.
-  // Callers should not assume that results are ordered by CompanyFoundDto.confidence.
-  private async findInRepo(searchDto: SearchDto): Promise<CompanyFoundDto[]> {
-    const results: CompanyFoundDto[] = [];
-    if (searchDto.companyId && searchDto.country) {
-      const company = await this.companyRepo.get(searchDto.country, searchDto.companyId, searchDto.atTime);
-      if (company) {
-        results.push({
-          confidence: CompanyService.confidenceByCompanyIdAndCountry,
-          foundBy: 'Repository by companyId and country',
-          company: company,
-        });
-      }
-    }
-    if (searchDto.companyName) {
-      results.push(
-        ...(await this.companyRepo.findByName(searchDto.companyName, searchDto.atTime)).map(function (company) {
-          return {
-            confidence: CompanyService.confidenceByName,
-            foundBy: 'Repository by name',
-            company: company,
-          };
-        }),
-      );
-    }
-    return results;
   }
 
   // There are three main error situations when contacting the ScraperService:
