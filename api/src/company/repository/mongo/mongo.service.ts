@@ -8,18 +8,28 @@ import { IncomingRequestDbObject, IncomingRequestDocument } from './incoming-req
 import { InsertOrUpdateDto } from 'src/company/dto/insert-or-update.dto';
 import { CompanyKeyDto } from 'src/company/dto/company-key.dto';
 import { IncomingRequest, RequestType } from './incoming-request.model';
+import { SearchDto } from 'src/company/dto/search.dto';
+import { MarkDeletedDto } from 'src/company/dto/mark-deleted.dto';
+import { CompanyFoundDto } from 'src/company/dto/company-found.dto';
 
 // A MongoDB-based repository for storing company data.
 @Injectable()
 export class MongoRepositoryService implements ICompanyRepository {
   logger = new Logger(MongoRepositoryService.name);
 
+  // These confidence values have been chosen intuitively.
+  static readonly confidenceByCompanyIdAndCountry = 0.9;
+  static readonly confidenceByName = 0.7;
+
   constructor(
     @InjectModel(CompanyDbObject.name) private readonly companyModel: Model<CompanyDocument>,
     @InjectModel(IncomingRequestDbObject.name) private readonly incomingRequestModel: Model<IncomingRequestDocument>,
   ) {}
 
-  async get(country: string, companyId: string, atTime?: Date): Promise<Company | undefined> {
+  // Fetch the metadata of a particular company.
+  // If `atTime` is set, return the metadata at that particular time.
+  // If unset, return the most recent metadata for the company.
+  private async get(country: string, companyId: string, atTime?: Date): Promise<Company | undefined> {
     if (!atTime) {
       const mostRecent = await this.getMostRecentRecord({ country, companyId });
       if (!mostRecent || mostRecent.isDeleted) {
@@ -72,25 +82,25 @@ export class MongoRepositoryService implements ICompanyRepository {
     return [companyDbObjectToModel(companyDbObject), msg];
   }
 
-  async markDeleted(key: CompanyKeyDto): Promise<[Company, string]> {
+  async markDeleted(markDeletedDto: MarkDeletedDto): Promise<[Company, string]> {
     const session = await this.companyModel.startSession();
     let dbObject: CompanyDbObject;
     let msg: string;
     await session.withTransaction(async () => {
-      this.incomingRequestModel.create(markDeletedDtoToDbObject(key));
-      const mostRecent = await this.getMostRecentRecord(key);
+      this.incomingRequestModel.create(markDeletedDtoToDbObject(markDeletedDto));
+      const mostRecent = await this.getMostRecentRecord(markDeletedDto);
       if (!mostRecent || !mostRecent.isDeleted) {
-        const deleteRecord = new Company({ country: key.country, companyId: key.companyId });
+        const deleteRecord = new Company({ country: markDeletedDto.country, companyId: markDeletedDto.companyId });
         deleteRecord.isDeleted = true;
         dbObject = await this.companyModel.create(companyModelToDbObject(deleteRecord));
-        msg = `Marked as deleted: ${JSON.stringify(key)}`;
+        msg = `Marked as deleted: ${JSON.stringify(markDeletedDto)}`;
       } else {
         dbObject = await this.companyModel.findByIdAndUpdate(
           mostRecent._id,
           { lastUpdated: new Date() },
           { returnDocument: 'after' },
         );
-        msg = `Marked as up-to-date; company already marked as deleted: ${JSON.stringify(key)}`;
+        msg = `Marked as up-to-date; company already marked as deleted: ${JSON.stringify(markDeletedDto)}`;
       }
     });
     session.endSession();
@@ -118,7 +128,42 @@ export class MongoRepositoryService implements ICompanyRepository {
     return [...requests];
   }
 
-  async findByName(name: string, atTime?: Date): Promise<Company[]> {
+  // find searches for a company in the repo.
+  // The search is based on the following fields:
+  // 1. Country and CompanyId
+  // 2. Name
+  // The search is performed by all applicable fields, i.e., if a request
+  // contains both CompanyId and Name, both searches will be performed, and
+  // all results are concatenated in the final return value.
+  // Callers should not assume that results are ordered by CompanyFoundDto.confidence.
+  async find(searchDto: SearchDto): Promise<CompanyFoundDto[]> {
+    const results: CompanyFoundDto[] = [];
+
+    if (searchDto.companyId && searchDto.country) {
+      const company = await this.get(searchDto.country, searchDto.companyId, searchDto.atTime);
+      if (company) {
+        results.push({
+          confidence: MongoRepositoryService.confidenceByCompanyIdAndCountry,
+          foundBy: 'Repository by companyId and country',
+          company: company,
+        });
+      }
+    }
+    if (searchDto.companyName) {
+      results.push(
+        ...(await this.findByName(searchDto.companyName, searchDto.atTime)).map(function (company) {
+          return {
+            confidence: MongoRepositoryService.confidenceByName,
+            foundBy: 'Repository by name',
+            company: company,
+          };
+        }),
+      );
+    }
+    return results;
+  }
+
+  private async findByName(name: string, atTime?: Date): Promise<Company[]> {
     const companies: Company[] = [];
     for (const dbObject of await this.companyModel.find({ companyName: name })) {
       const recordAtTime = await this.get(dbObject.country, dbObject.companyId, atTime);
@@ -149,12 +194,12 @@ function insertOrUpdateDtoToDbObject(insertOrUpdate: InsertOrUpdateDto): Incomin
   };
 }
 
-function markDeletedDtoToDbObject(markDeleted: CompanyKeyDto): IncomingRequestDbObject {
-  if (!markDeleted) {
+function markDeletedDtoToDbObject(markDeletedDto: MarkDeletedDto): IncomingRequestDbObject {
+  if (!markDeletedDto) {
     return;
   }
   return {
-    companyId: markDeleted.companyId,
+    companyId: markDeletedDto.companyId,
     created: new Date(),
     requestType: RequestType.MarkDeleted,
   };
