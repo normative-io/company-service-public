@@ -10,6 +10,8 @@ import { MongoRepositoryService } from './repository/mongo/mongo.service';
 import { COMPANY_REPOSITORY } from './repository/repository-interface';
 import { TestMetrics } from './test-utils/company-service-metrics';
 import { getConnectionToken } from '@nestjs/mongoose';
+import { RepoService } from './services/repo.service';
+import { ScraperService } from './services/scraper.service';
 
 describe('CompanyController', () => {
   let controller: CompanyController;
@@ -27,6 +29,8 @@ describe('CompanyController', () => {
       controllers: [CompanyController],
       providers: [
         CompanyService,
+        RepoService,
+        ScraperService,
         {
           provide: COMPANY_REPOSITORY,
           useClass: MongoRepositoryService,
