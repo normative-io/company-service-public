@@ -28,6 +28,9 @@ export class IncomingRequestDbObject {
 
   @Prop()
   taxId?: string;
+
+  @Prop()
+  orgNbr?: string;
 }
 
 export const IncomingRequestSchema = SchemaFactory.createForClass(IncomingRequestDbObject);

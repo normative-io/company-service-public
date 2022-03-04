@@ -35,4 +35,11 @@ export class InsertOrUpdateDto {
     required: false,
   })
   public taxId?: string;
+
+  @ApiProperty({
+    description: 'The organization number',
+    example: '123',
+    required: false,
+  })
+  public orgNbr?: string;
 }

@@ -17,6 +17,7 @@ import { CompanyDbObject, CompanyDocument } from './repository/mongo/company.sch
 import { SearchDto } from './dto/search.dto';
 import { IncomingRequestDbObject, IncomingRequestDocument } from './repository/mongo/incoming-request.schema';
 import { RequestType } from './repository/mongo/incoming-request.model';
+import { InsertOrUpdateDto } from './dto/insert-or-update.dto';
 
 describe('CompanyService', () => {
   const messageCompaniesFoundInRepository = 'Companies were found in repository';
@@ -107,34 +108,57 @@ describe('CompanyService', () => {
   });
 
   describe('the insertOrUpdate method', () => {
-    it('should insert a new record for a non-existent company', async () => {
-      const company = { country: 'CH', taxId: '1', companyName: 'name1', dataSource: 'Unit-Test', isic: 'isic' };
+    // Format of testCases: title, request.
+    const testCases: [string, any][] = [
+      ['requires at least one id field', { country: 'irrelevant' }],
+      ['requires at least one id field with content', { country: 'irrelevant', taxId: '' }],
+    ];
+    for (const [title, request] of testCases) {
+      it(title, async () => {
+        await expect(service.insertOrUpdate(request)).rejects.toThrowError(
+          new RegExp(`Invalid insertOrUpdate request.*not enough identifiers.*`),
+        );
+      });
+    }
 
-      const wantInDb = {
-        id: expect.any(String),
-        companyId: expect.any(String),
-        country: company.country,
-        taxId: company.taxId,
-        companyName: company.companyName,
-        created: expect.any(Date),
-        lastUpdated: expect.any(Date),
-        dataSource: 'Unit-Test',
-        isic: 'isic',
-      };
-      expect(await service.insertOrUpdate(company)).toEqual([wantInDb, expect.stringContaining('Inserted')]);
-      expect(await service.listAllForTesting()).toEqual([wantInDb]);
+    describe('should insert a new record for a non-existent company', () => {
+      // Format of testCases: title, request.
+      const testCases: [string, any][] = [
+        ['if we send Tax ID', { taxId: '1' }],
+        ['if we send OrgNbr', { orgNbr: '1' }],
+        ['if we send Tax ID an orgNbr', { taxId: '1', orgNbr: '2' }],
+      ];
+      for (const [title, request] of testCases) {
+        it(title, async () => {
+          const company = { country: 'CH', companyName: 'name1', dataSource: 'Unit-Test', isic: 'isic', ...request };
 
-      // Check that the incoming request was persisted.
-      const wantIncomingRequestInDb = {
-        country: company.country,
-        taxId: company.taxId,
-        companyName: company.companyName,
-        created: expect.any(Date),
-        dataSource: 'Unit-Test',
-        isic: 'isic',
-        requestType: requestTypeInsertOrUpdate,
-      };
-      expect(await service.listAllIncomingRequestsForTesting()).toEqual([wantIncomingRequestInDb]);
+          const wantInDb = {
+            id: expect.any(String),
+            companyId: expect.any(String),
+            country: company.country,
+            companyName: company.companyName,
+            created: expect.any(Date),
+            lastUpdated: expect.any(Date),
+            dataSource: 'Unit-Test',
+            isic: 'isic',
+            ...request, // Take advantage of the fact that the fields in the request and the db have the same name.
+          };
+          expect(await service.insertOrUpdate(company)).toEqual([wantInDb, expect.stringContaining('Inserted')]);
+          expect(await service.listAllForTesting()).toEqual([wantInDb]);
+
+          // Check that the incoming request was persisted.
+          const wantIncomingRequestInDb = {
+            country: company.country,
+            companyName: company.companyName,
+            created: expect.any(Date),
+            dataSource: 'Unit-Test',
+            isic: 'isic',
+            requestType: requestTypeInsertOrUpdate,
+            ...request,
+          };
+          expect(await service.listAllIncomingRequestsForTesting()).toEqual([wantIncomingRequestInDb]);
+        });
+      }
     });
 
     it('should not insert a new record if metadata did not change', async () => {
@@ -178,55 +202,173 @@ describe('CompanyService', () => {
       ]);
     });
 
-    it('should insert a new record for updates to the same company', async () => {
-      const metadata1 = { country: 'CH', taxId: '1', companyName: 'Old Name LLC' };
-      const metadata2 = { country: 'CH', taxId: '1', companyName: 'New Name Inc' };
+    describe('should insert a new record for updates to the same company', () => {
+      // Format of testCases: title, request1, request2.
+      const testCases: [string, any, any][] = [
+        [
+          'if the name changes',
+          { country: 'CH', taxId: '1', companyName: 'Old Name LLC' },
+          { country: 'CH', taxId: '1', companyName: 'New Name Inc' },
+        ],
+        [
+          'if the record has taxId, and we add orgNbr later',
+          { country: 'CH', taxId: '1' },
+          { country: 'CH', taxId: '1', orgNbr: '2' },
+        ],
+        [
+          'if the record has orgNbr, and we add taxId later',
+          { country: 'CH', orgNbr: '1' },
+          { country: 'CH', orgNbr: '1', taxId: '2' },
+        ],
+      ];
+      for (const [title, request1, request2] of testCases) {
+        it(title, async () => {
+          const want1 = {
+            id: expect.any(String),
+            companyId: expect.any(String),
+            created: expect.any(Date),
+            lastUpdated: expect.any(Date),
+            ...request1,
+          };
 
-      const want1 = {
-        id: expect.any(String),
-        companyId: expect.any(String),
-        country: metadata1.country,
-        taxId: metadata1.taxId,
-        companyName: metadata1.companyName,
-        created: expect.any(Date),
-        lastUpdated: expect.any(Date),
-      };
-      const want2 = {
-        id: expect.any(String),
-        companyId: expect.any(String),
-        country: metadata2.country,
-        taxId: metadata2.taxId,
-        companyName: metadata2.companyName,
-        created: expect.any(Date),
-        lastUpdated: expect.any(Date),
-      };
-      expect(await service.insertOrUpdate(metadata1)).toEqual([want1, expect.stringContaining('Inserted')]);
-      expect(await service.listAllForTesting()).toEqual([want1]);
-      expect(await service.insertOrUpdate(metadata2)).toEqual([want2, expect.stringContaining('Updated')]);
-      expect(await service.listAllForTesting()).toEqual([want1, want2]);
-      expect(await service.insertOrUpdate(metadata2)).toEqual([want2, expect.stringContaining('Marked as up-to-date')]);
-      expect(await service.listAllForTesting()).toEqual([want1, want2]);
+          const [company1, string1] = await service.insertOrUpdate(request1);
+          expect([company1, string1]).toEqual([want1, expect.stringContaining('Inserted')]);
+          expect(await service.listAllForTesting()).toEqual([want1]);
 
-      // Check that all incoming requests were persisted.
-      const wantIncomingRequest1 = {
-        country: metadata1.country,
-        taxId: metadata1.taxId,
-        companyName: metadata1.companyName,
-        created: expect.any(Date),
-        requestType: requestTypeInsertOrUpdate,
-      };
-      const wantIncomingRequest2 = {
-        country: metadata2.country,
-        taxId: metadata2.taxId,
-        companyName: metadata2.companyName,
-        created: expect.any(Date),
-        requestType: requestTypeInsertOrUpdate,
-      };
-      expect(await service.listAllIncomingRequestsForTesting()).toEqual([
-        wantIncomingRequest1,
-        wantIncomingRequest2,
-        wantIncomingRequest2,
-      ]);
+          const want2 = {
+            id: expect.any(String),
+            companyId: company1.companyId,
+            created: expect.any(Date),
+            lastUpdated: expect.any(Date),
+            ...request2,
+          };
+
+          expect(await service.insertOrUpdate(request2)).toEqual([want2, expect.stringContaining('Updated')]);
+          expect(await service.listAllForTesting()).toEqual([want1, want2]);
+          expect(await service.insertOrUpdate(request2)).toEqual([
+            want2,
+            expect.stringContaining('Marked as up-to-date'),
+          ]);
+          expect(await service.listAllForTesting()).toEqual([want1, want2]);
+
+          // Check that all incoming requests were persisted.
+          const wantIncomingRequest1 = {
+            created: expect.any(Date),
+            requestType: requestTypeInsertOrUpdate,
+            ...request1,
+          };
+          const wantIncomingRequest2 = {
+            created: expect.any(Date),
+            requestType: requestTypeInsertOrUpdate,
+            ...request2,
+          };
+          expect(await service.listAllIncomingRequestsForTesting()).toEqual([
+            wantIncomingRequest1,
+            wantIncomingRequest2,
+            wantIncomingRequest2,
+          ]);
+        });
+      }
+    });
+
+    describe('should insert a record with a new company id', () => {
+      // Format of testCases: title, request1, request2.
+      const testCases: [string, any, any][] = [
+        ['if we send a different Tax ID', { country: 'CH', taxId: '1' }, { country: 'CH', taxId: '2' }],
+        [
+          'if we send a different OrgNbr and the same country',
+          { country: 'CH', orgNbr: '1' },
+          { country: 'CH', orgNbr: '2' },
+        ],
+        [
+          'if we send an existing OrgNbr and a different country',
+          { country: 'CH', orgNbr: '1' },
+          { country: 'DK', orgNbr: '1' },
+        ],
+      ];
+      for (const [title, request1, request2] of testCases) {
+        it(title, async () => {
+          const metadata1 = { companyName: 'name1', dataSource: 'Unit-Test', isic: 'isic', ...request1 };
+          const metadata2 = { companyName: 'name1', dataSource: 'Unit-Test', isic: 'isic', ...request2 };
+
+          const [company1, string1] = await service.insertOrUpdate(metadata1);
+          const wantInDb1 = {
+            id: expect.any(String),
+            companyId: company1.companyId,
+            companyName: metadata1.companyName,
+            created: expect.any(Date),
+            lastUpdated: expect.any(Date),
+            dataSource: 'Unit-Test',
+            isic: 'isic',
+            ...request1,
+          };
+
+          expect([company1, string1]).toEqual([wantInDb1, expect.stringContaining('Inserted')]);
+
+          const wantInDb2 = {
+            id: expect.any(String),
+            companyId: expect.not.stringContaining(company1.companyId),
+            companyName: metadata2.companyName,
+            created: expect.any(Date),
+            lastUpdated: expect.any(Date),
+            dataSource: 'Unit-Test',
+            isic: 'isic',
+            ...request2,
+          };
+          expect(await service.insertOrUpdate(metadata2)).toEqual([wantInDb2, expect.stringContaining('Inserted')]);
+          expect(await service.insertOrUpdate(metadata2)).toEqual([
+            wantInDb2,
+            expect.stringContaining('Marked as up-to-date'),
+          ]);
+          expect(await service.listAllForTesting()).toEqual([wantInDb1, wantInDb2]);
+        });
+      }
+    });
+
+    describe('should throw an error if we try to insert data that conflicts with the data in the db', () => {
+      // Format of testCases: title, insertOrUpdate requests, expected error string.
+      const testCases: [string, InsertOrUpdateDto[], string][] = [
+        [
+          'if we use different countries with the same Tax ID',
+          [
+            { country: 'DK', taxId: '1', companyName: 'DK 1' },
+            { country: 'CH', taxId: '1', companyName: 'CH 1' },
+          ],
+          '.*Conflicting country: new: CH, existing: DK.*',
+        ],
+        [
+          'if we use different orgNbr with the same Tax ID',
+          [
+            { country: 'DK', taxId: '1', companyName: 'DK 1', orgNbr: '1' },
+            { country: 'DK', taxId: '1', companyName: 'DK 1', orgNbr: '2' },
+          ],
+          '.*Conflicting orgNbr: new: 2, existing: 1.*',
+        ],
+        [
+          'if we use identifiers from two different companies',
+          [
+            { country: 'DK', taxId: '1', companyName: 'DK 1' },
+            { country: 'DK', companyName: 'DK 1', orgNbr: '2' },
+            { country: 'DK', taxId: '1', companyName: 'DK 1', orgNbr: '2' },
+          ],
+          '.*Multiple companies match the identifiers.*',
+        ],
+      ];
+      for (const [title, requests, wantError] of testCases) {
+        it(title, async () => {
+          // Insert all requests except the last one.
+          for (let i = 0; i < requests.length - 1; i++) {
+            expect(await service.insertOrUpdate(requests[i])).toEqual([
+              expect.any(Company),
+              expect.stringContaining('Inserted'),
+            ]);
+          }
+          // The last request should fail.
+          await expect(service.insertOrUpdate(requests[requests.length - 1])).rejects.toThrowError(
+            new RegExp(wantError),
+          );
+        });
+      }
     });
   });
 
@@ -443,7 +585,7 @@ describe('CompanyService', () => {
         const insertOrUpdateInput = { country: 'CH', taxId: '1', companyName: 'name1' };
         const [insertedCompany1] = await service.insertOrUpdate(insertOrUpdateInput);
         await service.markDeleted({ companyId: insertedCompany1.companyId });
-        const [insertedCompany2] = await service.insertOrUpdate(insertOrUpdateInput);
+        await service.insertOrUpdate(insertOrUpdateInput);
 
         wantInserted1 = {
           id: expect.any(String),
@@ -457,8 +599,7 @@ describe('CompanyService', () => {
         // The second insertOrUpdate operation creates a new company because the first
         // one is deleted (and thus it's ignored). We've used the same request, so the
         // only difference is the generated id.
-        expect(insertedCompany1.companyId).not.toEqual(insertedCompany2.companyId);
-        wantInserted2 = { ...wantInserted1, companyId: insertedCompany2.companyId };
+        wantInserted2 = { ...wantInserted1, companyId: expect.not.stringContaining(insertedCompany1.companyId) };
 
         const wantDeleted = {
           id: expect.any(String),
