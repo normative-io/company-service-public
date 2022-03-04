@@ -15,6 +15,13 @@ export class SearchDto {
   })
   public taxId?: string;
 
+  @ApiProperty({
+    description: 'The organization number',
+    example: '123',
+    required: false,
+  })
+  public orgNbr?: string;
+
   // Note: `atTime` represents the database-insertion time of the record and not any
   // business-related timestamp (ex: date which the company was founded or dissolved).
   @ApiProperty({

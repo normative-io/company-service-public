@@ -17,6 +17,7 @@ export class RepoService {
   // These confidence values have been chosen intuitively.
   static readonly confidenceByCompanyIdAndCountry = 0.9;
   static readonly confidenceByTaxId = 0.9;
+  static readonly confidenceByOrgNbr = 0.8;
   static readonly confidenceByName = 0.7;
 
   constructor(
@@ -184,10 +185,25 @@ export class RepoService {
     return [company, msg];
   }
 
+  private async findAndAdd(
+    results: CompanyFoundDto[],
+    matcher: any,
+    confidence: number,
+    foundBy: string,
+    atTime?: Date,
+  ) {
+    results.push(
+      ...(await this.companyRepo.find([matcher], atTime)).map(function (company) {
+        return { confidence, foundBy, company };
+      }),
+    );
+  }
+
   // find searches for a company in the database.
   // The search is based on the following fields:
   // 1. TaxId
-  // 2. Name
+  // 2. OrgNbr + country
+  // 3. Name
   // The search is performed by all applicable fields, i.e., if a request
   // contains both TaxId and Name, both searches will be performed, and
   // all results are concatenated in the final return value.
@@ -195,27 +211,30 @@ export class RepoService {
   async find(searchDto: SearchDto): Promise<CompanyFoundDto[]> {
     const results: CompanyFoundDto[] = [];
     if (searchDto.taxId) {
-      results.push(
-        ...(await this.companyRepo.find([{ taxId: searchDto.taxId }], searchDto.atTime)).map(function (company) {
-          return {
-            confidence: RepoService.confidenceByTaxId,
-            foundBy: 'Repository by taxId',
-            company: company,
-          };
-        }),
+      await this.findAndAdd(
+        results,
+        { taxId: searchDto.taxId },
+        RepoService.confidenceByTaxId,
+        'Repository by taxId',
+        searchDto.atTime,
+      );
+    }
+    if (searchDto.orgNbr && searchDto.country) {
+      await this.findAndAdd(
+        results,
+        { orgNbr: searchDto.orgNbr, country: searchDto.country },
+        RepoService.confidenceByOrgNbr,
+        'Repository by orgNbr and country',
+        searchDto.atTime,
       );
     }
     if (searchDto.companyName) {
-      results.push(
-        ...(await this.companyRepo.find([{ companyName: searchDto.companyName }], searchDto.atTime)).map(function (
-          company,
-        ) {
-          return {
-            confidence: RepoService.confidenceByName,
-            foundBy: 'Repository by name',
-            company: company,
-          };
-        }),
+      await this.findAndAdd(
+        results,
+        { companyName: searchDto.companyName },
+        RepoService.confidenceByName,
+        'Repository by name',
+        searchDto.atTime,
       );
     }
     return results;
