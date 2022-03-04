@@ -25,6 +25,9 @@ export class IncomingRequestDbObject {
 
   @Prop()
   dataSource?: string;
+
+  @Prop()
+  taxId?: string;
 }
 
 export const IncomingRequestSchema = SchemaFactory.createForClass(IncomingRequestDbObject);

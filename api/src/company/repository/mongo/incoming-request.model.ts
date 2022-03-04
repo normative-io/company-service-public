@@ -19,4 +19,6 @@ export class IncomingRequest {
   created: Date;
 
   dataSource?: string;
+
+  taxId?: string;
 }

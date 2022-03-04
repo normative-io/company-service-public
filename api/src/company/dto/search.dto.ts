@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-// TODO: make SearchDto more flexible and support more complex filtering.
 export class SearchDto {
   @ApiProperty({
     description: 'The country code that this company is registered in.',
@@ -10,11 +9,11 @@ export class SearchDto {
   readonly country?: string;
 
   @ApiProperty({
-    description: 'The identifier for the company (ex: VAT, EIN, etc..)',
+    description: 'The Tax ID for the company',
     example: '123',
     required: false,
   })
-  readonly companyId?: string;
+  public taxId?: string;
 
   // Note: `atTime` represents the database-insertion time of the record and not any
   // business-related timestamp (ex: date which the company was founded or dissolved).
@@ -31,11 +30,4 @@ export class SearchDto {
     required: false,
   })
   readonly companyName?: string;
-
-  @ApiProperty({
-    description: 'The International Standard Industrial Classification (ISIC) for the company',
-    example: '123',
-    required: false,
-  })
-  readonly isic?: string;
 }

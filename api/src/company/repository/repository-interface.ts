@@ -19,12 +19,12 @@ export interface ICompanyRepository {
   insertOrUpdate(insertOrUpdateDto: InsertOrUpdateDto): Promise<[Company, string]>;
 
   // Marks a company record as deleted:
-  // * If the company doesn't exist, inserts a new `isDeleted` record.
+  // * If the company doesn't exist, throws an error.
   // * If the company is already marked as deleted, updates the `lastUpdated` timestamp.
   // * If the latest metadata is active, inserts a new `isDeleted` record.
   //
   // Previous updates will still be readable by clients using the `atTime` parameter.
-  // To un-delete, call insertOrUpdate again with the same CompanyKey.
+  // To un-delete, create the company again with an `insertOrUpdate` operation.
   // Returns the new deleted company record and a message describing the outcome.
   markDeleted(markDeletedDto: MarkDeletedDto): Promise<[Company, string]>;
 

@@ -51,7 +51,7 @@ export class Company {
     public readonly isic: string,
     // The country of the company
     public readonly country: string,
-    // Organization number of the company (Tax ID when applicable)
-    public readonly companyId?: string,
+    // Tax ID of the company
+    public readonly taxId?: string,
   ) {}
 }

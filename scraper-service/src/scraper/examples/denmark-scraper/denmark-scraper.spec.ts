@@ -20,7 +20,7 @@ describe('DenmarkScraper', () => {
   it('should convert a VirkResponse to a FoundCompany', async () => {
     const request: LookupRequest = {
       country: 'DK',
-      companyId: '37018848',
+      taxId: '37018848',
     };
     // @ts-expect-error: Response type is complex and may differ slightly
     expect(await scraper.toCompanies(request, response)).toEqual([
@@ -29,7 +29,7 @@ describe('DenmarkScraper', () => {
         company: {
           companyName: 'Meta Mind AB',
           isic: '6201',
-          companyId: '37018848',
+          taxId: '37018848',
           country: 'DK',
         },
       },
