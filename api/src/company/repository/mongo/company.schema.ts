@@ -36,6 +36,9 @@ export class CompanyDbObject {
 
   @Prop()
   taxId: string;
+
+  @Prop()
+  orgNbr: string;
 }
 
 export const CompanySchema = SchemaFactory.createForClass(CompanyDbObject);

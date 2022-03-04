@@ -188,14 +188,14 @@ export class CompanyService {
           const [company] = await this.insertOrUpdate({ dataSource: scraperName, ...dto.company } as InsertOrUpdateDto);
           this.logger.debug(`Added company: ${JSON.stringify(company)}`);
           // Note that if the scraper returns multiple records for one company (multiple items with the same
-          // country and companyId), we add all of them here.
+          // identifiers), we add all of them here.
           // The caller later deduplicates based on the record's internal id, which is based on the content of the record.
           // Thus, if the ScraperService returns two or more items with exactly the same content, they are properly
           // deduped later, but if they contain slightly different content (e.g., different populated fields), all of them will be
           // returned by the search. This might be problematic: it will be almost impossible to retrieve them separately since
           // they are created at the same time.
           // TODO: Think of how to handle this, especially if the content is different. Should we dedup here (or later)
-          // based on <country, companyId>, and if so, how do we choose what record to keep? Should we simply accept this and send
+          // based on these identifiers, and if so, how do we choose what record to keep? Should we simply accept this and send
           // a warning with the results so that we can have a look later?
           results.push({
             company: company,

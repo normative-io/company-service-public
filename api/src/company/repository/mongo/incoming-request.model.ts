@@ -21,4 +21,6 @@ export class IncomingRequest {
   dataSource?: string;
 
   taxId?: string;
+
+  orgNbr?: string;
 }

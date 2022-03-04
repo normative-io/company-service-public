@@ -14,6 +14,8 @@ import { CompanyFoundDto } from 'src/company/dto/company-found.dto';
 // A MongoDB-based repository for storing company data.
 @Injectable()
 export class MongoRepositoryService implements ICompanyRepository {
+  // TODO: Some methods throw HttpExceptions, which is ugly for a DB Service, can we do better?
+
   logger = new Logger(MongoRepositoryService.name);
 
   // These confidence values have been chosen intuitively.
@@ -58,13 +60,29 @@ export class MongoRepositoryService implements ICompanyRepository {
     return await this.companyModel.findOne({ companyId }).sort('-created');
   }
 
-  // Find companies that match all identifiers of an `insertOrUpdate` request.
-  private async findCompaniesByAllIdentifiers(insertOrUpdateDto: InsertOrUpdateDto): Promise<Company[]> {
-    const results: Company[] = [];
+  private static identifiers(insertOrUpdateDto: InsertOrUpdateDto): [any[], string] {
+    const ids: any[] = [];
     if (insertOrUpdateDto.taxId) {
-      results.push(...(await this.findByMatcher({ taxId: insertOrUpdateDto.taxId })));
+      ids.push({ taxId: insertOrUpdateDto.taxId });
     }
-    return results;
+    if (insertOrUpdateDto.orgNbr && insertOrUpdateDto.country) {
+      ids.push({ orgNbr: insertOrUpdateDto.orgNbr, country: insertOrUpdateDto.country });
+    }
+    return [ids, 'identifiers checked: [taxId, orgNbr+country]'];
+  }
+
+  private async findByIndividualIds(ids: any[]): Promise<Company[]> {
+    const found: Company[] = [];
+    for (const id of ids) {
+      found.push(...(await this.findByMatcher([id])));
+    }
+
+    // Dedup by companyId.
+    return found.filter(
+      (elem, index, self) =>
+        // Keep if this is the first index for this company's companyId.
+        index === self.findIndex((c) => c.companyId === elem.companyId),
+    );
   }
 
   // An insertOrUpdate operation can have the following three outcomes:
@@ -74,51 +92,89 @@ export class MongoRepositoryService implements ICompanyRepository {
   //
   // Logic:
   //
-  // (A) [TODO] Fail if no identifier is present in the request
-  // (B) If there is only one identifier in the request:
-  //   Get all companies that match that identifier
-  //     If there is just one company: UPDATE
-  //     If no companies: INSERT
-  //     If more than one company (although we should never get here if we follow this logic): ERROR
-  // (C) [TODO] If there is more than one identifier in the request:
-  //   Get all companies that match all identifiers
-  //     If more than one company (although we should never get here if we follow this logic): ERROR
-  //     If only one company: UPDATE
-  //     If no companies:
-  //       // It could be that:
-  //       // (a) the new record is truly a new company, or that
-  //       // (b) it is trying to add one or more identifiers to a company for which we had a
-  //       //     different type of identifier, or that
-  //       // (c) it mistakenly contains identifiers from multiple companies, or that
-  //       // (d) it is trying to update an identifier (which we don’t allow).
-  //       // We need to distinguish which case it is.
-  //       Search by each identifier separately.
-  //         If no identifiers give us any companies: INSERT
-  //         If two or more identifiers give us different companies: ERROR
-  //         If all searches that return results give us the same company:
-  //           If the company does not contain any of the identifiers that did not return results: UPDATE
-  //           Otherwise (the request is trying to update an identifier): ERROR
+  // 1  (A) Fail if no identifier is present in the request
+  // 2  (B) If there is only one identifier in the request:
+  // 3    Get all companies that match that identifier
+  // 4      If there is just one company: UPDATE
+  // 5      If no companies: INSERT
+  // 6      If more than one company (although we should never get here if we follow this logic): ERROR
+  // 7  (C) If there is more than one identifier in the request:
+  // 8    Get all companies that match all identifiers
+  // 9      If more than one company (although we should never get here if we follow this logic): ERROR
+  // 10     If only one company: UPDATE
+  // 11     If no companies:
+  // 12       // It could be that:
+  // 13       // (a) the new record is truly a new company, or that
+  // 14       // (b) it is trying to add one or more identifiers to a company for which we had a
+  // 15       //     different type of identifier, or that
+  // 16       // (c) it mistakenly contains identifiers from multiple companies, or that
+  // 17       // (d) it is trying to update an identifier (which we don’t allow).
+  // 18       // We need to distinguish which case it is.
+  // 19       Search by each identifier separately.
+  // 20         If no identifiers give us any companies: INSERT
+  // 21         If two or more identifiers give us different companies: ERROR
+  // 22         If all searches that return results give us the same company:
+  // 23           If the company does not contain any of the identifiers that did not return results: UPDATE
+  // 24           Otherwise (the request is trying to update an identifier): ERROR
   async insertOrUpdate(insertOrUpdateDto: InsertOrUpdateDto): Promise<[Company, string]> {
+    const prettyRequest = `${JSON.stringify(insertOrUpdateDto)}`;
+
+    const [ids, info] = MongoRepositoryService.identifiers(insertOrUpdateDto);
+    if (ids.length === 0) {
+      const message = `Invalid insertOrUpdate request ${prettyRequest}, not enough identifiers: ${info}`;
+      this.logger.error(message);
+      throw new HttpException(message, HttpStatus.BAD_REQUEST);
+    }
+
+    this.logger.debug(`Ids in ${prettyRequest}: ${JSON.stringify(ids)}`);
+
     // Operation is performed in a transaction to avoid race conditions
     // between checking the most recent record and inserting a new one.
     const session = await this.companyModel.startSession();
     let companyDbObject: CompanyDbObject;
     let msg: string;
-    const prettyRequest = `${JSON.stringify(insertOrUpdateDto)}`;
 
     await session.withTransaction(async () => {
       this.incomingRequestModel.create(insertOrUpdateDtoToDbObject(insertOrUpdateDto));
-      const existingCompanies = await this.findCompaniesByAllIdentifiers(insertOrUpdateDto);
+      const existingCompanies = await this.findByMatcher(ids);
       this.logger.log(
         `Existing companies that match insertOrUpdateDto ${prettyRequest}: ${JSON.stringify(existingCompanies)}`,
       );
       if (existingCompanies.length > 1) {
         const message = `Multiple companies match the identifiers in ${prettyRequest}`;
         this.logger.error(message);
-        // TODO: Is there a better easy way of raising a problem, than throwing an HttpException?
         throw new HttpException(message, HttpStatus.BAD_REQUEST);
       }
-      [companyDbObject, msg] = await this.doInsertOrUpdate(insertOrUpdateDto, existingCompanies);
+
+      // The existing company this new record should belong to, if any.
+      let existingCompany: Company;
+      if (existingCompanies.length === 1) {
+        existingCompany = existingCompanies[0];
+      }
+
+      if (existingCompanies.length === 0 && ids.length > 1) {
+        // We're in line 11 of the algorithm detailed in this method's comment:
+        // no existing companies mach *all* identifiers at once, but maybe some
+        // match individual identifiers.
+        // Inside this `if`, we detect whether we're in error case (c) (we find multiple companies
+        // when we search by individual identifiers), and let the code later handle the other error cases.
+
+        const byIndividualId = await this.findByIndividualIds(ids);
+        if (byIndividualId.length > 1) {
+          const message = `Multiple companies match the identifiers in ${prettyRequest}`;
+          this.logger.error(`${message}: ${JSON.stringify(byIndividualId)}`);
+          throw new HttpException(message, HttpStatus.BAD_REQUEST);
+        }
+
+        // If there's just one company that matches individual identifiers, that becomes
+        // our existingCompany.
+        if (byIndividualId.length === 1) {
+          const onlyMatch = byIndividualId[0];
+          this.logger.log(`Found a single company that matches individual identifiers: ${JSON.stringify(onlyMatch)}`);
+          existingCompany = onlyMatch;
+        }
+      }
+      [companyDbObject, msg] = await this.doInsertOrUpdate(insertOrUpdateDto, existingCompany);
     });
     session.endSession();
     this.logger.debug(msg);
@@ -127,11 +183,11 @@ export class MongoRepositoryService implements ICompanyRepository {
 
   private async doInsertOrUpdate(
     dto: InsertOrUpdateDto,
-    existingCompanies: Company[],
+    existingCompany: Company | undefined,
   ): Promise<[CompanyDbObject, string]> {
     const prettyRequest = `${JSON.stringify(dto)}`;
 
-    if (existingCompanies.length === 0) {
+    if (!existingCompany) {
       const newCompany = new Company(dto, Company.newCompanyId());
 
       const companyDbObject = await this.companyModel.create(companyModelToDbObject(newCompany));
@@ -139,7 +195,6 @@ export class MongoRepositoryService implements ICompanyRepository {
       return [companyDbObject, msg];
     }
 
-    const existingCompany = existingCompanies[0];
     const newCompany = new Company(dto, existingCompany.companyId);
     const prettyNewCompany = `${JSON.stringify(newCompany)}`;
 
@@ -156,10 +211,16 @@ export class MongoRepositoryService implements ICompanyRepository {
       ];
     }
 
+    const [isSame, reason] = newCompany.isSameEntity(existingCompany);
+    if (!isSame) {
+      const message = `Cannot add record ${prettyNewCompany} for existing company ${JSON.stringify(
+        existingCompany,
+      )}: ${reason}`;
+      this.logger.error(message);
+      throw new HttpException(message, HttpStatus.BAD_REQUEST);
+    }
+
     return [
-      // TODO: Merge newCompany and existingCompany, instead of blindly adding a new record
-      // with the latest insertOrUpdate information only. The data in the database might be better
-      // or more complete.
       await this.companyModel.create(companyModelToDbObject(newCompany)),
       `Updated metadata for company: ${prettyNewCompany}`,
     ];
@@ -179,7 +240,6 @@ export class MongoRepositoryService implements ICompanyRepository {
       if (!mostRecent) {
         const message = `Cannot find company to delete, unknown company: ${prettyRequest}`;
         this.logger.error(message);
-        // TODO: It is a bit ugly that a DB Service throws HttpExceptions, can we do better?
         throw new HttpException(message, HttpStatus.BAD_REQUEST);
       }
       [dbObject, msg] = await this.doMarkDeleted(markDeletedDto, mostRecent);
@@ -241,7 +301,7 @@ export class MongoRepositoryService implements ICompanyRepository {
     // TODO: Is taxId a global or a local identifier? If local, add the `country`.
     if (searchDto.taxId) {
       results.push(
-        ...(await this.findByMatcher({ taxId: searchDto.taxId }, searchDto.atTime)).map(function (company) {
+        ...(await this.findByMatcher([{ taxId: searchDto.taxId }], searchDto.atTime)).map(function (company) {
           return {
             confidence: MongoRepositoryService.confidenceByTaxId,
             foundBy: 'Repository by taxId',
@@ -252,7 +312,9 @@ export class MongoRepositoryService implements ICompanyRepository {
     }
     if (searchDto.companyName) {
       results.push(
-        ...(await this.findByMatcher({ companyName: searchDto.companyName }, searchDto.atTime)).map(function (company) {
+        ...(await this.findByMatcher([{ companyName: searchDto.companyName }], searchDto.atTime)).map(function (
+          company,
+        ) {
           return {
             confidence: MongoRepositoryService.confidenceByName,
             foundBy: 'Repository by name',
@@ -267,7 +329,12 @@ export class MongoRepositoryService implements ICompanyRepository {
   // findByMatcher finds companies that match the given argument.
   // If `atTime` unset, return the most recent matching metadata for the company.
   // If `atTime` is set, return the metadata at that particular time.
-  private async findByMatcher(matcher: any, atTime?: Date): Promise<Company[]> {
+  private async findByMatcher(matchers: any[], atTime?: Date): Promise<Company[]> {
+    let matcher: any = {};
+    for (const m of matchers) {
+      matcher = { ...matcher, ...m };
+    }
+
     const companies: Company[] = [];
     for (const dbObject of await this.companyModel.find(matcher)) {
       const recordAtTime = await this.get(dbObject.companyId, atTime);
@@ -295,6 +362,7 @@ function insertOrUpdateDtoToDbObject(insertOrUpdate: InsertOrUpdateDto): Incomin
     created: new Date(),
     requestType: RequestType.InsertOrUpdate,
     taxId: insertOrUpdate.taxId,
+    orgNbr: insertOrUpdate.orgNbr,
   };
 }
 
@@ -324,6 +392,7 @@ function companyModelToDbObject(company: Company): CompanyDbObject {
     dataSource: company.dataSource,
     isDeleted: company.isDeleted,
     taxId: company.taxId,
+    orgNbr: company.orgNbr,
   };
 }
 
@@ -341,6 +410,7 @@ function incomingRequestDbObjectToModel(dbObject: IncomingRequestDbObject): Inco
     isic: dbObject.isic,
     dataSource: dbObject.dataSource,
     taxId: dbObject.taxId,
+    orgNbr: dbObject.orgNbr,
   };
 }
 
@@ -355,6 +425,7 @@ function companyDbObjectToModel(dbObject: CompanyDbObject): Company {
       isic: dbObject.isic,
       dataSource: dbObject.dataSource,
       taxId: dbObject.taxId,
+      orgNbr: dbObject.orgNbr,
     },
     dbObject.companyId,
   );

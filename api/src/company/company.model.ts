@@ -55,6 +55,12 @@ export class Company {
   public taxId?: string;
 
   @ApiProperty({
+    description: 'The Org Nbr for the company. This is a local identifier, use in conjunction with the country',
+    example: '123',
+  })
+  public orgNbr?: string;
+
+  @ApiProperty({
     description: 'The International Standard Industrial Classification (ISIC) for the company',
     example: '123',
   })
@@ -85,6 +91,7 @@ export class Company {
     this.companyName = insertOrUpdateDto.companyName;
     this.country = insertOrUpdateDto.country;
     this.taxId = insertOrUpdateDto.taxId;
+    this.orgNbr = insertOrUpdateDto.orgNbr;
     this.isic = insertOrUpdateDto.isic;
     this.dataSource = insertOrUpdateDto.dataSource;
     const now = new Date();
@@ -104,5 +111,33 @@ export class Company {
   isMetadataEqual(other: Company): boolean {
     const internalFields = ['id', 'created', 'lastUpdated'];
     return isEqual(omit(this, internalFields), omit(other, internalFields));
+  }
+
+  private static equalStringField(field1: string, field2: string) {
+    return !field1 || !field2 || field1 == field2;
+  }
+
+  // isSameEntity returns whether the current company and the given company are the same commercial entity,
+  // and, if they are not, why.
+  // Two companies are not considered the same entity if they have different values of identifiers, country,
+  // or companyId.
+  // We assume that the current company is a new company we're trying to create, and the argument is the
+  // existing one in the system. This is an arbitrary decision, and the result of the method would be the same
+  // if it was the other way around, but this assumption allows to return a more descriptive message.
+  isSameEntity(existing: Company): [boolean, string] {
+    if (!Company.equalStringField(this.companyId, existing.companyId)) {
+      return [false, `Conflicting companyId: new: ${this.companyId}, existing: ${existing.companyId}`];
+    }
+    if (!Company.equalStringField(this.taxId, existing.taxId)) {
+      return [false, `Conflicting taxId: new: ${this.taxId}, existing: ${existing.taxId}`];
+    }
+    if (!Company.equalStringField(this.country, existing.country)) {
+      return [false, `Conflicting country: new: ${this.country}, existing: ${existing.country}`];
+    }
+    if (!Company.equalStringField(this.orgNbr, existing.orgNbr)) {
+      return [false, `Conflicting orgNbr: new: ${this.orgNbr}, existing: ${existing.orgNbr}`];
+    }
+
+    return [true, ''];
   }
 }
