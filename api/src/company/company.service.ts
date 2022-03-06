@@ -58,6 +58,10 @@ export class CompanyService {
     return await this.repoService.listAllIncomingRequestsForTesting();
   }
 
+  async countCompanies(searchDto: SearchDto): Promise<Number> {
+    return await this.repoService.countCompanies(searchDto);
+  }
+
   // Search for a company based on the metadata.
   // We first search inside the repo. If matches are found, return those.
   // If the requested company was not found in the local repository,

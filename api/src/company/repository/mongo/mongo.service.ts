@@ -201,7 +201,9 @@ function companyModelToDbObject(company: Company): CompanyDbObject {
     created: company.created,
     lastUpdated: company.lastUpdated,
     dataSource: company.dataSource,
-    isDeleted: company.isDeleted,
+    // Always set this field, it's easier to make mistakes in SQL queries
+    // if there are null fields, and this is an important one.
+    isDeleted: company.isDeleted ? true : false,
     taxId: company.taxId,
     orgNbr: company.orgNbr,
   };

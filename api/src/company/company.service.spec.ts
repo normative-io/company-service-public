@@ -74,6 +74,89 @@ describe('CompanyService', () => {
     expect(service).toBeDefined();
   });
 
+  describe('the countCompanies method', () => {
+    it('should count distinct companies', async () => {
+      // They are all different companies because taxId is different.
+      await service.insertOrUpdate({ country: 'CH', taxId: '1', companyName: '1' });
+      expect(await service.countCompanies({})).toEqual(1);
+      await service.insertOrUpdate({ country: 'CH', taxId: '2', companyName: '2' });
+      expect(await service.countCompanies({})).toEqual(2);
+      await service.insertOrUpdate({ country: 'CH', taxId: '3', companyName: '3' });
+      expect(await service.countCompanies({})).toEqual(3);
+    });
+
+    describe('should count companies that match specific fields', () => {
+      beforeEach(async () => {
+        await service.insertOrUpdate({ country: 'CH', taxId: '1', companyName: '1' });
+        await service.insertOrUpdate({ country: 'CH', taxId: '2', companyName: '2' });
+        await service.insertOrUpdate({ country: 'CH', taxId: '3', companyName: '3' });
+      });
+
+      it('by country', async () => {
+        expect(await service.countCompanies({ country: 'CH' })).toEqual(3);
+        expect(await service.countCompanies({ country: 'DK' })).toEqual(0);
+      });
+
+      it('by all previous names', async () => {
+        expect(await service.countCompanies({ companyName: '1' })).toEqual(1);
+        expect(await service.countCompanies({ companyName: '2' })).toEqual(1);
+        expect(await service.countCompanies({ companyName: '3' })).toEqual(1);
+      });
+    });
+
+    it('should count companies, not records', async () => {
+      await service.insertOrUpdate({ country: 'CH', taxId: '1', companyName: '1' });
+      expect(await service.countCompanies({})).toEqual(1);
+      await service.insertOrUpdate({ country: 'CH', taxId: '2', companyName: '2' });
+      expect(await service.countCompanies({})).toEqual(2);
+      // Same taxId, so it's considered the same company as the first request.
+      await service.insertOrUpdate({ country: 'CH', taxId: '1', companyName: '3' });
+      expect(await service.countCompanies({})).toEqual(2);
+    });
+
+    it('should not count deleted companies', async () => {
+      const [company, _] = await service.insertOrUpdate({ country: 'CH', taxId: '1', companyName: '1' });
+      expect((await service.listAllForTesting()).length).toEqual(1);
+      await service.markDeleted({ companyId: company.companyId });
+      expect((await service.listAllForTesting()).length).toEqual(2);
+      expect(await service.countCompanies({})).toEqual(0);
+
+      await service.insertOrUpdate({ country: 'CH', taxId: '1', companyName: '1' });
+      expect((await service.listAllForTesting()).length).toEqual(3);
+      expect(await service.countCompanies({})).toEqual(1);
+    });
+
+    it('should count historical companies if `atTime` is set', async () => {
+      const [oldestCompany] = await service.insertOrUpdate({ country: 'CH', taxId: '1', companyName: '1' });
+      const [middleCompany] = await service.insertOrUpdate({ country: 'CH', taxId: '2', companyName: '2' });
+      const [mostRecentCompany] = await service.insertOrUpdate({ country: 'CH', taxId: '3', companyName: '3' });
+      expect(await service.countCompanies({})).toEqual(3);
+
+      expect(await service.countCompanies({ atTime: new Date(oldestCompany.created.getTime() - 1) })).toEqual(0);
+      expect(await service.countCompanies({ atTime: oldestCompany.created })).toEqual(1);
+      expect(await service.countCompanies({ atTime: new Date(middleCompany.created.getTime() - 1) })).toEqual(1);
+      expect(await service.countCompanies({ atTime: middleCompany.created })).toEqual(2);
+      expect(await service.countCompanies({ atTime: new Date(mostRecentCompany.created.getTime() - 1) })).toEqual(2);
+      expect(await service.countCompanies({ atTime: mostRecentCompany.created })).toEqual(3);
+    });
+
+    it('should not count historical companies that are deleted', async () => {
+      const [oldestCompany] = await service.insertOrUpdate({ country: 'CH', taxId: '1', companyName: '1' });
+      expect(await service.countCompanies({})).toEqual(1);
+      const [deleted] = await service.markDeleted({ companyId: oldestCompany.companyId });
+      expect(await service.countCompanies({})).toEqual(0);
+      const [mostRecentCompany] = await service.insertOrUpdate({ country: 'CH', taxId: '3', companyName: '3' });
+      expect(await service.countCompanies({})).toEqual(1);
+
+      expect(await service.countCompanies({ atTime: new Date(oldestCompany.created.getTime() - 1) })).toEqual(0);
+      expect(await service.countCompanies({ atTime: oldestCompany.created })).toEqual(1);
+      expect(await service.countCompanies({ atTime: new Date(deleted.created.getTime() - 1) })).toEqual(1);
+      expect(await service.countCompanies({ atTime: deleted.created })).toEqual(0);
+      expect(await service.countCompanies({ atTime: new Date(mostRecentCompany.created.getTime() - 1) })).toEqual(0);
+      expect(await service.countCompanies({ atTime: mostRecentCompany.created })).toEqual(1);
+    });
+  });
+
   it('should list all companies', async () => {
     // We first need to create a few companies.
     await service.insertOrUpdate({ country: 'CH', taxId: '1', companyName: '1' });
