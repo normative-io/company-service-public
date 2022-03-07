@@ -32,6 +32,10 @@ export class RepoService {
     return await this.companyRepo.listAllIncomingRequestsForTesting();
   }
 
+  async countCompanies(searchDto: SearchDto): Promise<Number> {
+    return (await this.companyRepo.find([searchDto], searchDto.atTime)).length;
+  }
+
   private async findByIndividualIds(ids: any[]): Promise<Company[]> {
     const found: Company[] = [];
     for (const id of ids) {
