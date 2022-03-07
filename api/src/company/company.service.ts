@@ -1,22 +1,20 @@
-import { HttpException, HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Company } from './company.model';
-import { COMPANY_REPOSITORY, ICompanyRepository } from './repository/repository-interface';
 import { InsertOrUpdateDto } from './dto/insert-or-update.dto';
-import { CompanyFoundDto, ScraperServiceResponse } from './dto/company-found.dto';
+import { CompanyFoundDto } from './dto/company-found.dto';
 import { Counter } from 'prom-client';
 import { InjectMetric } from '@willsoto/nestjs-prometheus';
-import { ConfigService } from '@nestjs/config';
 import { SearchDto } from './dto/search.dto';
-import fetch from 'node-fetch';
 import { IncomingRequest } from './repository/mongo/incoming-request.model';
 import { MarkDeletedDto } from './dto/mark-deleted.dto';
+import { RepoService } from './services/repo.service';
+import { ScraperService } from './services/scraper.service';
 
 @Injectable()
 export class CompanyService {
   private readonly logger = new Logger(CompanyService.name);
 
   // Values of the component field for searchErrorTotal.
-  static readonly componentScrapers = 'scraper_service';
   static readonly componentApi = 'company_api';
 
   // Values of the `message` field for `get` and `search` operations.
@@ -29,12 +27,9 @@ export class CompanyService {
   static readonly messageScrapersNotContactedPrefix =
     'No companies found; request not sent to the ScraperService because';
 
-  private scraperServiceAddress;
-
   constructor(
-    @Inject(COMPANY_REPOSITORY)
-    private readonly companyRepo: ICompanyRepository,
-    private configService: ConfigService,
+    private repoService: RepoService,
+    private scraperService: ScraperService,
     // Some metrics for the "search" operation are related to each other:
     // search_inbound_total = search_found_total + search_not_found_total + search_error_total
     @InjectMetric('search_inbound_total')
@@ -45,26 +40,22 @@ export class CompanyService {
     public searchNotFoundTotal: Counter<string>,
     @InjectMetric('search_error_total')
     public searchErrorTotal: Counter<string>,
-  ) {
-    const scraperAddress = this.configService.get<string>('SCRAPER_ADDRESS');
-    this.scraperServiceAddress = `http://${scraperAddress}/scraper/lookup`;
-    this.logger.log(`Will use Scraper Service on address: ${this.scraperServiceAddress}`);
-  }
+  ) {}
 
   async insertOrUpdate(insertOrUpdateDto: InsertOrUpdateDto): Promise<[Company, string]> {
-    return await this.companyRepo.insertOrUpdate(insertOrUpdateDto);
+    return await this.repoService.insertOrUpdate(insertOrUpdateDto);
   }
 
   async markDeleted(markDeletedDto: MarkDeletedDto): Promise<[Company, string]> {
-    return await this.companyRepo.markDeleted(markDeletedDto);
+    return await this.repoService.markDeleted(markDeletedDto);
   }
 
   async listAllForTesting(): Promise<Company[]> {
-    return await this.companyRepo.listAllForTesting();
+    return await this.repoService.listAllForTesting();
   }
 
   async listAllIncomingRequestsForTesting(): Promise<IncomingRequest[]> {
-    return await this.companyRepo.listAllIncomingRequestsForTesting();
+    return await this.repoService.listAllIncomingRequestsForTesting();
   }
 
   // Search for a company based on the metadata.
@@ -102,7 +93,7 @@ export class CompanyService {
 
   async searchEverywhere(searchDto: SearchDto): Promise<[CompanyFoundDto[], string]> {
     const country = searchDto.country;
-    const results = await this.companyRepo.find(searchDto);
+    const results = await this.repoService.find(searchDto);
 
     if (results.length != 0) {
       this.searchFoundTotal.inc({ country: country, answered_by: 'repo' });
@@ -116,103 +107,10 @@ export class CompanyService {
       this.logger.debug(message);
       return [results, message];
     }
-    const [found, message] = await this.findInScraperService(searchDto);
+    const [found, message] = await this.scraperService.find(searchDto);
     if (found.length != 0) {
       this.searchFoundTotal.inc({ country: country, answered_by: 'scrapers' });
       results.push(...found);
-    }
-    return [results, message];
-  }
-
-  // There are three main error situations when contacting the ScraperService:
-  // 1. We cannot contact the ScraperService
-  // 2. The ScraperService returns a failure
-  // 3. We cannot parse the response
-  // Each of these increment `this.findScraperErrorTotal` and throw an HTTPException with
-  // a descriptive message.
-  private async findInScraperService(searchDto: SearchDto): Promise<[CompanyFoundDto[], string]> {
-    const country = searchDto.country;
-    if (Object.keys(searchDto).length === 0) {
-      throw new HttpException(`Search request cannot be empty`, HttpStatus.BAD_REQUEST);
-    }
-    let response;
-    try {
-      response = await fetch(this.scraperServiceAddress, {
-        method: 'post',
-        body: JSON.stringify(searchDto),
-        headers: { 'Content-Type': 'application/json' },
-      });
-    } catch (e) {
-      const message = `Cannot contact ScraperService, is the service available? ${e}`;
-      this.logger.error(message);
-      this.searchErrorTotal.inc({
-        country: country,
-        status_code: HttpStatus.SERVICE_UNAVAILABLE,
-        component: CompanyService.componentScrapers,
-      });
-      throw new HttpException(message, HttpStatus.SERVICE_UNAVAILABLE);
-    }
-    const jsonResponse = await response.json();
-    if (!response.ok) {
-      this.logger.debug(`Fetched failed response (status=${response.status}) ${JSON.stringify(jsonResponse)}`);
-      // A failed response is of the form:
-      // {"statusCode":501,"message":"No suitable scrapers for the request"}
-      const message = `Request to ScraperService failed: ${jsonResponse.message}`;
-      this.logger.error(message);
-      this.searchErrorTotal.inc({
-        country: country,
-        status_code: response.status,
-        component: CompanyService.componentScrapers,
-      });
-      throw new HttpException(message, response.status);
-    }
-    const scraperResponse = jsonResponse as ScraperServiceResponse;
-    this.logger.debug(`Fetched response from ScraperService: ${JSON.stringify(scraperResponse)}`);
-    return this.toCompanies(scraperResponse, country);
-  }
-
-  private async toCompanies(response: ScraperServiceResponse, country: string): Promise<[CompanyFoundDto[], string]> {
-    const results: CompanyFoundDto[] = [];
-    this.logger.verbose(`Extracting companies from response: ${JSON.stringify(response)}`);
-    const companies = response.companies;
-    const message = response.message;
-    if (!companies) {
-      return [results, message];
-    }
-    try {
-      for (const scraperResponse of companies) {
-        const scraperName = scraperResponse.scraperName;
-        this.logger.verbose(`Processing response from scraper ${scraperName}: ${JSON.stringify(scraperResponse)}`);
-        for (const dto of scraperResponse.companies) {
-          this.logger.debug(`Processing: ${JSON.stringify(dto)}`);
-          const [company] = await this.insertOrUpdate({ dataSource: scraperName, ...dto.company } as InsertOrUpdateDto);
-          this.logger.debug(`Added company: ${JSON.stringify(company)}`);
-          // Note that if the scraper returns multiple records for one company (multiple items with the same
-          // identifiers), we add all of them here.
-          // The caller later deduplicates based on the record's internal id, which is based on the content of the record.
-          // Thus, if the ScraperService returns two or more items with exactly the same content, they are properly
-          // deduped later, but if they contain slightly different content (e.g., different populated fields), all of them will be
-          // returned by the search. This might be problematic: it will be almost impossible to retrieve them separately since
-          // they are created at the same time.
-          // TODO: Think of how to handle this, especially if the content is different. Should we dedup here (or later)
-          // based on these identifiers, and if so, how do we choose what record to keep? Should we simply accept this and send
-          // a warning with the results so that we can have a look later?
-          results.push({
-            company: company,
-            confidence: dto.confidence,
-            foundBy: scraperName ? `Scraper ${scraperName}` : undefined,
-          });
-        }
-      }
-    } catch (e) {
-      const message = `Error parsing response from ScraperService: ${e}`;
-      this.logger.error(message);
-      this.searchErrorTotal.inc({
-        country: country,
-        status_code: HttpStatus.INTERNAL_SERVER_ERROR,
-        component: CompanyService.componentScrapers,
-      });
-      throw new HttpException(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
     return [results, message];
   }

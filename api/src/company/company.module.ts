@@ -7,6 +7,8 @@ import { PrometheusModule, makeCounterProvider } from '@willsoto/nestjs-promethe
 import { ConfigModule } from '@nestjs/config';
 import { MongoRepositoryModule } from './repository/mongo/mongo.module';
 import { MongoRepositoryService } from './repository/mongo/mongo.service';
+import { RepoService } from './services/repo.service';
+import { ScraperService } from './services/scraper.service';
 
 @Module({
   imports: [HttpModule, PrometheusModule.register(), ConfigModule, MongoRepositoryModule],
@@ -17,6 +19,8 @@ import { MongoRepositoryService } from './repository/mongo/mongo.service';
       provide: COMPANY_REPOSITORY,
       useClass: MongoRepositoryService,
     },
+    RepoService,
+    ScraperService,
 
     makeCounterProvider({
       name: 'search_inbound_total',

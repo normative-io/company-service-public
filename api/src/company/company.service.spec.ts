@@ -18,6 +18,8 @@ import { SearchDto } from './dto/search.dto';
 import { IncomingRequestDbObject, IncomingRequestDocument } from './repository/mongo/incoming-request.schema';
 import { RequestType } from './repository/mongo/incoming-request.model';
 import { InsertOrUpdateDto } from './dto/insert-or-update.dto';
+import { RepoService } from './services/repo.service';
+import { ScraperService } from './services/scraper.service';
 
 describe('CompanyService', () => {
   const messageCompaniesFoundInRepository = 'Companies were found in repository';
@@ -40,6 +42,8 @@ describe('CompanyService', () => {
       imports: [HttpModule, ConfigModule.forRoot(), MongoRepositoryModule],
       providers: [
         CompanyService,
+        RepoService,
+        ScraperService,
         {
           provide: COMPANY_REPOSITORY,
           useClass: MongoRepositoryService,
