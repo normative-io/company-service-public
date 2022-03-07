@@ -116,6 +116,42 @@ export class RepoService {
   // 22         If all searches that return results give us the same company:
   // 23           If the company does not contain any of the identifiers that did not return results: UPDATE
   // 24           Otherwise (the request is trying to update an identifier): ERROR
+  //
+  // ############################ GOTCHAS ############################
+  //
+  // ---------------------- Data Inconsistencies ---------------------
+  //
+  // Inconsistencies in the data are caused by conflicting identifiers.
+  // Companies have local and global identifiers that define them (see the `identifiers()`
+  // method).
+  // Global identifiers, and combinations of (country + local identifier), are unique.
+  // Two companies cannot share the same values for these fields.
+  // The `insertOrUpdate` operation does not allow inserting data that
+  // modifies present identifiers (but it is possible to add identifiers that
+  // were empty previously), or that sets identifiers from a different company.
+  // When this happens, the data in the repository needs to be resolved before the
+  // operation can succeed.
+  //
+  // -------------------------- Data Quality -------------------------
+  //
+  // Data can be inserted in the repository by on-demand scrapers, by batch scrapers,
+  // or manually through the Company Service API.
+  // The Company Service does not provide explicit quality assurance for the data that
+  // is added or is in the repository. A new valid request to insert or update data will
+  // always override any previous data for a company, even if the new data could be of
+  // lower quality (e.g., missing fields that were set in a previous version).
+  //
+  // The reason why the application has been set up like this is because it is not
+  // easy to come up with a universal algorithm to decide how good some data is, or
+  // when the new data we are trying to add is better than the existing data, or how to
+  // merge the new data with the existing one.
+  // It is up to the application owner to review the data that is being added to the
+  // repository. The Company Service provides some basic information to help with this:
+  //
+  // - All requests to insert or update data are recorded in the repository.
+  // - Companies in the repository have a `dataSource` field that contains who added the
+  //   data - this could be used to decide how reliable the data in the repository is.
+  //
   async insertOrUpdate(insertOrUpdateDto: InsertOrUpdateDto): Promise<[Company, string]> {
     const prettyRequest = `${JSON.stringify(insertOrUpdateDto)}`;
 
