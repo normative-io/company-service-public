@@ -150,6 +150,9 @@ export class MongoRepositoryService implements ICompanyRepository {
     for (const m of matchers) {
       matcher = { ...matcher, ...m };
     }
+    if (atTime) {
+      matcher = { ...matcher, created: { $lte: atTime } };
+    }
 
     const companies: Company[] = [];
     for (const companyId of await this.companyModel.distinct('companyId', matcher)) {

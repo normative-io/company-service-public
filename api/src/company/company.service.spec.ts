@@ -652,21 +652,67 @@ describe('CompanyService', () => {
       let firstRecord: Company;
       let secondRecord: Company;
       let mostRecent: Company;
+      let tcReferences: object;
 
       beforeEach(async () => {
-        [firstRecord] = await service.insertOrUpdate({ companyName: '1', taxId: '123', country: 'CH', orgNbr: '456' });
+        [firstRecord] = await service.insertOrUpdate({ companyName: '1', taxId: '123', country: 'CH' });
         [secondRecord] = await service.insertOrUpdate({ companyName: '2', taxId: '123', country: 'CH', orgNbr: '456' });
-        [mostRecent] = await service.insertOrUpdate({ companyName: '3', taxId: '123', country: 'CH', orgNbr: '456' });
+        [mostRecent] = await service.insertOrUpdate({ companyName: '3', taxId: '123', country: 'CH' });
+
+        // We can only refer to objects inside `it` blocks. This is a challenge with the tests inside
+        // this section because we cannot have nice table-driven test cases of the form "If the request
+        // is at time firstRecord.created, then I should get object firstRecord".
+        // As a workaround we define these test cases using strings which refer to fields of `tcReferences`,
+        // and we get the real objects inside the tests with `Reflect.get(tcReferences, `${myString}`);`
+        tcReferences = {
+          firstRecordCreated: firstRecord.created,
+          secondRecordCreated: secondRecord.created,
+          mostRecentCreated: mostRecent.created,
+          beforeSecondRecord: new Date(secondRecord.created.getTime() - 1),
+          beforeMostRecent: new Date(mostRecent.created.getTime() - 1),
+          afterMostRecent: new Date(mostRecent.created.getTime() + 5000),
+          firstRecord: [
+            [
+              {
+                confidence: expect.any(Number),
+                foundBy: expect.any(String),
+                company: firstRecord,
+              },
+            ],
+            messageCompaniesFoundInRepository,
+          ],
+          secondRecord: [
+            [
+              {
+                confidence: expect.any(Number),
+                foundBy: expect.any(String),
+                company: secondRecord,
+              },
+            ],
+            messageCompaniesFoundInRepository,
+          ],
+          mostRecent: [
+            [
+              {
+                confidence: expect.any(Number),
+                foundBy: expect.any(String),
+                company: mostRecent,
+              },
+            ],
+            messageCompaniesFoundInRepository,
+          ],
+          noRecord: [[], messageAtTimeWasSet],
+        };
       });
 
-      const testCases: [string, SearchDto, string][] = [
+      const tcNoAtTime: [string, SearchDto, string][] = [
         ['tax id', { taxId: '123' }, foundByRepoByTaxId],
         ['first company name', { companyName: '1' }, foundByRepoByName],
         ['second company name', { companyName: '2' }, foundByRepoByName],
         ['most recent company name', { companyName: '3' }, foundByRepoByName],
         ['org nbr and country', { country: 'CH', orgNbr: '456' }, foundByRepoByOrgNbr],
       ];
-      for (const [title, searchDto, wantFoundBy] of testCases) {
+      for (const [title, searchDto, wantFoundBy] of tcNoAtTime) {
         it(`and we search by ${title} and no 'atTime', should return the most recent record`, async () => {
           expect(await service.search(searchDto)).toEqual([
             [
@@ -679,38 +725,61 @@ describe('CompanyService', () => {
             messageCompaniesFoundInRepository,
           ]);
         });
+      }
 
-        it(`and we search by ${title}, should return historical records that correspond to the requested 'atTime'`, async () => {
-          // Note: these unit tests use the real clock and may show up as flakey in the
-          // unlikely case that the records above were created at the same millisecond.
-          const atTimeExpectations = new Map<Date, Company>([
-            [firstRecord.created, firstRecord],
-            [new Date(secondRecord.created.getTime() - 1), firstRecord],
-            [secondRecord.created, secondRecord],
-            [new Date(mostRecent.created.getTime() - 1), secondRecord],
-            [mostRecent.created, mostRecent],
-            [new Date(mostRecent.created.getTime() + 5000), mostRecent],
-          ]);
-          for (const [atTime, company] of atTimeExpectations) {
-            expect(
-              await service.search({
-                country: searchDto.country,
-                taxId: searchDto.taxId,
-                orgNbr: searchDto.orgNbr,
-                companyName: searchDto.companyName,
-                atTime: atTime,
-              }),
-            ).toEqual([
-              [
-                {
-                  confidence: expect.any(Number),
-                  foundBy: wantFoundBy,
-                  company: company,
-                },
-              ],
-              messageCompaniesFoundInRepository,
-            ]);
-          }
+      // Format: title, searchDto, requestDate, wantOutput.
+      // `requestDate` and `wantOutput` refer to variable names of `tcReferences`.
+      const tcHistorical: [string, SearchDto, string, string][] = [
+        ['tax id', { taxId: '123' }, 'firstRecordCreated', 'firstRecord'],
+        ['tax id', { taxId: '123' }, 'beforeSecondRecord', 'firstRecord'],
+        ['tax id', { taxId: '123' }, 'secondRecordCreated', 'secondRecord'],
+        ['tax id', { taxId: '123' }, 'beforeMostRecent', 'secondRecord'],
+        ['tax id', { taxId: '123' }, 'mostRecentCreated', 'mostRecent'],
+        ['tax id', { taxId: '123' }, 'afterMostRecent', 'mostRecent'],
+
+        // Companies can change names. Make sure that we can always find a company by an older name.
+        ['first company name', { companyName: '1' }, 'firstRecordCreated', 'firstRecord'],
+        ['first company name', { companyName: '1' }, 'beforeSecondRecord', 'firstRecord'],
+        ['first company name', { companyName: '1' }, 'secondRecordCreated', 'secondRecord'],
+        ['first company name', { companyName: '1' }, 'beforeMostRecent', 'secondRecord'],
+        ['first company name', { companyName: '1' }, 'mostRecentCreated', 'mostRecent'],
+        ['first company name', { companyName: '1' }, 'afterMostRecent', 'mostRecent'],
+
+        // Make sure that an old historical query cannot find companies by a newer name.
+        // companyName '2' is added in the second record, we should not be able to find it before that.
+        ['second company name', { companyName: '2' }, 'firstRecordCreated', 'noRecord'],
+        ['second company name', { companyName: '2' }, 'beforeSecondRecord', 'noRecord'],
+        ['second company name', { companyName: '2' }, 'secondRecordCreated', 'secondRecord'],
+        ['second company name', { companyName: '2' }, 'beforeMostRecent', 'secondRecord'],
+        ['second company name', { companyName: '2' }, 'mostRecentCreated', 'mostRecent'],
+        ['second company name', { companyName: '2' }, 'afterMostRecent', 'mostRecent'],
+
+        // companyName '3' is added in the mostRecent record.
+        ['most recent company name', { companyName: '3' }, 'firstRecordCreated', 'noRecord'],
+        ['most recent company name', { companyName: '3' }, 'beforeSecondRecord', 'noRecord'],
+        ['most recent company name', { companyName: '3' }, 'secondRecordCreated', 'noRecord'],
+        ['most recent company name', { companyName: '3' }, 'beforeMostRecent', 'noRecord'],
+        ['most recent company name', { companyName: '3' }, 'mostRecentCreated', 'mostRecent'],
+        ['most recent company name', { companyName: '3' }, 'afterMostRecent', 'mostRecent'],
+
+        // Companies can add org nbrs. '456' is added in secondRecord.
+        ['org nbr and country', { country: 'CH', orgNbr: '456' }, 'firstRecordCreated', 'noRecord'],
+        ['org nbr and country', { country: 'CH', orgNbr: '456' }, 'beforeSecondRecord', 'noRecord'],
+        ['org nbr and country', { country: 'CH', orgNbr: '456' }, 'secondRecordCreated', 'secondRecord'],
+        ['org nbr and country', { country: 'CH', orgNbr: '456' }, 'beforeMostRecent', 'secondRecord'],
+        // "mostRecent" does not have an orgNbr, but we're still able to find it from an older record.
+        ['org nbr and country', { country: 'CH', orgNbr: '456' }, 'mostRecentCreated', 'mostRecent'],
+        ['org nbr and country', { country: 'CH', orgNbr: '456' }, 'afterMostRecent', 'mostRecent'],
+      ];
+
+      // Note: these unit tests use the real clock and may show up as flakey in the
+      // unlikely case that the records above were created at the same millisecond.
+      for (const [title, searchDto, requestDate, wantOutput] of tcHistorical) {
+        it(`and we search by ${title} and time=${requestDate}, should return ${wantOutput}`, async () => {
+          const want = Reflect.get(tcReferences, `${wantOutput}`);
+          const t = Reflect.get(tcReferences, `${requestDate}`);
+
+          expect(await service.search({ ...searchDto, atTime: t })).toEqual(want);
         });
       }
     });
