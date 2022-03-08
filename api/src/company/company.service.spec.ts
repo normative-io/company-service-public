@@ -26,6 +26,7 @@ describe('CompanyService', () => {
   const messageAtTimeWasSet = 'No companies found; request not sent to the ScraperService because "atTime" was set';
   const foundByRepoByTaxId = 'Repository by taxId';
   const foundByRepoByName = 'Repository by name';
+  const foundByRepoByOrgNbr = 'Repository by orgNbr and country';
   const requestTypeInsertOrUpdate = RequestType.InsertOrUpdate;
   const requestTypeMarkDeleted = RequestType.MarkDeleted;
 
@@ -566,14 +567,22 @@ describe('CompanyService', () => {
   describe('the search method', () => {
     describe('when there is a single record of a company', () => {
       beforeEach(async () => {
-        await service.insertOrUpdate({ companyName: 'name1', taxId: '123', country: 'CH' });
+        await service.insertOrUpdate({ companyName: 'name1', taxId: '123', country: 'CH', orgNbr: '456' });
       });
 
-      const expectations: [string, SearchDto][] = [
-        ['tax id', { country: 'CH', taxId: '123' }],
+      const testCasesLocalIds: [string, SearchDto][] = [['org nbr', { orgNbr: '456' }]];
+      const testCasesLocalIdsAndCountry = testCasesLocalIds.map(function (
+        value: [string, SearchDto],
+      ): [string, SearchDto] {
+        return [`${value[0]} and country`, { ...value[1], country: 'CH' }];
+      });
+
+      const testCases: [string, SearchDto][] = [
+        ['tax id', { taxId: '123' }],
         ['company name', { companyName: 'name1' }],
+        ...testCasesLocalIdsAndCountry,
       ];
-      for (const [title, searchDto] of expectations) {
+      for (const [title, searchDto] of testCases) {
         it(`and we search by ${title}, should find the record`, async () => {
           const found = await service.search(searchDto);
           expect(found).toEqual([
@@ -585,6 +594,47 @@ describe('CompanyService', () => {
                   companyName: 'name1',
                   taxId: '123',
                   country: 'CH',
+                  orgNbr: '456',
+                  created: expect.any(Date),
+                  lastUpdated: expect.any(Date),
+                },
+                confidence: expect.any(Number),
+                foundBy: expect.any(String),
+              },
+            ],
+            messageCompaniesFoundInRepository,
+          ]);
+        });
+      }
+
+      for (const [title, searchDto] of testCasesLocalIds) {
+        it(`and we search by local id ${title} without country, should not find the record`, async () => {
+          const [found] = await service.search(searchDto);
+          expect(found).toEqual([]);
+        });
+      }
+    });
+
+    describe('when there are multiple companies with the same local identifiers but different countries', () => {
+      beforeEach(async () => {
+        await service.insertOrUpdate({ companyName: 'name1', taxId: '1', country: 'CH', orgNbr: '456' });
+        await service.insertOrUpdate({ companyName: 'name1', taxId: '2', country: 'DK', orgNbr: '456' });
+      });
+
+      const testCases: [string, SearchDto][] = [['org nbr and country', { country: 'CH', orgNbr: '456' }]];
+      for (const [title, searchDto] of testCases) {
+        it(`and we search by ${title}, should find the record for the specific country`, async () => {
+          const found = await service.search(searchDto);
+          expect(found).toEqual([
+            [
+              {
+                company: {
+                  id: expect.any(String),
+                  companyId: expect.any(String),
+                  companyName: 'name1',
+                  taxId: '1',
+                  country: 'CH',
+                  orgNbr: '456',
                   created: expect.any(Date),
                   lastUpdated: expect.any(Date),
                 },
@@ -604,18 +654,19 @@ describe('CompanyService', () => {
       let mostRecent: Company;
 
       beforeEach(async () => {
-        [firstRecord] = await service.insertOrUpdate({ companyName: '1', taxId: '123', country: 'CH' });
-        [secondRecord] = await service.insertOrUpdate({ companyName: '2', taxId: '123', country: 'CH' });
-        [mostRecent] = await service.insertOrUpdate({ companyName: '3', taxId: '123', country: 'CH' });
+        [firstRecord] = await service.insertOrUpdate({ companyName: '1', taxId: '123', country: 'CH', orgNbr: '456' });
+        [secondRecord] = await service.insertOrUpdate({ companyName: '2', taxId: '123', country: 'CH', orgNbr: '456' });
+        [mostRecent] = await service.insertOrUpdate({ companyName: '3', taxId: '123', country: 'CH', orgNbr: '456' });
       });
 
-      const expectations: [string, SearchDto, string][] = [
-        ['tax id', { country: 'CH', taxId: '123' }, foundByRepoByTaxId],
+      const testCases: [string, SearchDto, string][] = [
+        ['tax id', { taxId: '123' }, foundByRepoByTaxId],
         ['first company name', { companyName: '1' }, foundByRepoByName],
         ['second company name', { companyName: '2' }, foundByRepoByName],
         ['most recent company name', { companyName: '3' }, foundByRepoByName],
+        ['org nbr and country', { country: 'CH', orgNbr: '456' }, foundByRepoByOrgNbr],
       ];
-      for (const [title, searchDto, wantFoundBy] of expectations) {
+      for (const [title, searchDto, wantFoundBy] of testCases) {
         it(`and we search by ${title} and no 'atTime', should return the most recent record`, async () => {
           expect(await service.search(searchDto)).toEqual([
             [
@@ -645,6 +696,7 @@ describe('CompanyService', () => {
               await service.search({
                 country: searchDto.country,
                 taxId: searchDto.taxId,
+                orgNbr: searchDto.orgNbr,
                 companyName: searchDto.companyName,
                 atTime: atTime,
               }),
@@ -669,7 +721,7 @@ describe('CompanyService', () => {
       let wantInserted2;
 
       beforeEach(async () => {
-        const insertOrUpdateInput = { country: 'CH', taxId: '1', companyName: 'name1' };
+        const insertOrUpdateInput = { country: 'CH', taxId: '1', companyName: 'name1', orgNbr: '456' };
         const [insertedCompany1] = await service.insertOrUpdate(insertOrUpdateInput);
         await service.markDeleted({ companyId: insertedCompany1.companyId });
         await service.insertOrUpdate(insertOrUpdateInput);
@@ -681,6 +733,7 @@ describe('CompanyService', () => {
           lastUpdated: expect.any(Date),
           country: insertOrUpdateInput.country,
           taxId: insertOrUpdateInput.taxId,
+          orgNbr: insertOrUpdateInput.orgNbr,
           companyName: insertOrUpdateInput.companyName,
         };
         // The second insertOrUpdate operation creates a new company because the first
@@ -700,12 +753,13 @@ describe('CompanyService', () => {
         expect(dbContents).toEqual([wantInserted1, wantDeleted, wantInserted2]);
       });
 
-      const expectations: [string, SearchDto, string][] = [
-        ['tax id', { country: 'CH', taxId: '1' }, foundByRepoByTaxId],
+      const testCases: [string, SearchDto, string][] = [
+        ['tax id', { taxId: '1' }, foundByRepoByTaxId],
         ['company name', { companyName: 'name1' }, foundByRepoByName],
+        ['org nbr and country', { country: 'CH', orgNbr: '456' }, foundByRepoByOrgNbr],
       ];
 
-      for (const [title, searchDto, wantFoundBy] of expectations) {
+      for (const [title, searchDto, wantFoundBy] of testCases) {
         it(`and we search by ${title}, should not return historical records marked as deleted`, async () => {
           expect(
             await service.search({
@@ -772,11 +826,9 @@ describe('CompanyService', () => {
         await service.insertOrUpdate({ country: 'CH', taxId: '2', companyName: 'name', isic: 'updated' });
       });
 
-      const expectations: [string, SearchDto, string][] = [
-        ['company name', { companyName: 'name' }, foundByRepoByName],
-      ];
+      const testCases: [string, SearchDto, string][] = [['company name', { companyName: 'name' }, foundByRepoByName]];
 
-      for (const [title, searchDto, wantFoundBy] of expectations) {
+      for (const [title, searchDto, wantFoundBy] of testCases) {
         it(`and we search by ${title} and no 'atTime', should return the last record for each company`, async () => {
           const [found] = await service.search(searchDto);
           expect(found).toEqual([
@@ -902,11 +954,11 @@ describe('CompanyService', () => {
     });
 
     it('should find and deduplicate companies that match multiple search methods', async () => {
-      await service.insertOrUpdate({ country: 'CH', taxId: '123', companyName: '1' });
+      await service.insertOrUpdate({ country: 'CH', taxId: '123', companyName: '1', orgNbr: '456' });
 
-      // This request matches the data by name AND taxId. Make sure only one item is returned, and
-      // it has the highest confidence of both methods.
-      const [found] = await service.search({ companyName: '1', taxId: '123', country: 'CH' });
+      // This request matches the data by multiple fields. Make sure only one item is returned, and
+      // it has the highest confidence of all fields.
+      const [found] = await service.search({ companyName: '1', taxId: '123', country: 'CH', orgNbr: '456' });
       expect(found).toEqual([
         {
           company: {
@@ -914,6 +966,7 @@ describe('CompanyService', () => {
             companyId: expect.any(String),
             companyName: '1',
             taxId: '123',
+            orgNbr: '456',
             country: 'CH',
             created: expect.any(Date),
             lastUpdated: expect.any(Date),
@@ -1157,7 +1210,7 @@ describe('CompanyService', () => {
           const secondReturnedRecord = found[0][1];
           const thirdReturnedRecord = found[0][2];
 
-          const expectations: [SearchDto, {}][] = [
+          const testCases: [SearchDto, {}][] = [
             [
               {
                 country: firstReturnedRecord.company.country,
@@ -1181,7 +1234,7 @@ describe('CompanyService', () => {
             ],
           ];
 
-          for (const [searchDto, want] of expectations) {
+          for (const [searchDto, want] of testCases) {
             const found2 = await service.search(searchDto);
             expect(found2).toEqual([
               [
