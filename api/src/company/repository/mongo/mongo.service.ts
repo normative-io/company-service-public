@@ -140,6 +140,11 @@ export class MongoRepositoryService implements ICompanyRepository {
   // Find companies that match the given argument.
   // If `atTime` unset, return the most recent matching metadata for the company.
   // If `atTime` is set, return the metadata at that particular time.
+  // Results are sorted by creation time.
+  //
+  // TODO: We sort results by creation time because the tests expect older elements first,
+  // but that's an arbitrary way of sorting and it is not required by the business logic.
+  // Make tests order-agnostic instead of sorting here.
   async find(matchers: any[], atTime?: Date): Promise<Company[]> {
     let matcher: any = {};
     for (const m of matchers) {
@@ -147,17 +152,14 @@ export class MongoRepositoryService implements ICompanyRepository {
     }
 
     const companies: Company[] = [];
-    for (const dbObject of await this.companyModel.find(matcher)) {
-      const recordAtTime = await this.get(dbObject.companyId, atTime);
+    for (const companyId of await this.companyModel.distinct('companyId', matcher)) {
+      const recordAtTime = await this.get(companyId, atTime);
 
-      // Duplicates can occur if a company has multiple records that match the previous `find`
-      // operation, because the state of the company at a given time (which is what `get`
-      // returns) will be the same for all of those records.
-      if (recordAtTime && companies.findIndex((c) => c.id === recordAtTime.id) === -1) {
+      if (recordAtTime) {
         companies.push(recordAtTime);
       }
     }
-    return [...companies];
+    return [...companies.sort((a, b) => a.created.getTime() - b.created.getTime())];
   }
 }
 
