@@ -55,4 +55,9 @@ the `docker-compose.yml` to find the relevant dotenv file's.
 
 ### Running in Kubernetes with a remote image (API only)
 
-See kube/README.md.
+See [kube/README.md](kube/README.md).
+
+### Known issues
+
+There's no place like the actual code to document issues. Search for `TODO`
+to see small-ish issues, and `GOTCHA` for longer design discussions.

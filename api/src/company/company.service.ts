@@ -75,6 +75,38 @@ export class CompanyService {
   // confidence of the results found in the repo: if the actual results in
   // the repo are of low confidence (e.g., partial matches of the name),
   // should we see if the scrapers find something better?
+  //
+  // ############################ GOTCHAS ############################
+  //
+  // ---------------------- Search Idempotence -----------------------
+  //
+  // Search queries accept an optional `atTime` parameter that allows to run the query
+  // as if it was executed in the past, while obtaining the same results. We call this
+  // "search idempotence", and it is an important property of the system.
+  //
+  // Supporting idempotent results for any arbitrary time in the past, while expecting exactly
+  // the same answer, results in a very complicated system. We have taken a more relaxed
+  // interpretation with the following limitations.
+  //
+  // Search queries are idempotent as long as:
+  //
+  // - The output data was originally in the repository, and
+  // - The search code did not change between `atTime` and the current time. If using the
+  //   same code is important, we recommend freezing the code in different deployments.
+  //
+  // The current implementation does not provide idempotence if the data is found by the
+  // on-demand scrapers:
+  //
+  // - If a request contacts the scrapers, it usually takes a bit longer to return the results,
+  //   so a request at time A (current time) will insert new results in the repository at time B>A.
+  //   If we repeat the request at exactly atTime=A, we won't find the results. The request needs
+  //   to be repeated at the time the data is created in the repository (the data creation
+  //   timestamp is returned as part of the results).
+  // - The search logic for the on-demand scrapers is different from the search logic for data in the
+  //   repository. When the scrapers return X results, and we insert all of them in the repository,
+  //   it is not guaranteed that an identical search will find all of them, especially if some
+  //   of the results are or low quality or miss key fields.
+  //
   async search(searchDto: SearchDto): Promise<[CompanyFoundDto[], string]> {
     const country = searchDto.country;
     this.searchInboundTotal.inc({ country: country });
