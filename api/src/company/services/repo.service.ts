@@ -135,7 +135,8 @@ export class RepoService {
   // modifies present identifiers (but it is possible to add identifiers that
   // were empty previously), or that sets identifiers from a different company.
   // When this happens, the data in the repository needs to be resolved before the
-  // operation can succeed.
+  // operation can succeed. Use `markDelete` to delete the problematic companies
+  // and try again.
   //
   // -------------------------- Data Quality -------------------------
   //
