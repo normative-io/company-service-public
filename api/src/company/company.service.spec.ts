@@ -413,11 +413,11 @@ describe('CompanyService', () => {
       }
     });
 
-    describe('should throw an error if we try to insert data that conflicts with the data in the db', () => {
+    describe('and we try to insert data that conflicts with the data in the db', () => {
       // Format of testCases: title, insertOrUpdate requests, expected error string.
       const testCases: [string, InsertOrUpdateDto[], string][] = [
         [
-          'if we use different countries with the same Tax ID',
+          'we use different countries with the same Tax ID',
           [
             { country: 'DK', taxId: '1', companyName: 'DK 1' },
             { country: 'CH', taxId: '1', companyName: 'CH 1' },
@@ -425,7 +425,7 @@ describe('CompanyService', () => {
           '.*Conflicting country: new: CH, existing: DK.*',
         ],
         [
-          'if we use different orgNbr with the same Tax ID',
+          'we use different orgNbr with the same Tax ID',
           [
             { country: 'DK', taxId: '1', companyName: 'DK 1', orgNbr: '1' },
             { country: 'DK', taxId: '1', companyName: 'DK 1', orgNbr: '2' },
@@ -433,7 +433,7 @@ describe('CompanyService', () => {
           '.*Conflicting orgNbr: new: 2, existing: 1.*',
         ],
         [
-          'if we use identifiers from two different companies',
+          'we use identifiers from two different companies',
           [
             { country: 'DK', taxId: '1', companyName: 'DK 1' },
             { country: 'DK', companyName: 'DK 1', orgNbr: '2' },
@@ -442,19 +442,44 @@ describe('CompanyService', () => {
           '.*Multiple companies match the identifiers.*',
         ],
       ];
+
       for (const [title, requests, wantError] of testCases) {
-        it(title, async () => {
-          // Insert all requests except the last one.
-          for (let i = 0; i < requests.length - 1; i++) {
-            expect(await service.insertOrUpdate(requests[i])).toEqual([
+        const lastRequest = requests[requests.length - 1];
+        describe(`and ${title}`, () => {
+          it('should throw error', async () => {
+            // Insert all requests except the last one.
+            for (let i = 0; i < requests.length - 1; i++) {
+              expect(await service.insertOrUpdate(requests[i])).toEqual([
+                expect.any(Company),
+                expect.stringContaining('Inserted'),
+              ]);
+            }
+            // The last request should fail.
+            await expect(service.insertOrUpdate(lastRequest)).rejects.toThrowError(new RegExp(wantError));
+          });
+
+          it('should insert the company if we delete the conflicting companies first', async () => {
+            const companyIds: string[] = [];
+            // Insert all requests except the last one.
+            for (let i = 0; i < requests.length - 1; i++) {
+              const response = await service.insertOrUpdate(requests[i]);
+              companyIds.push(response[0].companyId);
+              expect(response).toEqual([expect.any(Company), expect.stringContaining('Inserted')]);
+            }
+            // The last request should fail.
+            await expect(service.insertOrUpdate(lastRequest)).rejects.toThrowError(new RegExp(wantError));
+
+            // The last request should succeed after deleting the problematic companies.
+            for (const companyId of companyIds) {
+              await service.markDeleted({ companyId });
+            }
+            expect(await service.countCompanies({})).toEqual(0);
+
+            expect(await service.insertOrUpdate(lastRequest)).toEqual([
               expect.any(Company),
               expect.stringContaining('Inserted'),
             ]);
-          }
-          // The last request should fail.
-          await expect(service.insertOrUpdate(requests[requests.length - 1])).rejects.toThrowError(
-            new RegExp(wantError),
-          );
+          });
         });
       }
     });
